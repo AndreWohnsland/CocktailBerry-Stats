@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "cocktailberry-webapp"
+version = "0.1.0"
+description = "WebApp with API and endpoint for CocktailBerry. Have insights into made cocktails."
+authors = ["Andre Wohnsland <50302161+AndreWohnsland@users.noreply.github.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.75.0"
+
+[tool.poetry.dev-dependencies]
+pylint = "^2.12.2"
+autopep8 = "^1.6.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
