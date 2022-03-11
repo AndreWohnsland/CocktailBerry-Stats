@@ -1,6 +1,10 @@
+import os
 from fastapi import FastAPI
+from dotenv import load_dotenv
 
+load_dotenv()
 app = FastAPI()
+isDev = os.getenv("DEBUG") is not None
 
 
 @app.get("/")

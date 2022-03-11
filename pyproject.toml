@@ -8,6 +8,8 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = "^3.9"
 fastapi = "^0.75.0"
+deta = "^1.1.0"
+python-dotenv = "^0.19.2"
 
 [tool.poetry.dev-dependencies]
 pylint = "^2.12.2"
