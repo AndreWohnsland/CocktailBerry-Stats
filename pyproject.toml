@@ -10,6 +10,9 @@ python = "^3.9"
 fastapi = "^0.75.0"
 deta = "^1.1.0"
 python-dotenv = "^0.19.2"
+dash = "^2.2.0"
+plotly-express = "^0.4.1"
+pandas = "^1.4.1"
 
 [tool.poetry.dev-dependencies]
 pylint = "^2.12.2"

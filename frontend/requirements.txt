@@ -1,3 +1,4 @@
-dash
 python-dotenv
-plotly-express
+flask
+deta
+pandas

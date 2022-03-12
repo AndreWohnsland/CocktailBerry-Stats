@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>CocktailBerry Data</title>
+  </head>
+  <body>
+    <h1>Volume by Land and Machine</h1>
+    <div class="data-table">{% for s in sumdata %} {{ s|safe }} {% endfor %}</div>
+    <h1>All the Maker data raw</h1>
+    <div class="data-table">{% for table in tables %} {{ table|safe }} {% endfor %}</div>
+  </body>
+</html>
