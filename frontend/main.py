@@ -1,15 +1,27 @@
-import dash
-from dash import dcc, html
+import os
+from flask import Flask, render_template
+from deta import Deta
+from dotenv import load_dotenv
+from aggregations import generate_df, sum_volume
 
-from app import app, server as application
+load_dotenv()
 
-# Connect to your app pages
-app.layout = html.Div([
-    dcc.Location(id='url', refresh=False),
-    html.Div("Hello I am DIV")
-], className="App")
+app = Flask(__name__)
+isDev = os.getenv("DEBUG") is not None
+TABLE_NAME = "cocktails" + ("_dev" if isDev else "")
+deta = Deta(os.getenv("DETA_PROJECT_KEY"))
+cocktail_deta = deta.Base(TABLE_NAME)
+
+
+@app.route('/', methods=["GET"])
+def hello_world():
+    df = generate_df(cocktail_deta)
+    sumdata = sum_volume(df)
+    return render_template(
+        'index.html', tables=[df.to_html(classes='data', index=False)], titles=df.columns.values,
+        sumdata=[sumdata.to_html(index=False)]
+    )
 
 
 if __name__ == '__main__':
-    print("access the server on http://127.0.0.1:8050/ http://127.0.0.1 or your defined address")
-    app.run_server(host="0.0.0.0", debug=False, port=8050)
+    app.run(host='0.0.0.0', debug=True)
