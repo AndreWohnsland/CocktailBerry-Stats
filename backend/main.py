@@ -1,15 +1,9 @@
-import os
-from deta import Deta
-from fastapi import FastAPI
-from dotenv import load_dotenv
-
 from models import CocktailData
+from app import init_app
 
-load_dotenv()
-app = FastAPI()
-isDev = os.getenv("DEBUG") is not None
+
+app, deta, isDev = init_app()
 TABLE_NAME = "cocktails" + ("_dev" if isDev else "")
-deta = Deta(os.getenv("DETA_PROJECT_KEY"))
 cocktail_deta = deta.Base(TABLE_NAME)
 
 
@@ -18,7 +12,7 @@ def read_root():
     return {"message": "Welcome to the API of the CocktailBerry-WebApp"}
 
 
-@app.post("/cocktail")
+@app.post("/cocktail", tags=["cocktail"])
 def insert_cocktaildata(cocktail: CocktailData):
     return cocktail_deta.insert({
         "cocktailname": cocktail.cocktailname,
