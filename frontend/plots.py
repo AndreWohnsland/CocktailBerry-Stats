@@ -15,7 +15,7 @@ def generate_volume_treemap(df: pd.DataFrame):
 
 
 def generate_recipes_treemap(df: pd.DataFrame):
-    fig = px.treemap(df, path=[px.Constant("Recipes"), 'Countrycode'],
-                     values="Cocktail Volume in ml", height=400)
+    fig = px.treemap(df, path=[px.Constant("Recipes"), "Cocktailname", 'Countrycode'],
+                     values="Number of Cocktails", height=400)
     fig.update_layout({"margin": {"l": 0, "r": 0, "t": 0, "b": 0}})
     st.plotly_chart(fig, use_container_width=True)
