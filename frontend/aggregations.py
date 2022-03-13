@@ -29,6 +29,7 @@ def generate_df():
 def sum_volume(df: pd.DataFrame) -> pd.DataFrame:
     volumes = df.groupby(["Countrycode", "Machinename"])["Volume"] \
         .agg(["sum", "count"]).reset_index() \
+        .sort_values(['sum', 'count'], ascending=False) \
         .rename(columns={
             "sum": "Cocktail Volume in ml",
             "count": "Number of Cocktails",
@@ -41,6 +42,6 @@ def cocktail_count(df: pd.DataFrame) -> pd.DataFrame:
     cocktails = df.groupby(["Cocktailname", "Countrycode"])["Volume"] \
         .count().reset_index() \
         .rename(columns={
-            "count": "Number of Cocktails",
+            "Volume": "Number of Cocktails",
         })
     return cocktails
