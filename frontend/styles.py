@@ -1,16 +1,8 @@
 import streamlit as st
 
 # CSS to inject contained in a string
-STYLESETTINGS = """
-            <style>
-            tbody th {display:none}
-            .blank {display:none}
-            .appview-container .main .block-container{
-                padding-top: 1rem;
-                max-width: 1000px;
-            }
-            </style>
-            """
+with open('style.css', encoding="utf-8") as f:
+    STYLESETTINGS = f"<style>{f.read()}</style>"
 
 
 def generate_style():
