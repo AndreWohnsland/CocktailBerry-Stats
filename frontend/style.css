@@ -1,16 +1,43 @@
 tbody th {
   display: none;
 }
+
 .blank {
   display: none;
 }
+
 .appview-container .main .block-container {
   padding-top: 1rem;
   max-width: 1000px;
 }
+
 ul li {
   list-style-type: none;
 }
+
 li {
   margin-left: 5px !important;
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: rgb(240, 242, 246);
+  color: black;
+  z-index: 999;
+}
+
+.footer .left {
+  float: left;
+}
+
+.footer .right {
+  float: right;
+}
+
+.footer p {
+  padding: 8px 5px 8px 5px;
+  margin: 0px 0px 0px 0px;
 }
