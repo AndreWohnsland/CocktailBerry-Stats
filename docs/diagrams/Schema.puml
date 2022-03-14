@@ -20,7 +20,7 @@ skinparam backgroundColor #fff
 HIDE_STEREOTYPE()
 
 System_Boundary(c1, "Deta", $link="https://docs.deta.sh/docs/home/") {
-  Container(api, "API", "Python (FastAPI)", "Displays information and option for the user to filter", "python")
+  Container(api, "API", "Python (FastAPI)", "Endpoint to receive and process cocktail data", "python")
   Container(detastore, "Deta Store", "Deta", "Saves cocktail data into a NoSql format database", "database")
 }
 Container(webapp, "WebApp", "Python (Streamlit)", "Displays information and option for the user to filter", "python")
