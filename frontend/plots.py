@@ -8,6 +8,7 @@ warnings.filterwarnings("ignore")
 
 
 def generate_volume_treemap(df: pd.DataFrame):
+    """Uses the volume agg df to generate a treemap"""
     fig = px.treemap(df, path=[px.Constant("Language used"), 'Language', 'Machine Name'],
                      values="Cocktail Volume in Litre", height=400)
     fig.update_layout({"margin": {"l": 0, "r": 0, "t": 0, "b": 0}})
@@ -19,6 +20,7 @@ def generate_volume_treemap(df: pd.DataFrame):
 
 
 def generate_recipes_treemap(df: pd.DataFrame):
+    """Uses the recipe agg df to generate a treemap"""
     fig = px.treemap(df, path=[px.Constant("Recipes"), "Cocktailname", 'Language'],
                      values="Number of Cocktails", height=400)
     fig.update_layout({"margin": {"l": 0, "r": 0, "t": 0, "b": 0}})
