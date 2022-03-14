@@ -1,37 +1,21 @@
 import streamlit as st
 
-from utils import generate_sidebar
-from aggregations import generate_df, sum_volume, cocktail_count
-from plots import generate_volume_treemap, generate_recipes_treemap
+from data import generate_df, filter_dataframe
 from styles import generate_style
+from views import display_data, display_introduction, generate_sidebar, display_footer
 
 
 st.set_page_config(
     page_title="CocktailBerry Dashboard",
     page_icon="🍹",
+    initial_sidebar_state="collapsed"
 )
-
-countrycodes = generate_sidebar()
 generate_style()
 
-st.title("🍹CocktailBerry Dashboard")
-st.write("Dashboard for all the CocktailBerry Machines Data!")
-
 df = generate_df()
-volume_df = sum_volume(df)
-recipe_df = cocktail_count(df)
+countrycodes, machines, recipes, df_stats = generate_sidebar(df)
+filtered_df = filter_dataframe(df, countrycodes, machines, recipes)
 
-st.header("Volume and Number of Cocktails")
-with st.expander("Aggregated by Countrycode and Machinename (Table):"):
-    st.table(volume_df)
-generate_volume_treemap(volume_df)
-
-st.header("Recipes Made")
-with st.expander("Aggregated by Recipe Name and Countrycode (Table):"):
-    st.table(recipe_df)
-generate_recipes_treemap(recipe_df)
-
-
-st.header("Debug Stuff")
-with st.expander("All raw Data:"):
-    st.table(df)
+display_introduction(df_stats)
+display_data(df, filtered_df)
+display_footer()
