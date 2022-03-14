@@ -1,4 +1,5 @@
 python-dotenv
-flask
+streamlit
+plotly-express
 deta
 pandas
