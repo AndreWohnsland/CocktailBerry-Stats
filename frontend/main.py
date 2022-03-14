@@ -2,7 +2,7 @@ import streamlit as st
 
 from data import generate_df, filter_dataframe
 from styles import generate_style
-from views import display_data, display_introduction, generate_sidebar, display_footer
+from views import display_data, display_introduction, generate_sidebar, display_footer, display_api_instructions, display_dev
 
 
 st.set_page_config(
@@ -27,4 +27,6 @@ if df.empty:
 else:
     filtered_df = filter_dataframe(df, countrycodes, machines, recipes)
     display_data(df, filtered_df, recipes_limit)
+display_api_instructions()
+display_dev(df)
 display_footer()
