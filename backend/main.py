@@ -15,8 +15,8 @@ def read_root():
 @app.post("/cocktail", tags=["cocktail"])
 def insert_cocktaildata(cocktail: CocktailData):
     return cocktail_deta.insert({
-        "cocktailname": cocktail.cocktailname,
+        "cocktailname": cocktail.cocktailname[:30],  # limit by 30 chars
         "volume": cocktail.volume,
-        "machinename": cocktail.machinename,
+        "machinename": cocktail.machinename[:30],  # limit by 30 chars
         "countrycode": cocktail.countrycode
     })
