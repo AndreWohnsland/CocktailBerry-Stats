@@ -5,6 +5,16 @@ WebApp with API and endpoint for CocktailBerry. Have insights into made cocktail
 
 This app is currently under construction.
 
+# Getting Started
+
+Either cd into `frontend` or `backend` and run `pip install -r requirements.txt` or use poetry in main folder to install everything for both apps with `poetry install`. Then in the corresponding folder run:
+
+```bash
+# omit poetry run if using normal python
+poetry run uvicorn main:app --reload # backend
+poetry run streamlit run main.py # frontend
+```
+
 # Architecture
 
 In this project, [Deta](https://docs.deta.sh/docs/home/) was used for the hosting. The WebApp can be accessed freely over any browser. The API is protected an can be only accessed with an according API key to prevent unauthorized access. To get an API key for your [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry) machine follow the instructions on the website. 
