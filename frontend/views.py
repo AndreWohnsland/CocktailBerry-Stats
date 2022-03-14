@@ -12,6 +12,7 @@ class DataFrameStats():
     machines: int
     recipes: int
     cocktails: int
+    volume: int
 
 
 def generate_sidebar(df: pd.DataFrame):
@@ -27,7 +28,13 @@ def generate_sidebar(df: pd.DataFrame):
     recipes = st.sidebar.multiselect("Choose Recipes:", recipes_selection, recipes_selection)
     # also generates the needed data out of the df
     # since we got unique calculation already here (to save some compute things)
-    df_stats = DataFrameStats(len(country_selection), len(machine_selection), len(recipes_selection), len(df))
+    df_stats = DataFrameStats(
+        len(country_selection),
+        len(machine_selection),
+        len(recipes_selection),
+        len(df),
+        df["Volume"].sum() / 1000,
+    )
     return countrycodes, machines, recipes, df_stats
 
 
@@ -38,8 +45,9 @@ def display_introduction(df_stats: DataFrameStats):
         __what_is_this()
     st.markdown(
         f"""
-        Current CocktailBerry stats:
-        - 🍸 **{df_stats.cocktails}** cocktails were made
+        # 📈 Current CocktailBerry Stats
+        - 🍸 **{df_stats.cocktails}** cocktails made
+        - 🎊 **{df_stats.volume:.1f}** litre cocktails produced
         - 🕹️ **{df_stats.machines}** machines sending data
         - 🌐 **{df_stats.countries}** languages used
         - 🧾 **{df_stats.recipes}** different recipes produced
@@ -80,3 +88,13 @@ def display_data(df: pd.DataFrame, filterd_df: pd.DataFrame):
         st.header("⚙️ Debug Stuff")
         with st.expander("All raw Data:"):
             st.table(df)
+
+
+def display_footer():
+    footer = """
+    <div class="footer">
+        <p class="left">Developed with ❤️</p>
+        <p class="right">Data from <a href="https://github.com/AndreWohnsland/CocktailBerry">CocktailBerry</a></p>
+    </div>
+    """
+    st.markdown(footer, unsafe_allow_html=True)
