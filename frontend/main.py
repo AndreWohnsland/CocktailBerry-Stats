@@ -8,7 +8,12 @@ from views import display_data, display_introduction, generate_sidebar, display_
 st.set_page_config(
     page_title="CocktailBerry Dashboard",
     page_icon="🍹",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="collapsed",
+    menu_items={
+        'Get Help': 'https://github.com/AndreWohnsland/CocktailBerry',
+        'Report a bug': "https://github.com/AndreWohnsland/CocktailBerry-WebApp/issues",
+        'About': "# 🍹 CocktailBerry Dashboard \nDashboard for all the CocktailBerry machines data!"
+    }
 )
 generate_style()
 
