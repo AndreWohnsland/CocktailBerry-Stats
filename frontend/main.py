@@ -26,7 +26,7 @@ if df.empty:
     st.write("Currently no data available. Let CocktailBerry send some data! 🥺")
 else:
     filtered_df = filter_dataframe(df, countrycodes, machines, recipes)
-    display_data(df, filtered_df, recipes_limit)
+    display_data(filtered_df, recipes_limit)
 display_api_instructions()
 display_dev(df)
 display_footer()
