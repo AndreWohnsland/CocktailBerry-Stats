@@ -79,7 +79,7 @@ def __what_is_this():
     )
 
 
-def display_data(df: pd.DataFrame, filterd_df: pd.DataFrame, recipes_limit: int):
+def display_data(filterd_df: pd.DataFrame, recipes_limit: int):
     """Generates all the data views (plots and tables) from the data"""
     volume_df = sum_volume(filterd_df)
     recipe_df = cocktail_count(filterd_df, recipes_limit)
