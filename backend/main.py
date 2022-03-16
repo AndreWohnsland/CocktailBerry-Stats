@@ -1,3 +1,6 @@
+from typing import Optional
+
+from fastapi import Header
 from models import CocktailData
 from app import init_app
 
@@ -13,10 +16,11 @@ def read_root():
 
 
 @app.post("/cocktail", tags=["cocktail"])
-def insert_cocktaildata(cocktail: CocktailData):
+def insert_cocktaildata(cocktail: CocktailData, x_deta_api_key_name: Optional[str] = Header(None)):
     return cocktail_deta.insert({
         "cocktailname": cocktail.cocktailname[:30],  # limit by 30 chars
         "volume": cocktail.volume,
         "machinename": cocktail.machinename[:30],  # limit by 30 chars
-        "countrycode": cocktail.countrycode
+        "countrycode": cocktail.countrycode,
+        "keyname": x_deta_api_key_name,
     })
