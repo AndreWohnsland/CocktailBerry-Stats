@@ -23,7 +23,7 @@ def generate_df():
         "volume": "Volume",
     })
     if not df.empty:
-        df.drop("key", axis=1, inplace=True)
+        df.drop(["key", "keyname"], axis=1, inplace=True)
     return df
 
 
