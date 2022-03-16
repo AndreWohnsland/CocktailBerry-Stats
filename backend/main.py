@@ -23,4 +23,5 @@ def insert_cocktaildata(cocktail: CocktailData, x_deta_api_key_name: Optional[st
         "machinename": cocktail.machinename[:30],  # limit by 30 chars
         "countrycode": cocktail.countrycode,
         "keyname": x_deta_api_key_name,
+        "makedate": cocktail.makedate,
     })
