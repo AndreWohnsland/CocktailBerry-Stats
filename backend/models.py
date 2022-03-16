@@ -12,3 +12,4 @@ class CocktailData(BaseModel):
     volume: int
     machinename: str
     countrycode: LandEnum
+    makedate: str
