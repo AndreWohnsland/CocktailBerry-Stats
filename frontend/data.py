@@ -11,6 +11,7 @@ is_dev = os.getenv("DEBUG") is not None
 TABLE_NAME = "cocktails" + ("_dev" if is_dev else "")
 deta = Deta(os.getenv("DETA_BASE_KEY"))
 cocktail_deta = deta.Base(TABLE_NAME)
+DATEFORMAT_STR = "%d/%m/%Y, %H:%M"
 
 
 @dataclass
@@ -21,6 +22,7 @@ class DfNames():
     cocktail_volume: str = "Cocktail Volume in Litre"
     volume: str = "Volume"
     language: str = "Language"
+    receivedate: str = "receivedate"
 
 
 dfnames = DfNames()
@@ -42,7 +44,9 @@ def generate_df():
             dfnames.machine_name,
             dfnames.cocktail_name,
             dfnames.volume,
+            dfnames.receivedate,
         ]]
+        df[dfnames.receivedate] = pd.to_datetime(df[dfnames.receivedate], format=DATEFORMAT_STR)
     return df
 
 
