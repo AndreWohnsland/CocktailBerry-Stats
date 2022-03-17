@@ -1,3 +1,4 @@
+import datetime
 from typing import Optional
 
 from fastapi import Header
@@ -24,4 +25,5 @@ def insert_cocktaildata(cocktail: CocktailData, x_deta_api_key_name: Optional[st
         "countrycode": cocktail.countrycode,
         "keyname": x_deta_api_key_name,
         "makedate": cocktail.makedate,
+        "receivedate": datetime.datetime.now().strftime("%d/%m/%Y, %H:%M"),
     })
