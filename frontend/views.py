@@ -2,7 +2,7 @@ from dataclasses import dataclass
 import streamlit as st
 import pandas as pd
 
-from data import sum_volume, cocktail_count, is_dev
+from data import sum_volume, cocktail_count, is_dev, dfnames
 from plots import generate_volume_treemap, generate_recipes_treemap
 
 
@@ -23,11 +23,11 @@ def generate_sidebar(df: pd.DataFrame):
         st.sidebar.write("Nothing to do, need some data ...")
         return [], [], [], 1, DataFrameStats(0, 0, 0, 0, 0)
     st.sidebar.subheader("Filter Options")
-    country_selection = sorted(list(df["Language"].unique()))
+    country_selection = sorted(list(df[dfnames.language].unique()))
     countrycodes = st.sidebar.multiselect("Choose Used Languages:", country_selection, country_selection)
-    machine_selection = sorted(list(df["Machine Name"].unique()))
+    machine_selection = sorted(list(df[dfnames.machine_name].unique()))
     machines = st.sidebar.multiselect("Choose Machines:", machine_selection, machine_selection)
-    recipes_selection = sorted(list(df["Cocktailname"].unique()))
+    recipes_selection = sorted(list(df[dfnames.cocktail_name].unique()))
     recipes_limit = st.sidebar.slider(
         "Show x most popular recipes:", 2, max(2, len(recipes_selection)), min(10, len(recipes_selection))
     )
@@ -39,7 +39,7 @@ def generate_sidebar(df: pd.DataFrame):
         len(machine_selection),
         len(recipes_selection),
         len(df),
-        df["Volume"].sum() / 1000,
+        df[dfnames.volume].sum() / 1000,
     )
     return countrycodes, machines, recipes, recipes_limit, df_stats
 
@@ -90,8 +90,8 @@ def display_data(filterd_df: pd.DataFrame, recipes_limit: int):
         generate_volume_treemap(volume_df)
     else:
         __say_no_data()
-    with st.expander("[Table] Aggregated by Language used and Machine Name:"):
-        st.table(volume_df.style.format({"Cocktail Volume in Litre": "{:.2f}"}))
+    with st.expander(f"[Table] Aggregated by Language used and {dfnames.machine_name}:"):
+        st.table(volume_df.style.format({dfnames.cocktail_volume: "{:.2f}"}))
 
     # Display section of recipe data
     st.header("🧾 Recipes Made")
@@ -99,7 +99,7 @@ def display_data(filterd_df: pd.DataFrame, recipes_limit: int):
         generate_recipes_treemap(recipe_df)
     else:
         __say_no_data()
-    with st.expander(f"[Table] Aggregated by Recipe Name and Language used (Top {recipes_limit}):"):
+    with st.expander(f"[Table] Aggregated by {dfnames.cocktail_name} and Language used (Top {recipes_limit}):"):
         st.table(recipe_df)
 
 
