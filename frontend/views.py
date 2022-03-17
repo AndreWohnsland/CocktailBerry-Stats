@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import datetime
 import streamlit as st
 import pandas as pd
 
@@ -13,6 +14,8 @@ class DataFrameStats():
     recipes: int
     cocktails: int
     volume: int
+    first_data: str
+    last_data: str
 
 
 def generate_sidebar(df: pd.DataFrame):
@@ -21,7 +24,7 @@ def generate_sidebar(df: pd.DataFrame):
     st.sidebar.write("Here you can limit the data and filter a little bit.")
     if df.empty:
         st.sidebar.write("Nothing to do, need some data ...")
-        return [], [], [], 1, DataFrameStats(0, 0, 0, 0, 0)
+        return [], [], [], 1, DataFrameStats(0, 0, 0, 0, 0, "No Data", "No Data")
     st.sidebar.subheader("Filter Options")
     country_selection = sorted(list(df[dfnames.language].unique()))
     countrycodes = st.sidebar.multiselect("Choose Used Languages:", country_selection, country_selection)
@@ -40,8 +43,17 @@ def generate_sidebar(df: pd.DataFrame):
         len(recipes_selection),
         len(df),
         df[dfnames.volume].sum() / 1000,
+        __build_date(df[dfnames.receivedate].min()),
+        __build_date(df[dfnames.receivedate].max()),
     )
     return countrycodes, machines, recipes, recipes_limit, df_stats
+
+
+def __build_date(checkdate: datetime) -> str:
+    yyyymmddfmt = "%Y-%m-%d"
+    if checkdate.date() == datetime.today().date():
+        return "today"
+    return checkdate.strftime(yyyymmddfmt)
 
 
 def display_introduction(df_stats: DataFrameStats):
@@ -58,6 +70,8 @@ def display_introduction(df_stats: DataFrameStats):
         - 🎊 **{df_stats.volume:.1f}** litre cocktails produced
         - 🕹️ **{df_stats.machines}** machines sending data
         - 🌐 **{df_stats.countries}** languages used
+        - 🧊 oldest data: **{df_stats.first_data}**
+        - 🔥 latest data: **{df_stats.first_data}**
         """
     )
 
