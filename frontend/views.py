@@ -71,7 +71,7 @@ def display_introduction(df_stats: DataFrameStats):
         - 🕹️ **{df_stats.machines}** machines sending data
         - 🌐 **{df_stats.countries}** languages used
         - 🧊 oldest data: **{df_stats.first_data}**
-        - 🔥 latest data: **{df_stats.first_data}**
+        - 🔥 latest data: **{df_stats.last_data}**
         """
     )
 
