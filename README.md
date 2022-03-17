@@ -1,4 +1,5 @@
-# CocktailBerry-WebApp
+<img src="docs/pictures/logo_dashboard.png" alt="CocktailBerry" width="750"/>
+
 WebApp with API and endpoint for [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry). Have insights into made cocktails.
 
 # Disclaimer
@@ -14,6 +15,15 @@ Either cd into `frontend` or `backend` and run `pip install -r requirements.txt`
 poetry run uvicorn main:app --reload # backend
 poetry run streamlit run main.py # frontend
 ```
+
+If you want everything to work properly, you need a [deta account](https://web.deta.sh/) and project API key (go to Settings>Create Key). It is used for Deta Base e.g. storing of the data and for the later deployment of the API. Dont' worry it's free (and will always be that way, according to deta). Copy the `.env.example` in both folders as a `.env` file and change the API key dummy to your project API key:
+
+```bash
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
+```
+
+Using `DEBUG=1` in the env files will create additional `*_dev` databases to let you test anything without changing your main ones.
 
 # Architecture
 
