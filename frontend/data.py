@@ -11,6 +11,11 @@ TABLE_NAME = "cocktails" + ("_dev" if is_dev else "")
 deta = Deta(os.getenv("DETA_BASE_KEY"))
 cocktail_deta = deta.Base(TABLE_NAME)
 
+MACHINENAME = "Machine Name"
+COCKTAILNAME = "Cocktailname"
+COCKTAILCOUNT = "Number of Cocktails"
+COCKTAILVOLUME = "Cocktail Volume in Litre"
+
 
 @st.cache(ttl=60)
 def generate_df():
@@ -18,12 +23,12 @@ def generate_df():
     cocktails = cocktail_deta.fetch().items
     df = pd.DataFrame(cocktails).rename(columns={
         "countrycode": "Language",
-        "machinename": "Machine Name",
+        "machinename": MACHINENAME,
         "cocktailname": "Cocktailname",
         "volume": "Volume",
     })
     if not df.empty:
-        df.drop(["key", "keyname", "makedate"], axis=1, inplace=True)
+        df = df[["Language", MACHINENAME, "Cocktailname", "Volume"]]
     return df
 
 
@@ -32,7 +37,7 @@ def filter_dataframe(df: pd.DataFrame, countries: list, machines: list, recipes:
     """Applies the sidebar filter option to the data"""
     filtered_df = df.loc[
         df["Language"].isin(countries) &
-        df["Machine Name"].isin(machines) &
+        df[MACHINENAME].isin(machines) &
         df["Cocktailname"].isin(recipes)
     ]
     return filtered_df
@@ -41,14 +46,14 @@ def filter_dataframe(df: pd.DataFrame, countries: list, machines: list, recipes:
 @st.cache(ttl=60)
 def sum_volume(df: pd.DataFrame) -> pd.DataFrame:
     """Aggregate by language and machine Name, returns total volumes and cocktail counts"""
-    volumes = df.groupby(["Language", "Machine Name"])["Volume"] \
+    volumes = df.groupby(["Language", MACHINENAME])["Volume"] \
         .agg(["sum", "count"]).reset_index() \
         .sort_values(['sum', 'count'], ascending=False) \
         .rename(columns={
-            "sum": "Cocktail Volume in Litre",
-            "count": "Number of Cocktails",
+            "sum": COCKTAILVOLUME,
+            "count": COCKTAILCOUNT,
         })
-    volumes["Cocktail Volume in Litre"] = volumes["Cocktail Volume in Litre"] / 1000
+    volumes[COCKTAILVOLUME] = volumes[COCKTAILVOLUME] / 1000
     return volumes
 
 
@@ -60,10 +65,10 @@ def cocktail_count(df: pd.DataFrame, limit_recipe: int = 10) -> pd.DataFrame:
     cocktails = df.groupby(["Cocktailname", "Language"])["Volume"] \
         .count().reset_index() \
         .rename(columns={
-            "Volume": "Number of Cocktails",
+            "Volume": COCKTAILCOUNT,
         })
     cocktails['Rank'] = cocktails['Cocktailname'].map(sorter_index)
-    cocktails.sort_values(['Rank', 'Number of Cocktails'], ascending=False, inplace=True)
+    cocktails.sort_values(['Rank', COCKTAILCOUNT], ascending=False, inplace=True)
     cocktails.dropna(axis=0, inplace=True)
     cocktails.drop('Rank', 1, inplace=True)
     return cocktails
