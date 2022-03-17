@@ -1,5 +1,15 @@
 <img src="docs/pictures/logo_dashboard.png" alt="CocktailBerry" width="750"/>
 
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/AndreWohnsland/CocktailBerry-WebApp)
+![GitHub Release Date](https://img.shields.io/github/release-date/AndreWohnsland/CocktailBerry-WebApp)
+![Python Version](https://img.shields.io/badge/python-%3E%3D%203.9-blue)
+![GitHub](https://img.shields.io/github/license/AndreWohnsland/CocktailBerry-WebApp)
+![GitHub issues](https://img.shields.io/github/issues-raw/AndreWohnsland/CocktailBerry-WebApp)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=AndreWohnsland_CocktailBerry-WebApp&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=AndreWohnsland_CocktailBerry-WebApp)
+![GitHub Repo stars](https://img.shields.io/github/stars/AndreWohnsland/CocktailBerry-WebApp?style=social)
+
+[![Buy Me a Coffee](https://img.shields.io/badge/buy%20me%20a%20coffee-donate-yellow)](https://www.buymeacoffee.com/AndreWohnsland)
+
 WebApp with API and endpoint for [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry). Have insights into made cocktails.
 
 # Disclaimer
