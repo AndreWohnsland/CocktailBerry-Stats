@@ -31,3 +31,27 @@ def generate_recipes_treemap(df: pd.DataFrame):
         hovertemplate='%{parent} (%{label})<br>Repice made: %{value:,.0f}'
     )
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+
+
+def generate_time_plot(df: pd.DataFrame):
+    """Generates the cocktail count over the time"""
+    fig = px.bar(
+        df,
+        x=dfnames.receivedate,
+        y=dfnames.cocktail_count,
+        color=dfnames.machine_name,
+        barmode="group",
+    )
+    fig.update_layout(
+        {"margin": {"l": 0, "r": 0, "t": 0, "b": 0}},
+        bargroupgap=0,  # bargap=0,
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1
+        )
+    )
+    fig.update_traces(marker_line_width=0, selector=dict(type="bar"))
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
