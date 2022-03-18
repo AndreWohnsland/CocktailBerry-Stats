@@ -26,14 +26,14 @@ def generate_sidebar(df: pd.DataFrame):
         st.sidebar.write("Nothing to do, need some data ...")
         return [], [], [], 1, False, DataFrameStats(0, 0, 0, 0, 0, "No Data", "No Data")
     st.sidebar.subheader("Filter Options")
-    only_one_day = st.sidebar.checkbox("Only show last 24h data")
+    only_one_day = st.sidebar.checkbox("Only Show last 24h Data")
     country_selection = sorted(list(df[dfnames.language].unique()))
     countrycodes = st.sidebar.multiselect("Choose Used Languages:", country_selection, country_selection)
     machine_selection = sorted(list(df[dfnames.machine_name].unique()))
     machines = st.sidebar.multiselect("Choose Machines:", machine_selection, machine_selection)
     recipes_selection = sorted(list(df[dfnames.cocktail_name].unique()))
     recipes_limit = st.sidebar.slider(
-        "Show x most popular recipes:", 2, max(2, len(recipes_selection)), min(10, len(recipes_selection))
+        "Show x most Popular Recipes:", 2, max(2, len(recipes_selection)), min(10, len(recipes_selection))
     )
     recipes = st.sidebar.multiselect("Choose Recipes:", recipes_selection, recipes_selection)
     # also generates the needed data out of the df
@@ -164,7 +164,7 @@ def display_footer():
     """Generates the footer element with from HTML data"""
     footer = """
     <div class="footer">
-        <p class="left">Developed with ❤️</p>
+        <p class="left">Made with ❤️</p>
         <p class="right">Data from <a href="https://github.com/AndreWohnsland/CocktailBerry">CocktailBerry</a></p>
     </div>
     """
@@ -201,7 +201,7 @@ def __detailed_explanation():
         and provide me some sort of name or alias how should I reply to you (first name or your preferred alias is fine).
         You can [contact me](mailto:cocktailmakeraw@gmail.com) for further questions or just to get the API-key.
 
-        #### Why a protected API
+        #### Why a Protected API
 
         The reason behind this is that only **real machines** should submit data for the dashboard (you could otherwise
         just run the Python program anywhere and submit a lot of data) and to minimize any other kinds of exploits
@@ -209,14 +209,14 @@ def __detailed_explanation():
         also be exploited quite easily. The internet is still a wild and scary place! 🦖
         Also, I would love to see what you did in combination with my software.
 
-        #### Final steps
+        #### Final Steps
 
         You can then use the received API key for the CocktailBerry microservice (in the .env file).
         As soon as there is a valid key and the microservice is enabled, your machine will send the cocktail data
         (*cocktail name, machine name, volume and language setting*) to the API using the API-key.
         The activation of this feature is also explained in the CocktailBerry docs.
 
-        #### Will this be easier in the future
+        #### Will this be Easier in the Future
 
         I always work on improvements and try to bring the most joy with CocktailBerry and related projects.
         Since I do it all in my free time + open source, sadly my time is limited, and I can only do so much.
