@@ -132,7 +132,7 @@ def __define_granularity(last_day):
     if not last_day:
         grouping_options = ("One Day", "One Hour")
         selected_grouping = st.radio(
-            "Select the time grouping",
+            "Select the Time Grouping",
             grouping_options
         )
         hour_grouping = selected_grouping == grouping_options[1]
