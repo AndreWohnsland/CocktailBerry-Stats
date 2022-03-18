@@ -1,4 +1,5 @@
 import os
+import datetime
 from dataclasses import dataclass
 import streamlit as st
 from deta import Deta
@@ -22,7 +23,7 @@ class DfNames():
     cocktail_volume: str = "Cocktail Volume in Litre"
     volume: str = "Volume"
     language: str = "Language"
-    receivedate: str = "receivedate"
+    receivedate: str = "Received Date"
 
 
 dfnames = DfNames()
@@ -37,6 +38,7 @@ def generate_df():
         "machinename": dfnames.machine_name,
         "cocktailname": dfnames.cocktail_name,
         "volume": dfnames.volume,
+        "receivedate": dfnames.receivedate,
     })
     if not df.empty:
         df = df[[
@@ -51,13 +53,16 @@ def generate_df():
 
 
 @st.cache(ttl=60)
-def filter_dataframe(df: pd.DataFrame, countries: list, machines: list, recipes: list):
+def filter_dataframe(df: pd.DataFrame, countries: list, machines: list, recipes: list, only_one_day: bool):
     """Applies the sidebar filter option to the data"""
     filtered_df = df.loc[
         df[dfnames.language].isin(countries) &
         df[dfnames.machine_name].isin(machines) &
         df[dfnames.cocktail_name].isin(recipes)
     ]
+    if only_one_day:
+        filtering = filtered_df[dfnames.receivedate] >= (datetime.datetime.now() - datetime.timedelta(hours=24))
+        filtered_df = filtered_df[filtering]
     return filtered_df
 
 
@@ -91,3 +96,17 @@ def cocktail_count(df: pd.DataFrame, limit_recipe: int = 10) -> pd.DataFrame:
     cocktails.dropna(axis=0, inplace=True)
     cocktails.drop('Rank', 1, inplace=True)
     return cocktails
+
+
+@st.cache(ttl=60)
+def time_aggregation(df: pd.DataFrame, last_day: bool, hour_grouping: bool = False) -> pd.DataFrame:
+    """Aggregates the data either by day or hour, depending on the last_day param"""
+    freq = "1D"
+    if last_day or hour_grouping:
+        freq = "1h"
+    time_df = df.groupby(
+        [pd.Grouper(key=dfnames.receivedate, freq=freq), dfnames.machine_name]
+    )[dfnames.cocktail_name].count().reset_index().rename(
+        columns={dfnames.cocktail_name: dfnames.cocktail_count, }
+    )
+    return time_df
