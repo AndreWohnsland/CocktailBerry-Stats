@@ -118,16 +118,16 @@ def __show_recipe_data(filterd_df: pd.DataFrame, recipes_limit: int):
     recipe_df = data.cocktail_count(filterd_df, recipes_limit, country_split)
     plots.generate_recipes_treemap(recipe_df, country_split)
     header_addition = " and Language used" if country_split else ""
-    with st.expander(f"[Table] Aggregated by {dfnames.cocktail_name}{header_addition} (Top {recipes_limit}):"):
+    with st.expander(f"[Table] Aggregated by {dfnames.cocktail_name}{header_addition}:"):
         st.table(recipe_df)
 
 
 def __show_time_stats(filterd_df: pd.DataFrame, last_day: bool):
     """Displays Cocktail count over time"""
     st.header("⏱️ Data Over Time")
-    hour_grouping = __define_granularity(last_day)
-    time_df = data.time_aggregation(filterd_df, last_day, hour_grouping)
-    plots.generate_time_plot(time_df)
+    hour_grouping, machine_grouping = __define_granularity(last_day)
+    time_df = data.time_aggregation(filterd_df, hour_grouping, machine_grouping)
+    plots.generate_time_plot(time_df, machine_grouping)
 
 
 def __show_volume_stats(filterd_df: pd.DataFrame):
@@ -143,16 +143,20 @@ def __show_volume_stats(filterd_df: pd.DataFrame):
 
 def __define_granularity(last_day):
     """Lets the user choose in case of all data to aggregate by hour or day"""
-    if not last_day:
-        grouping_options = ("One Day", "One Hour")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.caption("Different Machines?")
+        machine_grouping = st.checkbox("Split by Machine", False)
+    if last_day:
+        return True, machine_grouping
+    grouping_options = ("One Day", "One Hour")
+    with col2:
         selected_grouping = st.radio(
             "Select the Time Grouping",
             grouping_options
         )
-        hour_grouping = selected_grouping == grouping_options[1]
-    else:
-        hour_grouping = False
-    return hour_grouping
+    hour_grouping = selected_grouping == grouping_options[1]
+    return hour_grouping, machine_grouping
 
 
 def __say_no_data():
