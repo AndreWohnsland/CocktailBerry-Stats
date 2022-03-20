@@ -67,9 +67,12 @@ def filter_dataframe(df: pd.DataFrame, countries: list, machines: list, recipes:
 
 
 @st.cache(ttl=60)
-def sum_volume(df: pd.DataFrame) -> pd.DataFrame:
+def sum_volume(df: pd.DataFrame, country_split: bool = True) -> pd.DataFrame:
     """Aggregate by language and machine Name, returns total volumes and cocktail counts"""
-    volumes = df.groupby([dfnames.language, dfnames.machine_name])[dfnames.volume] \
+    grouping = [dfnames.machine_name]
+    if country_split:
+        grouping = [dfnames.language, dfnames.machine_name]
+    volumes = df.groupby(grouping)[dfnames.volume] \
         .agg(["sum", "count"]).reset_index() \
         .sort_values(['sum', 'count'], ascending=False) \
         .rename(columns={
@@ -81,16 +84,26 @@ def sum_volume(df: pd.DataFrame) -> pd.DataFrame:
 
 
 @st.cache(ttl=60)
-def cocktail_count(df: pd.DataFrame, limit_recipe: int = 10) -> pd.DataFrame:
+def cocktail_count(df: pd.DataFrame, limit_recipe: int = 10, country_split: bool = True) -> pd.DataFrame:
     """Aggregate by language and cocktailname, limits to x most used recipes"""
-    nameorder = df.groupby([dfnames.cocktail_name])[dfnames.volume].count(
-    ).sort_values().index.to_list()[-limit_recipe:]
-    sorter_index = dict(zip(nameorder, range(len(nameorder))))
-    cocktails = df.groupby([dfnames.cocktail_name, dfnames.language])[dfnames.volume] \
-        .count().reset_index() \
-        .rename(columns={
+    grouping = [dfnames.cocktail_name]
+    if country_split:
+        grouping = [dfnames.cocktail_name, dfnames.language]
+    # first group by the restrictions, this needs to be done in both cases
+    cocktails = df.groupby(grouping)[dfnames.volume] \
+        .count().reset_index().rename(columns={
             dfnames.volume: dfnames.cocktail_count,
         })
+    # if no split, the logic is quite simple, just sort and limit them
+    if not country_split:
+        cocktails.sort_values([dfnames.cocktail_count], ascending=False, inplace=True)
+        cocktails = cocktails.iloc[:limit_recipe]
+        return cocktails
+    # If split by country, for the listing, we need to generate a tmp rank
+    # that we can order by that rank for the cocktail name (its dependant on total count)
+    nameorder = df.groupby([dfnames.cocktail_name])[dfnames.volume].count() \
+        .sort_values().index.to_list()[-limit_recipe:]
+    sorter_index = dict(zip(nameorder, range(len(nameorder))))
     cocktails['Rank'] = cocktails[dfnames.cocktail_name].map(sorter_index)
     cocktails.sort_values(['Rank', dfnames.cocktail_count], ascending=False, inplace=True)
     cocktails.dropna(axis=0, inplace=True)
