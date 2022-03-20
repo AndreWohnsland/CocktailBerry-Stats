@@ -4,7 +4,11 @@ import streamlit as st
 import pandas as pd
 
 import plots
-from data import sum_volume, cocktail_count, time_aggregation, is_dev, dfnames
+import data
+from data import is_dev, dfnames
+
+
+LANGUAGE_SPLIT_DESC = "Also Split by Language Used"
 
 
 @dataclass
@@ -96,35 +100,42 @@ def __what_is_this():
 
 def display_data(filterd_df: pd.DataFrame, recipes_limit: int, last_day: bool):
     """Generates all the data views (plots and tables) from the data"""
-    volume_df = sum_volume(filterd_df)
-    recipe_df = cocktail_count(filterd_df, recipes_limit)
-
-    # Display section of volume / count data
-    st.header("🍸 Volume and Number of Cocktails")
-    if not volume_df.empty:
-        plots.generate_volume_treemap(volume_df)
-    else:
+    if filterd_df.empty:
         __say_no_data()
-    with st.expander(f"[Table] Aggregated by Language used and {dfnames.machine_name}:"):
-        st.table(volume_df.style.format({dfnames.cocktail_volume: "{:.2f}"}))
+        return
+    __show_recipe_data(filterd_df, recipes_limit)
+    __show_time_stats(filterd_df, last_day)
+    __show_volume_stats(filterd_df)
 
-    # Display section of recipe data
+
+def __show_recipe_data(filterd_df: pd.DataFrame, recipes_limit: int):
+    """Display Recipes count by recipe and country"""
     st.header("🧾 Recipes Made")
-    if not recipe_df.empty:
-        plots.generate_recipes_treemap(recipe_df)
-    else:
-        __say_no_data()
-    with st.expander(f"[Table] Aggregated by {dfnames.cocktail_name} and Language used (Top {recipes_limit}):"):
+    country_split = st.checkbox(LANGUAGE_SPLIT_DESC, False, key="country_recipe")
+    recipe_df = data.cocktail_count(filterd_df, recipes_limit, country_split)
+    plots.generate_recipes_treemap(recipe_df, country_split)
+    header_addition = " and Language used" if country_split else ""
+    with st.expander(f"[Table] Aggregated by {dfnames.cocktail_name}{header_addition} (Top {recipes_limit}):"):
         st.table(recipe_df)
 
-    # Display time stats
+
+def __show_time_stats(filterd_df: pd.DataFrame, last_day: bool):
+    """Displays Cocktail count over time"""
     st.header("⏱️ Data Over Time")
     hour_grouping = __define_granularity(last_day)
-    if not filterd_df.empty:
-        time_df = time_aggregation(filterd_df, last_day, hour_grouping)
-        plots.generate_time_plot(time_df)
-    else:
-        __say_no_data()
+    time_df = data.time_aggregation(filterd_df, last_day, hour_grouping)
+    plots.generate_time_plot(time_df)
+
+
+def __show_volume_stats(filterd_df: pd.DataFrame):
+    """Lets the user decide to also split by country code"""
+    st.header("🍸 Volume and Number of Cocktails")
+    country_split = st.checkbox(LANGUAGE_SPLIT_DESC, False, key="country_machine")
+    volume_df = data.sum_volume(filterd_df, country_split)
+    plots.generate_volume_treemap(volume_df, country_split)
+    header_addition = " Language used and" if country_split else ""
+    with st.expander(f"[Table] Aggregated by{header_addition} {dfnames.machine_name}:"):
+        st.table(volume_df.style.format({dfnames.cocktail_volume: "{:.2f}"}))
 
 
 def __define_granularity(last_day):
@@ -145,7 +156,7 @@ def __say_no_data():
     """Displays a warning that there is no data to plot"""
     st.warning(
         """
-        ⚠️ There is currently no data to be displayed. This is probably a result of following reason:
+        ⚠️ There is currently no detailed data to be displayed. This is probably a result of following reason:
 
         - ❌ Your filtering is too strict and nothing matches the criteria. Change your filter or reload the page to reset the filtering.
         """
