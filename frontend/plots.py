@@ -63,7 +63,8 @@ def generate_time_plot(df: pd.DataFrame, machine_grouping: bool):
             y=1.02,
             xanchor="right",
             x=1
-        )
+        ),
+        xaxis_title=None,
     )
     fig.update_traces(marker_line_width=0, selector=dict(type="bar"))
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
