@@ -8,7 +8,7 @@ import data
 from data import is_dev, dfnames
 
 
-LANGUAGE_SPLIT_DESC = "Also Split by Language Used"
+LANGUAGE_SPLIT_DESC = "Split by Language Used"
 
 
 @dataclass
