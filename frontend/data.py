@@ -67,7 +67,7 @@ def filter_dataframe(df: pd.DataFrame, countries: list, machines: list, recipes:
 
 
 @st.cache(ttl=60)
-def sum_volume(df: pd.DataFrame, country_split: bool = True) -> pd.DataFrame:
+def sum_volume(df: pd.DataFrame, country_split: bool) -> pd.DataFrame:
     """Aggregate by language and machine Name, returns total volumes and cocktail counts"""
     grouping = [dfnames.machine_name]
     if country_split:
@@ -84,7 +84,7 @@ def sum_volume(df: pd.DataFrame, country_split: bool = True) -> pd.DataFrame:
 
 
 @st.cache(ttl=60)
-def cocktail_count(df: pd.DataFrame, limit_recipe: int = 10, country_split: bool = True) -> pd.DataFrame:
+def cocktail_count(df: pd.DataFrame, limit_recipe: int, country_split: bool) -> pd.DataFrame:
     """Aggregate by language and cocktailname, limits to x most used recipes"""
     grouping = [dfnames.cocktail_name]
     if country_split:
@@ -112,14 +112,16 @@ def cocktail_count(df: pd.DataFrame, limit_recipe: int = 10, country_split: bool
 
 
 @st.cache(ttl=60)
-def time_aggregation(df: pd.DataFrame, last_day: bool, hour_grouping: bool = False) -> pd.DataFrame:
+def time_aggregation(df: pd.DataFrame, hour_grouping: bool, machine_grouping: bool) -> pd.DataFrame:
     """Aggregates the data either by day or hour, depending on the last_day param"""
     freq = "1D"
-    if last_day or hour_grouping:
+    if hour_grouping:
         freq = "1h"
-    time_df = df.groupby(
-        [pd.Grouper(key=dfnames.receivedate, freq=freq), dfnames.machine_name]
-    )[dfnames.cocktail_name].count().reset_index().rename(
+    date_grouper = pd.Grouper(key=dfnames.receivedate, freq=freq)
+    grouping = [date_grouper]
+    if machine_grouping:
+        grouping = [date_grouper, dfnames.machine_name]
+    time_df = df.groupby(grouping)[dfnames.cocktail_name].count().reset_index().rename(
         columns={dfnames.cocktail_name: dfnames.cocktail_count, }
     )
     return time_df
