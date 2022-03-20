@@ -42,14 +42,17 @@ def generate_recipes_treemap(df: pd.DataFrame, country_split: bool = True):
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
 
-def generate_time_plot(df: pd.DataFrame):
+def generate_time_plot(df: pd.DataFrame, machine_grouping: bool):
     """Generates the cocktail count over the time"""
+    aditional_params = {}
+    if machine_grouping:
+        aditional_params["color"] = dfnames.machine_name
+        aditional_params["barmode"] = "group"
     fig = px.bar(
         df,
         x=dfnames.receivedate,
         y=dfnames.cocktail_count,
-        color=dfnames.machine_name,
-        barmode="group",
+        **aditional_params,
     )
     fig.update_layout(
         {"margin": {"l": 0, "r": 0, "t": 0, "b": 0}},
