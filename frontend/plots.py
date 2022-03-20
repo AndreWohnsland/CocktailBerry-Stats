@@ -53,7 +53,7 @@ def generate_time_plot(df: pd.DataFrame):
     )
     fig.update_layout(
         {"margin": {"l": 0, "r": 0, "t": 0, "b": 0}},
-        bargroupgap=0,  # bargap=0,
+        bargroupgap=0,
         legend=dict(
             orientation="h",
             yanchor="bottom",
