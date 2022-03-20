@@ -30,7 +30,9 @@ def generate_sidebar(df: pd.DataFrame):
         st.sidebar.write("Nothing to do, need some data ...")
         return [], [], [], 1, False, DataFrameStats(0, 0, 0, 0, 0, "No Data", "No Data")
     st.sidebar.subheader("Filter Options")
+    st.sidebar.caption("For your Party")
     only_one_day = st.sidebar.checkbox("Only Show last 24h Data")
+    st.sidebar.caption("Basic Settings")
     country_selection = sorted(list(df[dfnames.language].unique()))
     countrycodes = st.sidebar.multiselect("Choose Used Languages:", country_selection, country_selection)
     machine_selection = sorted(list(df[dfnames.machine_name].unique()))
@@ -39,6 +41,7 @@ def generate_sidebar(df: pd.DataFrame):
     recipes_limit = st.sidebar.slider(
         "Show x most Popular Recipes:", 2, max(2, len(recipes_selection)), min(10, len(recipes_selection))
     )
+    st.sidebar.caption("Advanced Settings")
     recipes = st.sidebar.multiselect("Choose Recipes:", recipes_selection, recipes_selection)
     # also generates the needed data out of the df
     # since we got unique calculation already here (to save some compute things)
