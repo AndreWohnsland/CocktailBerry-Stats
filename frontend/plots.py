@@ -47,12 +47,12 @@ def generate_time_plot(df: pd.DataFrame, machine_grouping: bool):
     aditional_params = {}
     if machine_grouping:
         aditional_params["color"] = dfnames.machine_name
-        aditional_params["barmode"] = "group"
     fig = px.bar(
         df,
         x=dfnames.receivedate,
         y=dfnames.cocktail_count,
-        **aditional_params,
+        barmode="group",
+        ** aditional_params,
     )
     fig.update_layout(
         {"margin": {"l": 0, "r": 0, "t": 0, "b": 0}},
