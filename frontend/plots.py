@@ -9,26 +9,35 @@ from data import dfnames
 warnings.filterwarnings("ignore")
 
 
-def generate_volume_treemap(df: pd.DataFrame):
-    """Uses the volume agg df to generate a treemap"""
-    fig = px.treemap(df, path=[px.Constant("Language used"), dfnames.language, dfnames.machine_name],
-                     values=dfnames.cocktail_volume, height=400)
+def generate_volume_treemap(df: pd.DataFrame, country_split: bool = True):
+    """Uses the language an machine name agg df to generate a treemap"""
+    path = [px.Constant("Machines"), dfnames.machine_name]
+    if country_split:
+        path = [px.Constant("Language used"), dfnames.language, dfnames.machine_name]
+    fig = px.treemap(df, path=path, values=dfnames.cocktail_volume, height=400)
     fig.update_layout({"margin": {"l": 0, "r": 0, "t": 0, "b": 0}})
+    fig.data[0].customdata = df[dfnames.cocktail_count].to_list()
     fig.update_traces(
-        texttemplate="<b>%{label}</b><br>%{value:,.2f} l",
-        hovertemplate='%{label}<br>Cocktail Volume: %{value:,.2f} l'
+        texttemplate="<b>%{label}</b><br>%{customdata} Cocktails<br>%{value:,.2f} l",
+        hovertemplate='%{label}<br>Cocktail Volume: %{value:,.2f} l<br>Cocktails Made: %{customdata}<i>x</i>'
     )
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
 
-def generate_recipes_treemap(df: pd.DataFrame):
+def generate_recipes_treemap(df: pd.DataFrame, country_split: bool = True):
     """Uses the recipe agg df to generate a treemap"""
-    fig = px.treemap(df, path=[px.Constant("Recipes"), dfnames.cocktail_name, dfnames.language],
-                     values=dfnames.cocktail_count, height=400)
+    path = [px.Constant("Recipes"), dfnames.cocktail_name]
+    texttemplate = "<b>%{label}</b> <i>x</i>%{value:.0f}<br>"
+    hovertemplate = '%{label}<br>Repice made: %{value:,.0f}<i>x</i>'
+    if country_split:
+        path = [px.Constant("Recipes"), dfnames.cocktail_name, dfnames.language]
+        texttemplate = "<b>%{parent}</b> <i>x</i>%{value:.0f}<br>(%{label})"
+        hovertemplate = '%{parent} (%{label})<br>Repice made: %{value:,.0f}<i>x</i>'
+    fig = px.treemap(df, path=path, values=dfnames.cocktail_count, height=400)
     fig.update_layout({"margin": {"l": 0, "r": 0, "t": 0, "b": 0}})
     fig.update_traces(
-        texttemplate="<b>%{parent}</b> <i>x</i>%{value:.0f}<br>(%{label})",
-        hovertemplate='%{parent} (%{label})<br>Repice made: %{value:,.0f}'
+        texttemplate=texttemplate,
+        hovertemplate=hovertemplate
     )
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
