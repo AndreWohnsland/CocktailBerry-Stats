@@ -23,7 +23,7 @@ views.display_introduction(df_stats)
 
 # skip this part if there is no data
 if df.empty:
-    st.write("Currently no data available. Let CocktailBerry send some data! 🥺")
+    st.info("Currently no data available. Let CocktailBerry send some data! ✨")
 else:
     filtered_df = filter_dataframe(df, countrycodes, machines, recipes, only_one_day)
     views.display_data(filtered_df, recipes_limit, only_one_day)
