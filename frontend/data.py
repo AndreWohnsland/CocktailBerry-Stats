@@ -124,4 +124,5 @@ def time_aggregation(df: pd.DataFrame, hour_grouping: bool, machine_grouping: bo
     time_df = df.groupby(grouping)[dfnames.cocktail_name].count().reset_index().rename(
         columns={dfnames.cocktail_name: dfnames.cocktail_count, }
     )
+    time_df = time_df[time_df[dfnames.cocktail_count] != 0]
     return time_df
