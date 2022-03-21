@@ -14,12 +14,11 @@ def generate_volume_treemap(df: pd.DataFrame, country_split: bool = True):
     path = [px.Constant("Machines"), dfnames.machine_name]
     if country_split:
         path = [px.Constant("Language used"), dfnames.language, dfnames.machine_name]
-    fig = px.treemap(df, path=path, values=dfnames.cocktail_volume, height=400)
+    fig = px.treemap(df, path=path, values=dfnames.cocktail_volume, height=400, hover_data=[dfnames.cocktail_count])
     fig.update_layout({"margin": {"l": 0, "r": 0, "t": 0, "b": 0}})
-    fig.data[0].customdata = df[dfnames.cocktail_count].to_list()
     fig.update_traces(
         texttemplate="<b>%{label}</b><br>%{customdata} Cocktails<br>%{value:,.2f} l",
-        hovertemplate='%{label}<br>Cocktail Volume: %{value:,.2f} l<br>Cocktails Made: %{customdata}<i>x</i>'
+        hovertemplate='%{label}<br>Cocktails Made: %{customdata}<i>x</i><br>Cocktail Volume: %{value:,.2f} l'
     )
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
