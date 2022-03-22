@@ -66,4 +66,21 @@ def generate_time_plot(df: pd.DataFrame, machine_grouping: bool):
         xaxis_title=None,
     )
     fig.update_traces(marker_line_width=0, selector=dict(type="bar"))
+    fig.update_xaxes(
+        rangeslider_visible=False,
+        rangeselector=dict(
+            buttons=list([
+                dict(count=1, label="1d", step="day", stepmode="backward"),
+                dict(count=7, label="1w", step="day", stepmode="backward"),
+                dict(count=1, label="1m", step="month", stepmode="backward"),
+                dict(step="all")
+            ]),
+            activecolor="#ff0000",
+            font=dict(color="#000000"),
+            yanchor="top",
+            y=0.98,
+            xanchor="left",
+            x=0.01
+        )
+    )
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
