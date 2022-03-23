@@ -58,7 +58,7 @@ def generate_sidebar(df: pd.DataFrame):
 
 
 def __build_date(checkdate: datetime) -> str:
-    yyyymmddfmt = "%Y-%m-%d"
+    yyyymmddfmt = "%a, %d. %b %Y"
     if checkdate.date() == datetime.today().date():
         return "today"
     return checkdate.strftime(yyyymmddfmt)
