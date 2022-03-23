@@ -165,7 +165,7 @@ def __say_no_data():
         """
         ⚠️ There is currently no detailed data to be displayed. This is probably a result of following reason:
 
-        - ❌ Your filtering is too strict and nothing matches the criteria. Change your filter or reload the page to reset the filtering.
+        ❌ Your filtering is too strict and nothing matches the criteria. Change your filter or reload the page to reset the filtering.
         """
     )
 
