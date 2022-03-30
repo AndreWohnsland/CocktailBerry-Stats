@@ -145,8 +145,9 @@ def __show_volume_stats(filterd_df: pd.DataFrame):
 def __show_serving_size(filterd_df: pd.DataFrame):
     """Show stats over the prepared volume choices"""
     st.header("🥃 Serving Sizes")
-    serving_df = data.serving_aggreation(filterd_df)
-    plots.generate_serving_size_bars(serving_df)
+    machine_split = st.checkbox("Split by Machine", False, key="serving_machine")
+    serving_df = data.serving_aggreation(filterd_df, machine_split)
+    plots.generate_serving_size_bars(serving_df, machine_split)
 
 
 def __define_granularity(last_day):
