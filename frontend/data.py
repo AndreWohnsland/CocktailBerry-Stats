@@ -126,3 +126,14 @@ def time_aggregation(df: pd.DataFrame, hour_grouping: bool, machine_grouping: bo
     )
     time_df = time_df[time_df[dfnames.cocktail_count] != 0]
     return time_df
+
+
+def serving_aggreation(df: pd.DataFrame):
+    """Aggregates by serving sizes"""
+    serving_df = df.groupby(dfnames.volume)[dfnames.language] \
+        .agg(["count"]).reset_index() \
+        .sort_values(['count'], ascending=False) \
+        .rename(columns={
+            "count": dfnames.cocktail_count,
+        })
+    return serving_df

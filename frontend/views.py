@@ -109,6 +109,7 @@ def display_data(filterd_df: pd.DataFrame, recipes_limit: int, last_day: bool):
     __show_recipe_data(filterd_df, recipes_limit)
     __show_time_stats(filterd_df, last_day)
     __show_volume_stats(filterd_df)
+    __show_serving_size(filterd_df)
 
 
 def __show_recipe_data(filterd_df: pd.DataFrame, recipes_limit: int):
@@ -139,6 +140,13 @@ def __show_volume_stats(filterd_df: pd.DataFrame):
     header_addition = " Language used and" if country_split else ""
     with st.expander(f"[Table] Aggregated by{header_addition} {dfnames.machine_name}:"):
         st.table(volume_df.style.format({dfnames.cocktail_volume: "{:.2f}"}))
+
+
+def __show_serving_size(filterd_df: pd.DataFrame):
+    """Show stats over the prepared volume choices"""
+    st.header("🥃 Serving Sizes")
+    serving_df = data.serving_aggreation(filterd_df)
+    plots.generate_serving_size_bars(serving_df)
 
 
 def __define_granularity(last_day):
