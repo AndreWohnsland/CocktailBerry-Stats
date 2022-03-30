@@ -132,11 +132,16 @@ def time_aggregation(df: pd.DataFrame, hour_grouping: bool, machine_grouping: bo
     return time_df
 
 
-def serving_aggreation(df: pd.DataFrame):
+@st.cache(ttl=60)
+def serving_aggreation(df: pd.DataFrame, machine_split: bool):
     """Aggregates by serving sizes"""
     # rounds to the closest 25
-    df[dfnames.volume] = df[dfnames.volume].apply(__myround, args=(25,))
-    serving_df = df.groupby(dfnames.volume)[dfnames.language] \
+    serving_df = df.copy(deep=True)
+    serving_df[dfnames.volume] = serving_df[dfnames.volume].apply(__myround, args=(25,))
+    grouping = [dfnames.volume]
+    if machine_split:
+        grouping = [dfnames.machine_name, dfnames.volume]
+    serving_df = serving_df.groupby(grouping)[dfnames.language] \
         .agg(["count"]).reset_index() \
         .sort_values(['count'], ascending=False) \
         .rename(columns={

@@ -86,17 +86,28 @@ def generate_time_plot(df: pd.DataFrame, machine_grouping: bool):
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
 
-def generate_serving_size_bars(df: pd.DataFrame):
+def generate_serving_size_bars(df: pd.DataFrame, machine_split: bool):
     """Crerates a bar chart with the serving sizes"""
+    additional_args = {}
+    if machine_split:
+        additional_args["color"] = dfnames.machine_name
     fig = px.bar(
         df,
         x=dfnames.volume,
         y=dfnames.cocktail_count,
+        **additional_args
     )
     fig.update_layout(
         {"margin": {"l": 0, "r": 0, "t": 0, "b": 0}},
         bargroupgap=0,
         xaxis_title=None,
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1
+        ),
     )
     fig.update_traces(marker_line_width=0, selector=dict(type="bar"))
     fig.update_xaxes(
