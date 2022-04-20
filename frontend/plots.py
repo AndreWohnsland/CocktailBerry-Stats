@@ -95,6 +95,7 @@ def generate_serving_size_bars(df: pd.DataFrame, machine_split: bool):
         df,
         x=dfnames.volume,
         y=dfnames.cocktail_count,
+        text_auto=True,
         **additional_args
     )
     fig.update_layout(
