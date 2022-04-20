@@ -23,7 +23,7 @@ Either cd into `frontend` or `backend` and run `pip install -r requirements.txt`
 ```bash
 # omit poetry run if using normal python
 poetry run uvicorn main:app --reload # backend
-poetry run streamlit run main.py # frontend
+poetry run streamlit run streamlit_app.py # frontend
 ```
 
 If you want everything to work properly, you need a [deta account](https://web.deta.sh/) and project API key (go to Settings>Create Key). It is used for Deta Base e.g. storing of the data and for the later deployment of the API. Dont' worry it's free (and will always be that way, according to deta). Copy the `.env.example` in both folders as a `.env` file and change the API key dummy to your project API key:
