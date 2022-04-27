@@ -3,9 +3,9 @@ from datetime import datetime
 import streamlit as st
 import pandas as pd
 
-import plots
-import data
-from data import is_dev, dfnames
+from . import plots
+from . import data
+from .data import is_dev, dfnames
 
 
 LANGUAGE_SPLIT_DESC = "Split by Language Used"

@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-from data import dfnames
+from .data import dfnames
 
 # ignore the frame.append deprecation warning cause by plotly
 warnings.filterwarnings("ignore")
