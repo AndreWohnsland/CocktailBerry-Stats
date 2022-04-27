@@ -1,8 +1,8 @@
 import streamlit as st
 
-from data import generate_df, filter_dataframe
-from styles import generate_style
-import views
+from frontend.data import generate_df, filter_dataframe
+from frontend.styles import generate_style
+from frontend import views
 
 
 st.set_page_config(
