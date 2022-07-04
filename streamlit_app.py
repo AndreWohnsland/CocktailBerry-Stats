@@ -28,5 +28,6 @@ else:
     filtered_df = filter_dataframe(df, countrycodes, machines, recipes, only_one_day)
     views.display_data(filtered_df, recipes_limit, only_one_day)
 views.display_api_instructions()
+views.display_machine_types()
 views.display_dev(df)
 views.display_footer()
