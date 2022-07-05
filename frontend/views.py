@@ -269,8 +269,7 @@ def display_machine_types():
 
 def _display_cocktailberry_mk_one():
     """Shows information about the first CocktailBerry machine"""
-    description = """
-        **CocktailBerry Mk 1** was the start of the journey and the birth of this project.
+    description = """**CocktailBerry Mk 1** was the start of the journey and the birth of this project.
         It got 10 12V Pumps, a Rapsberry Pi 3b+, relays to controll the pumps and a 5-inch touch screen.
         The casing is made out of stainless steel, the electric is inside an electric box for protection as well as display.
         The pumps are located above the bottles.
@@ -281,8 +280,7 @@ def _display_cocktailberry_mk_one():
 
 def _display_cocktailberry_mk_two():
     """Shows information about the second CocktailBerry machine"""
-    description = """
-        **CocktailBerry Mk 2** is the successor of the first model.
+    description = """**CocktailBerry Mk 2** is the successor of the first model.
         The pumps were reduced to 8, to make it smaller and better portable.
         The design was changed to be more modern and to be producable on a 3D printer.
         The screen is now a 7-inch touch screen, for better user experience.
