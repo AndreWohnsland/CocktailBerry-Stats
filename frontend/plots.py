@@ -1,5 +1,7 @@
 import warnings
+import datetime
 import pandas as pd
+import numpy as np
 import plotly.express as px
 import streamlit as st
 
@@ -83,7 +85,27 @@ def generate_time_plot(df: pd.DataFrame, machine_grouping: bool):
             x=0.01
         )
     )
+
+    excluded_days = _generate_excluded_days(df[dfnames.receivedate])
+
+    fig.update_xaxes(
+        rangebreaks=[
+            dict(values=excluded_days)  # hide days without values
+        ]
+    )
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+
+
+def _generate_excluded_days(date_data: pd.Series) -> list[str]:
+    start_date = min(date_data)   # start date
+    end_date = max(date_data)     # end date
+    delta = end_date - start_date               # as timedelta
+    used_days = date_data.unique()
+    used_days = [pd.to_datetime(day).strftime('%Y-%m-%d') for day in used_days]
+    all_days = [start_date + datetime.timedelta(days=i) for i in range(delta.days + 1)]
+    all_days = [day.strftime('%Y-%m-%d') for day in all_days]
+    excluded_days = list(set(all_days) - set(used_days))
+    return excluded_days
 
 
 def generate_serving_size_bars(df: pd.DataFrame, machine_split: bool):
