@@ -1,7 +1,6 @@
 import warnings
 import datetime
 import pandas as pd
-import numpy as np
 import plotly.express as px
 import streamlit as st
 
@@ -52,7 +51,6 @@ def generate_time_plot(df: pd.DataFrame, machine_grouping: bool):
         df,
         x=dfnames.receivedate,
         y=dfnames.cocktail_count,
-        barmode="group",
         ** aditional_params,
     )
     fig.update_layout(
