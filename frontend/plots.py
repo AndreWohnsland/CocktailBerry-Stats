@@ -65,7 +65,13 @@ def generate_time_plot(df: pd.DataFrame, machine_grouping: bool):
         ),
         xaxis_title=None,
     )
-    fig.update_traces(marker_line_width=0, selector=dict(type="bar"))
+    hovertemplate = '<b>%{fullData.name}</b><br>%{label}<br>Cocktails: %{value:i}<i>x</i><extra></extra>'
+    fig.update_traces(
+        marker_line_width=0,
+        selector=dict(type="bar"),
+        hovertemplate=hovertemplate
+    )
+    excluded_days = _generate_excluded_days(df[dfnames.receivedate])
     fig.update_xaxes(
         rangeslider_visible=False,
         rangeselector=dict(
@@ -81,23 +87,20 @@ def generate_time_plot(df: pd.DataFrame, machine_grouping: bool):
             y=0.98,
             xanchor="left",
             x=0.01
-        )
-    )
-
-    excluded_days = _generate_excluded_days(df[dfnames.receivedate])
-
-    fig.update_xaxes(
+        ),
         rangebreaks=[
             dict(values=excluded_days)  # hide days without values
-        ]
+        ],
     )
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
 
 def _generate_excluded_days(date_data: pd.Series) -> list[str]:
-    start_date = min(date_data)   # start date
-    end_date = max(date_data)     # end date
-    delta = end_date - start_date               # as timedelta
+    """Generates a list of days to exclude from the time plot.
+    Leaving only existing dates in the dataframe"""
+    start_date = min(date_data)
+    end_date = max(date_data)
+    delta = end_date - start_date
     used_days = date_data.unique()
     used_days = [pd.to_datetime(day).strftime('%Y-%m-%d') for day in used_days]
     all_days = [start_date + datetime.timedelta(days=i) for i in range(delta.days + 1)]
@@ -130,7 +133,12 @@ def generate_serving_size_bars(df: pd.DataFrame, machine_split: bool):
             x=1
         ),
     )
-    fig.update_traces(marker_line_width=0, selector=dict(type="bar"))
+    hovertemplate = '<b>%{fullData.name}</b><br>Size: %{label}<br>Cocktails: %{value:i}<i>x</i><extra></extra>'
+    fig.update_traces(
+        marker_line_width=0,
+        selector=dict(type="bar"),
+        hovertemplate=hovertemplate
+    )
     fig.update_xaxes(
         tickmode='array',
         tickvals=df[dfnames.volume],
