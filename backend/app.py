@@ -30,5 +30,5 @@ def init_app():
         openapi_tags=tags_metadata,
     )
     is_dev = os.getenv("DEBUG") is not None
-    deta = Deta(os.getenv("DETA_PROJECT_KEY"))
+    deta = Deta(os.getenv("DETA_PROJECT_KEY", "no_key_found"))
     return app, deta, is_dev
