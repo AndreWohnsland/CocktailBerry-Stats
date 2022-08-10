@@ -1,18 +1,18 @@
 [tool.poetry]
 name = "cocktailberry-webapp"
-version = "0.1.0"
+version = "1.0.0"
 description = "WebApp with API and endpoint for CocktailBerry. Have insights into made cocktails."
 authors = ["Andre Wohnsland <50302161+AndreWohnsland@users.noreply.github.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-fastapi = "^0.75.0"
+fastapi = "^0.79.0"
 deta = "^1.1.0"
-python-dotenv = "^0.19.2"
+python-dotenv = "^0.20.0"
 plotly-express = "^0.4.1"
-pandas = "^1.4.1"
-streamlit = "^1.7.0"
+pandas = "^1.4.3"
+streamlit = "^1.11.1"
 
 [tool.poetry.dev-dependencies]
 pylint = "^2.12.2"
