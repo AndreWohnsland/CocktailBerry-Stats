@@ -7,7 +7,7 @@ import pandas as pd
 
 from . import plots
 from . import data
-from .data import is_dev, dfnames
+from .data import is_dev, DataSchema
 
 
 LANGUAGE_SPLIT_DESC = "Split by Language Used"
@@ -37,11 +37,11 @@ def generate_sidebar(df: pd.DataFrame):
     st.sidebar.caption("For your Party")
     only_one_day = st.sidebar.checkbox("Only Show last 24h Data")
     st.sidebar.caption("Basic Settings")
-    country_selection = sorted(list(df[dfnames.language].unique()))
+    country_selection = sorted(list(df[DataSchema.language].unique()))
     countrycodes = st.sidebar.multiselect("Choose Used Languages:", country_selection, country_selection)
-    machine_selection = sorted(list(df[dfnames.machine_name].unique()))
+    machine_selection = sorted(list(df[DataSchema.machine_name].unique()))
     machines = st.sidebar.multiselect("Choose Machines:", machine_selection, machine_selection)
-    recipes_selection = sorted(list(df[dfnames.cocktail_name].unique()))
+    recipes_selection = sorted(list(df[DataSchema.cocktail_name].unique()))
     recipes_limit = st.sidebar.slider(
         "Show x most Popular Recipes:", 2, max(2, len(recipes_selection)), min(10, len(recipes_selection))
     )
@@ -54,9 +54,9 @@ def generate_sidebar(df: pd.DataFrame):
         len(machine_selection),
         len(recipes_selection),
         len(df),
-        df[dfnames.volume].sum() / 1000,
-        __build_date(df[dfnames.receivedate].min()),
-        __build_date(df[dfnames.receivedate].max()),
+        df[DataSchema.volume].sum() / 1000,
+        __build_date(df[DataSchema.receivedate].min()),
+        __build_date(df[DataSchema.receivedate].max()),
     )
     return countrycodes, machines, recipes, recipes_limit, only_one_day, df_stats
 
@@ -123,7 +123,7 @@ def __show_recipe_data(filterd_df: pd.DataFrame, recipes_limit: int):
     recipe_df = data.cocktail_count(filterd_df, recipes_limit, country_split)
     plots.generate_recipes_treemap(recipe_df, country_split)
     header_addition = " and Language used" if country_split else ""
-    with st.expander(f"[Table] Aggregated by {dfnames.cocktail_name}{header_addition}:"):
+    with st.expander(f"[Table] Aggregated by {DataSchema.cocktail_name}{header_addition}:"):
         st.table(recipe_df)
 
 
@@ -142,8 +142,8 @@ def __show_volume_stats(filterd_df: pd.DataFrame):
     volume_df = data.sum_volume(filterd_df, country_split)
     plots.generate_volume_treemap(volume_df, country_split)
     header_addition = " Language used and" if country_split else ""
-    with st.expander(f"[Table] Aggregated by{header_addition} {dfnames.machine_name}:"):
-        st.table(volume_df.style.format({dfnames.cocktail_volume: "{:.2f}"}))
+    with st.expander(f"[Table] Aggregated by{header_addition} {DataSchema.machine_name}:"):
+        st.table(volume_df.style.format({DataSchema.cocktail_volume: "{:.2f}"}))
 
 
 def __show_serving_size(filterd_df: pd.DataFrame):

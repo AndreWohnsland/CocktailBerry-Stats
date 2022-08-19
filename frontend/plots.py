@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-from .data import dfnames
+from .data import DataSchema
 
 # ignore the frame.append deprecation warning cause by plotly
 warnings.filterwarnings("ignore")
@@ -12,10 +12,11 @@ warnings.filterwarnings("ignore")
 
 def generate_volume_treemap(df: pd.DataFrame, country_split: bool = True):
     """Uses the language an machine name agg df to generate a treemap"""
-    path = [px.Constant("Machines"), dfnames.machine_name]
+    path = [px.Constant("Machines"), DataSchema.machine_name]
     if country_split:
-        path = [px.Constant("Language used"), dfnames.language, dfnames.machine_name]
-    fig = px.treemap(df, path=path, values=dfnames.cocktail_volume, height=400, hover_data=[dfnames.cocktail_count])
+        path = [px.Constant("Language used"), DataSchema.language, DataSchema.machine_name]
+    fig = px.treemap(df, path=path, values=DataSchema.cocktail_volume,
+                     height=400, hover_data=[DataSchema.cocktail_count])
     fig.update_layout({"margin": {"l": 0, "r": 0, "t": 0, "b": 0}})
     fig.update_traces(
         texttemplate="<b>%{label}</b><br>%{customdata} Cocktails<br>%{value:,.2f} l",
@@ -26,14 +27,14 @@ def generate_volume_treemap(df: pd.DataFrame, country_split: bool = True):
 
 def generate_recipes_treemap(df: pd.DataFrame, country_split: bool = True):
     """Uses the recipe agg df to generate a treemap"""
-    path = [px.Constant("Recipes"), dfnames.cocktail_name]
+    path = [px.Constant("Recipes"), DataSchema.cocktail_name]
     texttemplate = "<b>%{label}</b> <i>x</i>%{value:.0f}<br>"
     hovertemplate = '%{label}<br>Repice made: %{value:,.0f}<i>x</i>'
     if country_split:
-        path = [px.Constant("Recipes"), dfnames.cocktail_name, dfnames.language]
+        path = [px.Constant("Recipes"), DataSchema.cocktail_name, DataSchema.language]
         texttemplate = "<b>%{parent}</b> <i>x</i>%{value:.0f}<br>(%{label})"
         hovertemplate = '%{parent} (%{label})<br>Repice made: %{value:,.0f}<i>x</i>'
-    fig = px.treemap(df, path=path, values=dfnames.cocktail_count, height=400)
+    fig = px.treemap(df, path=path, values=DataSchema.cocktail_count, height=400)
     fig.update_layout({"margin": {"l": 0, "r": 0, "t": 0, "b": 0}})
     fig.update_traces(
         texttemplate=texttemplate,
@@ -46,11 +47,11 @@ def generate_time_plot(df: pd.DataFrame, machine_grouping: bool):
     """Generates the cocktail count over the time"""
     aditional_params = {}
     if machine_grouping:
-        aditional_params["color"] = dfnames.machine_name
+        aditional_params["color"] = DataSchema.machine_name
     fig = px.bar(
         df,
-        x=dfnames.receivedate,
-        y=dfnames.cocktail_count,
+        x=DataSchema.receivedate,
+        y=DataSchema.cocktail_count,
         ** aditional_params,
     )
     fig.update_layout(
@@ -71,7 +72,7 @@ def generate_time_plot(df: pd.DataFrame, machine_grouping: bool):
         selector=dict(type="bar"),
         hovertemplate=hovertemplate
     )
-    excluded_days = _generate_excluded_days(df[dfnames.receivedate])
+    excluded_days = _generate_excluded_days(df[DataSchema.receivedate])
     fig.update_xaxes(
         rangeslider_visible=False,
         rangeselector=dict(
@@ -113,11 +114,11 @@ def generate_serving_size_bars(df: pd.DataFrame, machine_split: bool):
     """Crerates a bar chart with the serving sizes"""
     additional_args = {}
     if machine_split:
-        additional_args["color"] = dfnames.machine_name
+        additional_args["color"] = DataSchema.machine_name
     fig = px.bar(
         df,
-        x=dfnames.volume,
-        y=dfnames.cocktail_count,
+        x=DataSchema.volume,
+        y=DataSchema.cocktail_count,
         text_auto=True,
         **additional_args
     )
@@ -141,7 +142,7 @@ def generate_serving_size_bars(df: pd.DataFrame, machine_split: bool):
     )
     fig.update_xaxes(
         tickmode='array',
-        tickvals=df[dfnames.volume],
-        ticktext=[f"{x} ml" for x in df[dfnames.volume].to_list()]
+        tickvals=df[DataSchema.volume],
+        ticktext=[f"{x} ml" for x in df[DataSchema.volume].to_list()]
     )
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
