@@ -43,4 +43,4 @@ In this project, [Deta](https://docs.deta.sh/docs/home/) was used for the hostin
 
 # Access
 
-Simply go to the [site](https://share.streamlit.io/andrewohnsland/cocktailberry-webapp/main/frontend/main.py) and have nice insight into the data. If you have build your [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry) and use the official software, you can get an API key for CocktailBerry to use the prodived endpoint to submit your production data. This way, you can actively participate. 🙌
+Simply go to the [site](https://stats-cocktailberry.streamlitapp.com/) and have nice insight into the data. If you have build your [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry) and use the official software, you can get an API key for CocktailBerry to use the prodived endpoint to submit your production data. This way, you can actively participate. 🙌
