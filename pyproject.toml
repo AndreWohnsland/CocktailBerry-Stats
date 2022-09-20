@@ -6,13 +6,13 @@ authors = ["Andre Wohnsland <50302161+AndreWohnsland@users.noreply.github.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.7,<3.9.7 || >3.9.7,<4.0"
 fastapi = "^0.79.0"
 deta = "^1.1.0"
 python-dotenv = "^0.20.0"
 plotly-express = "^0.4.1"
 pandas = "^1.4.3"
-streamlit = "^1.12.0"
+streamlit = "^1.12.2"
 
 [tool.poetry.dev-dependencies]
 pylint = "^2.12.2"
