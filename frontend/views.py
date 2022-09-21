@@ -35,7 +35,7 @@ def generate_sidebar(df: pd.DataFrame):
         return [], [], [], 1, False, DataFrameStats(0, 0, 0, 0, 0, "No Data", "No Data")
     st.sidebar.subheader("Filter Options")
     st.sidebar.caption("For your Party")
-    only_one_day = st.sidebar.checkbox("Only Show last 24h Data")
+    only_one_day = st.sidebar.checkbox("Only Show last 24h Data", _get_partymode())
     st.sidebar.caption("Basic Settings")
     country_selection = sorted(list(df[DataSchema.language].unique()))
     countrycodes = st.sidebar.multiselect("Choose Used Languages:", country_selection, country_selection)
@@ -59,6 +59,14 @@ def generate_sidebar(df: pd.DataFrame):
         __build_date(df[DataSchema.receivedate].max()),
     )
     return countrycodes, machines, recipes, recipes_limit, only_one_day, df_stats
+
+
+def _get_partymode() -> bool:
+    """Returns if the query requested only data of today"""
+    q_params = st.experimental_get_query_params()
+    partymode = q_params.get("partymode")
+    use_party = partymode is not None and partymode[0].lower() == "true"
+    return use_party
 
 
 def __build_date(checkdate: datetime) -> str:
@@ -187,6 +195,8 @@ def display_dev(df):
     """show dev thingies if devmode is on"""
     if is_dev:
         st.header("⚙️ Debug Stuff")
+        q_params = st.experimental_get_query_params()
+        st.write(q_params)
         with st.expander("All raw Data:"):
             st.table(df)
 
