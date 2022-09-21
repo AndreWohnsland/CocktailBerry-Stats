@@ -44,3 +44,5 @@ In this project, [Deta](https://docs.deta.sh/docs/home/) was used for the hostin
 # Access
 
 Simply go to the [site](https://stats-cocktailberry.streamlitapp.com/) and have nice insight into the data. If you have build your [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry) and use the official software, you can get an API key for CocktailBerry to use the prodived endpoint to submit your production data. This way, you can actively participate. 🙌
+
+Also, if you directly just want the data for the last 24 hours, for example if you want to give your guest insights in the current developments of the cocktail stats, there is the possibility to add the `?partymode?=true` query parameter to the url. This will cause the "Only Show last 24h Data" checkbox to be checked by default.
