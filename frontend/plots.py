@@ -8,6 +8,8 @@ from .data import DataSchema
 
 # ignore the frame.append deprecation warning cause by plotly
 warnings.filterwarnings("ignore")
+_TREEMAP_HEIGHT = 400
+_BARPLOT_HEIGHT = 380
 
 
 def generate_volume_treemap(df: pd.DataFrame, country_split: bool = True):
@@ -16,7 +18,7 @@ def generate_volume_treemap(df: pd.DataFrame, country_split: bool = True):
     if country_split:
         path = [px.Constant("Language used"), DataSchema.language, DataSchema.machine_name]
     fig = px.treemap(df, path=path, values=DataSchema.cocktail_volume,
-                     height=400, hover_data=[DataSchema.cocktail_count])
+                     height=_TREEMAP_HEIGHT, hover_data=[DataSchema.cocktail_count])
     fig.update_layout({"margin": {"l": 0, "r": 0, "t": 0, "b": 0}})
     fig.update_traces(
         texttemplate="<b>%{label}</b><br>%{customdata} Cocktails<br>%{value:,.2f} l",
@@ -34,7 +36,7 @@ def generate_recipes_treemap(df: pd.DataFrame, country_split: bool = True):
         path = [px.Constant("Recipes"), DataSchema.cocktail_name, DataSchema.language]
         texttemplate = "<b>%{parent}</b> <i>x</i>%{value:.0f}<br>(%{label})"
         hovertemplate = '%{parent} (%{label})<br>Repice made: %{value:,.0f}<i>x</i>'
-    fig = px.treemap(df, path=path, values=DataSchema.cocktail_count, height=400)
+    fig = px.treemap(df, path=path, values=DataSchema.cocktail_count, height=_TREEMAP_HEIGHT)
     fig.update_layout({"margin": {"l": 0, "r": 0, "t": 0, "b": 0}})
     fig.update_traces(
         texttemplate=texttemplate,
@@ -52,6 +54,7 @@ def generate_time_plot(df: pd.DataFrame, machine_grouping: bool):
         df,
         x=DataSchema.receivedate,
         y=DataSchema.cocktail_count,
+        height=_BARPLOT_HEIGHT,
         ** aditional_params,
     )
     fig.update_layout(
@@ -120,6 +123,7 @@ def generate_serving_size_bars(df: pd.DataFrame, machine_split: bool):
         x=DataSchema.volume,
         y=DataSchema.cocktail_count,
         text_auto=True,
+        height=_BARPLOT_HEIGHT,
         **additional_args
     )
     fig.update_layout(
