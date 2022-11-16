@@ -84,7 +84,7 @@ def display_introduction(df_stats: DataFrameStats):
         __what_is_this()
     st.markdown(
         f"""
-        # 📈 Current CocktailBerry Stats
+        ## 📈 Current CocktailBerry Stats
         - 🍸 **{df_stats.cocktails}** cocktails made
         - 🧾 **{df_stats.recipes}** different recipes tasted
         - 🎊 **{df_stats.volume:.1f}** litre cocktails produced
@@ -157,8 +157,15 @@ def __show_volume_stats(filterd_df: pd.DataFrame):
 def __show_serving_size(filterd_df: pd.DataFrame):
     """Show stats over the prepared volume choices"""
     st.header("🥃 Serving Sizes")
-    machine_split = st.checkbox("Split by Machine", False, key="serving_machine")
-    serving_df = data.serving_aggreation(filterd_df, machine_split)
+    col1, col2 = st.columns(2)
+    machine_split = col1.checkbox("Split by Machine", False, key="serving_machine")
+    # only make it available if no machine split is activated
+    max_value_posssible = 10
+    min_servings: int = col2.slider(
+        "Filter Minimal Serving Count", 0,
+        max_value_posssible
+    )  # type: ignore
+    serving_df = data.serving_aggreation(filterd_df, machine_split, min_servings)
     plots.generate_serving_size_bars(serving_df, machine_split)
 
 

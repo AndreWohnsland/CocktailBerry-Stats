@@ -147,6 +147,7 @@ def generate_serving_size_bars(df: pd.DataFrame, machine_split: bool):
     fig.update_xaxes(
         tickmode='array',
         tickvals=df[DataSchema.volume],
-        ticktext=[f"{x} ml" for x in df[DataSchema.volume].to_list()]
+        ticktext=[f"{x} ml" for x in df[DataSchema.volume].to_list()],
+        type="category",
     )
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
