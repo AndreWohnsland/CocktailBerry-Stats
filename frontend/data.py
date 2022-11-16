@@ -1,6 +1,5 @@
 import os
 import datetime
-from dataclasses import dataclass
 import streamlit as st
 from deta import Deta
 import pandas as pd
@@ -37,6 +36,7 @@ class ReceivedData():
 
 
 def __myround(x, base=5):
+    """Rounds to the nearest number to given base"""
     return base * round(x / base)
 
 
@@ -152,7 +152,7 @@ def time_aggregation(df: pd.DataFrame, hour_grouping: bool, machine_grouping: bo
 
 
 @st.cache(ttl=60)
-def serving_aggreation(df: pd.DataFrame, machine_split: bool):
+def serving_aggreation(df: pd.DataFrame, machine_split: bool, min_count: int):
     """Aggregates by serving sizes"""
     # rounds to the closest 25
     serving_df = df.copy(deep=True)
@@ -164,7 +164,10 @@ def serving_aggreation(df: pd.DataFrame, machine_split: bool):
         serving_df.groupby(grouping)[DataSchema.language]  # type: ignore
         .agg(["count"])
         .reset_index()
-        .sort_values(['count'], ascending=False)
+        .sort_values([DataSchema.volume], ascending=True)
         .rename(columns={"count": DataSchema.cocktail_count, })
     )
-    return serving_df
+    # for multiple grouping needs to calculate the sum per group and only inlcude the ones having more than min
+    serving_sive_count = serving_df.groupby(DataSchema.volume).sum()
+    volumes_to_keep = serving_sive_count[serving_sive_count[DataSchema.cocktail_count] >= min_count].index.to_list()
+    return serving_df[serving_df[DataSchema.volume].isin(volumes_to_keep)]
