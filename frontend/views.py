@@ -28,7 +28,7 @@ class DataFrameStats():
 
 def generate_sidebar(df: pd.DataFrame):
     """Generates the sidebar with the option. Returns needed variables"""
-    st.sidebar.header("🔍 Filter CocktailBerry Data")
+    st.sidebar.subheader("🔍 Filter CocktailBerry Data")
     st.sidebar.write("Here you can limit the data and filter a little bit.")
     if df.empty:
         st.sidebar.write("Nothing to do, need some data ...")
@@ -78,7 +78,7 @@ def __build_date(checkdate: datetime) -> str:
 
 def display_introduction(df_stats: DataFrameStats):
     """Displays some basic information and stats about the data & project"""
-    st.title("🍹CocktailBerry Dashboard")
+    st.header("🍹CocktailBerry Dashboard")
     st.markdown("Dashboard for all the [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry) machines data!")
     with st.expander("What is this?"):
         __what_is_this()
