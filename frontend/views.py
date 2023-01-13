@@ -103,7 +103,7 @@ def __what_is_this():
         This is the official WebApp / Dashboard for the [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry) project.
         If you don't know it, go check it out, it's super cool. 🚀
 
-        In short, CocktailBerry is a Python software for the Rapsberry Pi
+        In short, CocktailBerry is a Python software for the Raspberry Pi
         to easily server cocktails and do lots of additional things for your party. The users can send their cocktail data
         (volume, cocktail name) with the according machine data (machine name, language settings) to an API endpoint. ⚙️
 
@@ -246,7 +246,7 @@ def __detailed_explanation():
         It does not matter if the pumps are showing or the cabling looks like a mess. 😉
 
         Please upload your video / photos to some sort of hosting site (Imgur, etc.) and provide the link,
-        or give a reference to your blogpost (own blog, Reddit, social media) if you did such things for your machine.
+        or give a reference to your blog post (own blog, Reddit, social media) if you did such things for your machine.
         It would be nice to write some words in addition to the submission, even if it's just a kind greeting,
         and provide me some sort of name or alias how should I reply to you (first name or your preferred alias is fine).
         You can [contact me](mailto:cocktailmakeraw@gmail.com) for further questions or just to get the API-key.
@@ -289,7 +289,7 @@ def display_machine_types():
 def _display_cocktailberry_mk_one():
     """Shows information about the first CocktailBerry machine"""
     description = """**CocktailBerry Mk 1** was the start of the journey and the birth of this project.
-        It got 10 12V Pumps, a Rapsberry Pi 3b+, relays to controll the pumps and a 5-inch touch screen.
+        It got 10 12V Pumps, a Raspberry Pi 3b+, relays to control the pumps and a 5-inch touch screen.
         The casing is made out of stainless steel, the electric is inside an electric box for protection as well as display.
         The pumps are located above the bottles.
     """
@@ -301,12 +301,12 @@ def _display_cocktailberry_mk_two():
     """Shows information about the second CocktailBerry machine"""
     description = """**CocktailBerry Mk 2** is the successor of the first model.
         The pumps were reduced to 8, to make it smaller and better portable.
-        The design was changed to be more modern and to be producable on a 3D printer.
+        The design was changed to be more modern and for production on a 3D printer.
         The screen is now a 7-inch touch screen, for better user experience.
         There is also only one power supply, a 12V one for the supply of the pumps.
         The current gets split and converted into a 5V one, which is enough for the RPi to run.
         The pumps are still located above the bottles.
-        The machine is mounted on a wooden plate for stability and can be deassembled easily for transport.
+        The machine is mounted on a wooden plate for stability and can be disassembled easily for transport.
     """
     _generate_machine_info("Andre Wohnsland", description)
     _display_picture("cbmk2.jfif", "Fancy newer CocktailBerry Mk 2")
