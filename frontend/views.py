@@ -227,8 +227,9 @@ def display_api_instructions():
     st.markdown(
         """
         The tl;dr is you need to build your own [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry)
-        machine and install the software on it. After that, you provide me proof that it exists / works  (video / pictures /
-        blog or social media post). Afterwards, you will get an API key to submit your machine data.
+        machine and install the software on it. After that, you [provide me proof](mailto:cocktailmakeraw@gmail.com)
+        that it exists / works  (video / pictures / blog or social media post).
+        Afterwards, you will get an API key to submit your machine data.
         """)
     with st.expander("Show details and reasons behind them:"):
         __detailed_explanation()
