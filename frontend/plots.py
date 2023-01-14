@@ -31,11 +31,11 @@ def generate_recipes_treemap(df: pd.DataFrame, country_split: bool = True):
     """Uses the recipe agg df to generate a treemap"""
     path = [px.Constant("Recipes"), DataSchema.cocktail_name]
     texttemplate = "<b>%{label}</b> <i>x</i>%{value:.0f}<br>"
-    hovertemplate = '%{label}<br>Repice made: %{value:,.0f}<i>x</i>'
+    hovertemplate = '%{label}<br>Recipe made: %{value:,.0f}<i>x</i>'
     if country_split:
         path = [px.Constant("Recipes"), DataSchema.cocktail_name, DataSchema.language]
         texttemplate = "<b>%{parent}</b> <i>x</i>%{value:.0f}<br>(%{label})"
-        hovertemplate = '%{parent} (%{label})<br>Repice made: %{value:,.0f}<i>x</i>'
+        hovertemplate = '%{parent} (%{label})<br>Recipe made: %{value:,.0f}<i>x</i>'
     fig = px.treemap(df, path=path, values=DataSchema.cocktail_count, height=_TREEMAP_HEIGHT)
     fig.update_layout({"margin": {"l": 0, "r": 0, "t": 0, "b": 0}})
     fig.update_traces(
@@ -47,15 +47,15 @@ def generate_recipes_treemap(df: pd.DataFrame, country_split: bool = True):
 
 def generate_time_plot(df: pd.DataFrame, machine_grouping: bool):
     """Generates the cocktail count over the time"""
-    aditional_params = {}
+    additional_params = {}
     if machine_grouping:
-        aditional_params["color"] = DataSchema.machine_name
+        additional_params["color"] = DataSchema.machine_name
     fig = px.bar(
         df,
         x=DataSchema.receivedate,
         y=DataSchema.cocktail_count,
         height=_BARPLOT_HEIGHT,
-        ** aditional_params,
+        ** additional_params,
     )
     fig.update_layout(
         {"margin": {"l": 0, "r": 0, "t": 0, "b": 0}},
@@ -114,7 +114,7 @@ def _generate_excluded_days(date_data: pd.Series) -> list[str]:
 
 
 def generate_serving_size_bars(df: pd.DataFrame, machine_split: bool):
-    """Crerates a bar chart with the serving sizes"""
+    """Creates a bar chart with the serving sizes"""
     additional_args = {}
     if machine_split:
         additional_args["color"] = DataSchema.machine_name
