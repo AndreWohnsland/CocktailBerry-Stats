@@ -86,7 +86,6 @@ def generate_time_plot(df: pd.DataFrame, machine_grouping: bool):
                 dict(step="all")
             ]),
             activecolor="#ff0000",
-            font=dict(color="#000000"),
             yanchor="top",
             y=0.98,
             xanchor="left",
