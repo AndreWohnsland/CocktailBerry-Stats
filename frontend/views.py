@@ -38,7 +38,7 @@ def generate_sidebar(df: pd.DataFrame):
     only_one_day = st.sidebar.checkbox("Only Show last 24h Data", _get_partymode())
     st.sidebar.caption("Basic Settings")
     country_selection = sorted(list(df[DataSchema.language].unique()))
-    countrycodes = st.sidebar.multiselect("Choose Used Languages:", country_selection, country_selection)
+    country_codes = st.sidebar.multiselect("Choose Used Languages:", country_selection, country_selection)
     machine_selection = sorted(list(df[DataSchema.machine_name].unique()))
     machines = st.sidebar.multiselect("Choose Machines:", machine_selection, machine_selection)
     recipes_selection = sorted(list(df[DataSchema.cocktail_name].unique()))
@@ -58,7 +58,7 @@ def generate_sidebar(df: pd.DataFrame):
         __build_date(df[DataSchema.receivedate].min()),
         __build_date(df[DataSchema.receivedate].max()),
     )
-    return countrycodes, machines, recipes, recipes_limit, only_one_day, df_stats
+    return country_codes, machines, recipes, recipes_limit, only_one_day, df_stats
 
 
 def _get_partymode() -> bool:
@@ -113,59 +113,59 @@ def __what_is_this():
     )
 
 
-def display_data(filterd_df: pd.DataFrame, recipes_limit: int, last_day: bool):
+def display_data(filtered_df: pd.DataFrame, recipes_limit: int, last_day: bool):
     """Generates all the data views (plots and tables) from the data"""
-    if filterd_df.empty:
+    if filtered_df.empty:
         __say_no_data()
         return
-    __show_recipe_data(filterd_df, recipes_limit)
-    __show_time_stats(filterd_df, last_day)
-    __show_volume_stats(filterd_df)
-    __show_serving_size(filterd_df)
+    __show_recipe_data(filtered_df, recipes_limit)
+    __show_time_stats(filtered_df, last_day)
+    __show_volume_stats(filtered_df)
+    __show_serving_size(filtered_df)
 
 
-def __show_recipe_data(filterd_df: pd.DataFrame, recipes_limit: int):
+def __show_recipe_data(filtered_df: pd.DataFrame, recipes_limit: int):
     """Display Recipes count by recipe and country"""
     st.header("🧾 Recipes Made")
     country_split = st.checkbox(LANGUAGE_SPLIT_DESC, False, key="country_recipe")
-    recipe_df = data.cocktail_count(filterd_df, recipes_limit, country_split)
+    recipe_df = data.cocktail_count(filtered_df, recipes_limit, country_split)
     plots.generate_recipes_treemap(recipe_df, country_split)
     header_addition = " and Language used" if country_split else ""
     with st.expander(f"[Table] Aggregated by {DataSchema.cocktail_name}{header_addition}:"):
         st.table(recipe_df)
 
 
-def __show_time_stats(filterd_df: pd.DataFrame, last_day: bool):
+def __show_time_stats(filtered_df: pd.DataFrame, last_day: bool):
     """Displays Cocktail count over time"""
     st.header("⏱️ Data Over Time")
     hour_grouping, machine_grouping = __define_granularity(last_day)
-    time_df = data.time_aggregation(filterd_df, hour_grouping, machine_grouping)
+    time_df = data.time_aggregation(filtered_df, hour_grouping, machine_grouping)
     plots.generate_time_plot(time_df, machine_grouping)
 
 
-def __show_volume_stats(filterd_df: pd.DataFrame):
+def __show_volume_stats(filtered_df: pd.DataFrame):
     """Lets the user decide to also split by country code"""
     st.header("🍸 Volume and Number of Cocktails")
     country_split = st.checkbox(LANGUAGE_SPLIT_DESC, False, key="country_machine")
-    volume_df = data.sum_volume(filterd_df, country_split)
+    volume_df = data.sum_volume(filtered_df, country_split)
     plots.generate_volume_treemap(volume_df, country_split)
     header_addition = " Language used and" if country_split else ""
     with st.expander(f"[Table] Aggregated by{header_addition} {DataSchema.machine_name}:"):
         st.table(volume_df.style.format({DataSchema.cocktail_volume: "{:.2f}"}))
 
 
-def __show_serving_size(filterd_df: pd.DataFrame):
+def __show_serving_size(filtered_df: pd.DataFrame):
     """Show stats over the prepared volume choices"""
     st.header("🥃 Serving Sizes")
     col1, col2 = st.columns(2)
     machine_split = col1.checkbox("Split by Machine", False, key="serving_machine")
     # only make it available if no machine split is activated
-    max_value_posssible = 10
+    max_value_possible = 10
     min_servings: int = col2.slider(
         "Filter Minimal Serving Count", 0,
-        max_value_posssible
+        max_value_possible
     )  # type: ignore
-    serving_df = data.serving_aggreation(filterd_df, machine_split, min_servings)
+    serving_df = data.serving_aggregation(filtered_df, machine_split, min_servings)
     plots.generate_serving_size_bars(serving_df, machine_split)
 
 
