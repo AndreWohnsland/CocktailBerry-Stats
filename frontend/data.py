@@ -26,7 +26,7 @@ class DataSchema():
 
 class ReceivedData():
     COUNTRYCODE = "countrycode"
-    MACCHINENAME = "machinename"
+    MACHINENAME = "machinename"
     COCKTAILNAME = "cocktailname"
     VOLUME = "volume"
     RECEIVEDATE = "receivedate"
@@ -40,13 +40,13 @@ def __myround(x, base=5):
     return base * round(x / base)
 
 
-@st.cache(ttl=60)
+@st.cache_data(ttl=60)
 def generate_df():
     """Gets the data from deta and converts to df"""
     cocktails = cocktail_deta.fetch().items
     df = pd.DataFrame(cocktails).rename(columns={
         ReceivedData.COUNTRYCODE: DataSchema.language,
-        ReceivedData.MACCHINENAME: DataSchema.machine_name,
+        ReceivedData.MACHINENAME: DataSchema.machine_name,
         ReceivedData.COCKTAILNAME: DataSchema.cocktail_name,
         ReceivedData.VOLUME: DataSchema.volume,
         ReceivedData.RECEIVEDATE: DataSchema.receivedate,
@@ -63,7 +63,7 @@ def generate_df():
     return df
 
 
-@st.cache(ttl=60)
+@st.cache_data(ttl=60)
 def filter_dataframe(df: pd.DataFrame, countries: list, machines: list, recipes: list, only_one_day: bool):
     """Applies the sidebar filter option to the data"""
     filtered_df = df.loc[
@@ -78,7 +78,7 @@ def filter_dataframe(df: pd.DataFrame, countries: list, machines: list, recipes:
     return filtered_df
 
 
-@st.cache(ttl=60)
+@st.cache_data(ttl=60)
 def sum_volume(df: pd.DataFrame, country_split: bool) -> pd.DataFrame:
     """Aggregate by language and machine Name, returns total volumes and cocktail counts"""
     grouping = [DataSchema.machine_name]
@@ -96,9 +96,9 @@ def sum_volume(df: pd.DataFrame, country_split: bool) -> pd.DataFrame:
     return volumes
 
 
-@st.cache(ttl=60)
+@st.cache_data(ttl=60)
 def cocktail_count(df: pd.DataFrame, limit_recipe: int, country_split: bool) -> pd.DataFrame:
-    """Aggregate by language and cocktailname, limits to x most used recipes"""
+    """Aggregate by language and cocktail name, limits to x most used recipes"""
     grouping = [DataSchema.cocktail_name]
     if country_split:
         grouping = [DataSchema.cocktail_name, DataSchema.language]
@@ -116,14 +116,14 @@ def cocktail_count(df: pd.DataFrame, limit_recipe: int, country_split: bool) -> 
         return cocktails
     # If split by country, for the listing, we need to generate a tmp rank
     # that we can order by that rank for the cocktail name (its dependant on total count)
-    nameorder = (
+    name_order = (
         df.groupby([DataSchema.cocktail_name])[DataSchema.volume]
         .count()
         .sort_values()
         .index
         .to_list()[-limit_recipe:]
     )
-    sorter_index = dict(zip(nameorder, range(len(nameorder))))
+    sorter_index = dict(zip(name_order, range(len(name_order))))
     cocktails['Rank'] = cocktails[DataSchema.cocktail_name].map(sorter_index)
     cocktails.sort_values(['Rank', DataSchema.cocktail_count], ascending=False, inplace=True)
     cocktails.dropna(axis=0, inplace=True)
@@ -131,7 +131,7 @@ def cocktail_count(df: pd.DataFrame, limit_recipe: int, country_split: bool) -> 
     return cocktails
 
 
-@st.cache(ttl=60)
+@st.cache_data(ttl=60)
 def time_aggregation(df: pd.DataFrame, hour_grouping: bool, machine_grouping: bool) -> pd.DataFrame:
     """Aggregates the data either by day or hour, depending on the last_day param"""
     freq = "1D"
@@ -151,8 +151,8 @@ def time_aggregation(df: pd.DataFrame, hour_grouping: bool, machine_grouping: bo
     return time_df
 
 
-@st.cache(ttl=60)
-def serving_aggreation(df: pd.DataFrame, machine_split: bool, min_count: int):
+@st.cache_data(ttl=60)
+def serving_aggregation(df: pd.DataFrame, machine_split: bool, min_count: int):
     """Aggregates by serving sizes"""
     # rounds to the closest 25
     serving_df = df.copy(deep=True)
@@ -167,7 +167,7 @@ def serving_aggreation(df: pd.DataFrame, machine_split: bool, min_count: int):
         .sort_values([DataSchema.volume], ascending=True)
         .rename(columns={"count": DataSchema.cocktail_count, })
     )
-    # for multiple grouping needs to calculate the sum per group and only inlcude the ones having more than min
-    serving_sive_count = serving_df.groupby(DataSchema.volume).sum()
-    volumes_to_keep = serving_sive_count[serving_sive_count[DataSchema.cocktail_count] >= min_count].index.to_list()
+    # for multiple grouping needs to calculate the sum per group and only include the ones having more than min
+    serving_size_count = serving_df.groupby(DataSchema.volume).sum()
+    volumes_to_keep = serving_size_count[serving_size_count[DataSchema.cocktail_count] >= min_count].index.to_list()
     return serving_df[serving_df[DataSchema.volume].isin(volumes_to_keep)]
