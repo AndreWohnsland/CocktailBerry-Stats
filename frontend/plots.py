@@ -17,8 +17,10 @@ def generate_volume_treemap(df: pd.DataFrame, country_split: bool = True):
     path = [px.Constant("Machines"), DataSchema.machine_name]
     if country_split:
         path = [px.Constant("Language used"), DataSchema.language, DataSchema.machine_name]
-    fig = px.treemap(df, path=path, values=DataSchema.cocktail_volume,
-                     height=_TREEMAP_HEIGHT, hover_data=[DataSchema.cocktail_count])
+    fig = px.treemap(
+        df, path=path, values=DataSchema.cocktail_volume,
+        height=_TREEMAP_HEIGHT, hover_data=[DataSchema.cocktail_count]
+    )
     fig.update_layout({"margin": {"l": 0, "r": 0, "t": 0, "b": 0}})
     fig.update_traces(
         texttemplate="<b>%{label}</b><br>%{customdata} Cocktails<br>%{value:,.2f} l",
