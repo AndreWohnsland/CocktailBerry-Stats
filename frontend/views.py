@@ -162,8 +162,8 @@ def __show_serving_size(filtered_df: pd.DataFrame):
     # only make it available if no machine split is activated
     max_value_possible = 10
     min_servings: int = col2.slider(
-        "Filter Minimal Serving Count", 5,
-        max_value_possible
+        "Filter Minimal Serving Count", 0,
+        max_value_possible, 5
     )  # type: ignore
     serving_df = data.serving_aggregation(filtered_df, machine_split, min_servings)
     plots.generate_serving_size_bars(serving_df, machine_split)
