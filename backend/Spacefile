@@ -1,0 +1,15 @@
+# Spacefile Docs: https://go.deta.dev/docs/spacefile/v0
+v: 0
+micros:
+  - name: cocktailberryapi
+    src: .
+    engine: python3.9
+    primary: true
+    public_routes:
+      - '/*'
+    presets:
+      api_keys: true
+      env:
+        - name: MY_DATA_KEY
+          description: Data Key to write to deta base
+          default: 'please input your data key'

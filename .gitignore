@@ -131,3 +131,5 @@ dmypy.json
 
 # deta related things
 .deta
+tmp.*
+.space
