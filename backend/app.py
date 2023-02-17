@@ -9,7 +9,9 @@ An endpoint for [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry)
 
 ## cocktail
 
-You can **post your cocktaildata**.
+You can **post your cocktaildata** or **get all the cocktaildata**.
+Check the tags which route is public accessible and which one is protected by an API key.
+Usually routes inserting or changing data are protected, routes getting data are open.
 
 This API is still quite minimal, since not much endpoints are needed for CocktailBerry.
 """
@@ -21,6 +23,14 @@ def init_app():
         {
             "name": "cocktail",
             "description": "Operations with cocktail data.",
+        },
+        {
+            "name": "protected",
+            "description": "Route is protected by API key.",
+        },
+        {
+            "name": "open",
+            "description": "Route is accessible by public.",
         },
     ]
     app = FastAPI(
