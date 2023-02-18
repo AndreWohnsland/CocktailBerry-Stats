@@ -6,6 +6,7 @@ micros:
     engine: python3.9
     primary: true
     public_routes:
+      - '/docs' # docs should be open
       - '/docs/*' # docs should be open
       - '/public/*' # public routes for getting data
     presets:
