@@ -24,5 +24,5 @@ class DetaCocktail(BaseModel):
     machinename: str
     countrycode: str
     keyname: Optional[str]
-    makedate: str
+    makedate: Optional[str]
     receivedate: str
