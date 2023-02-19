@@ -10,7 +10,6 @@ from dotenv import load_dotenv
 load_dotenv()
 is_dev = os.getenv("DEBUG") is not None
 backend_url = os.getenv("BACKEND", "http://127.0.0.1:8000")
-print(backend_url)
 DATEFORMAT_STR = "%d/%m/%Y, %H:%M"
 
 
