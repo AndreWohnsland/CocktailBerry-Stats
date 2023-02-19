@@ -1,16 +1,16 @@
 import os
 import datetime
+import json
+import requests
 import streamlit as st
-from deta import Deta
 import pandas as pd
 from dotenv import load_dotenv
 
 
 load_dotenv()
 is_dev = os.getenv("DEBUG") is not None
-TABLE_NAME = "cocktails" + ("_dev" if is_dev else "")
-deta = Deta(os.getenv("DETA_BASE_KEY", "no_key_found"))
-cocktail_deta = deta.Base(TABLE_NAME)
+backend_url = os.getenv("BACKEND", "http://127.0.0.1:8000")
+print(backend_url)
 DATEFORMAT_STR = "%d/%m/%Y, %H:%M"
 
 
@@ -43,7 +43,10 @@ def __myround(x, base=5):
 @st.cache_data(ttl=60)
 def generate_df():
     """Gets the data from deta and converts to df"""
-    cocktails = cocktail_deta.fetch().items
+    cocktails_response = requests.get(f"{backend_url}/public/cocktails", timeout=10)
+    cocktails = {}
+    if cocktails_response.ok:
+        cocktails = json.loads(cocktails_response.text)
     df = pd.DataFrame(cocktails).rename(columns={
         ReceivedData.COUNTRYCODE: DataSchema.language,
         ReceivedData.MACHINENAME: DataSchema.machine_name,
