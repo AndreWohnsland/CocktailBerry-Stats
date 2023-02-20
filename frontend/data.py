@@ -31,9 +31,6 @@ class ReceivedData():
     RECEIVEDATE = "receivedate"
 
 
-# DataSchema = DataSchema()
-
-
 def __myround(x, base=5):
     """Rounds to the nearest number to given base"""
     return base * round(x / base)
@@ -54,7 +51,7 @@ def generate_df():
         ReceivedData.RECEIVEDATE: DataSchema.receivedate,
     })
     if not df.empty:
-        df = df[[
+        df = df[[  # pylint: disable=unsubscriptable-object
             DataSchema.language,
             DataSchema.machine_name,
             DataSchema.cocktail_name,
@@ -129,7 +126,7 @@ def cocktail_count(df: pd.DataFrame, limit_recipe: int, country_split: bool) -> 
     cocktails['Rank'] = cocktails[DataSchema.cocktail_name].map(sorter_index)
     cocktails.sort_values(['Rank', DataSchema.cocktail_count], ascending=False, inplace=True)
     cocktails.dropna(axis=0, inplace=True)
-    cocktails.drop('Rank', 1, inplace=True)
+    cocktails.drop('Rank', axis=1, inplace=True)
     return cocktails
 
 
