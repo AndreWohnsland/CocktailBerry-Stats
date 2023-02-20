@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 is_dev = os.getenv("DEBUG") is not None
-backend_url = os.getenv("BACKEND", "http://127.0.0.1:8000")
+backend_url = os.getenv("BACKEND_URL", "http://127.0.0.1:8000")
 DATEFORMAT_STR = "%d/%m/%Y, %H:%M"
 
 
