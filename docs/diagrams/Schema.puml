@@ -19,21 +19,23 @@ skinparam backgroundColor #fff
 
 HIDE_STEREOTYPE()
 
-System_Boundary(c1, "Deta", $link="https://docs.deta.sh/docs/home/") {
+System_Boundary(c1, "Deta") {
   Container(api, "API", "Python (FastAPI)", "Endpoint to receive and process cocktail data", "python")
   Container(detastore, "Deta Store", "Deta", "Saves cocktail data into a NoSql format database", "database")
 }
 Container(webapp, "WebApp", "Python (Streamlit)", "Displays information and option for the user to filter", "python")
-Person_Ext(user, "Users", "Person who wants the exported data from the DB", "users")
+Person_Ext(user, "Users", "Person who wants cocktails and see the data", "users")
 System(cocktailberry, "CocktailBerry", "CocktailBerry machines which sends production data", "raspberry_pi")
 
 
 
+Rel_L(user, cocktailberry, "uses")
+Rel_R(cocktailberry,  user, "cocktails")
 Rel(user, webapp, "uses", "https")
-Rel(cocktailberry, api, "post", "https")
-Rel_L(webapp, detastore, "reads", "SDK")
-Rel_R(api, detastore, "saves")
-Rel_L(detastore, api, "provides")
+Rel(cocktailberry, api, "posts\n(protected)", "https")
+Rel_L(webapp, api, "gets\n(open)", "https")
+Rel_L(api, detastore, "saves")
+Rel_R(detastore, api, "provides")
 
 
 @enduml
