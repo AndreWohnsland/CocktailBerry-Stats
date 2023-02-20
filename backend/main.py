@@ -9,6 +9,7 @@ from app import init_app
 app, deta, isDev = init_app()
 TABLE_NAME = "cocktails" + ("_dev" if isDev else "")
 cocktail_deta = deta.Base(TABLE_NAME)
+DATEFORMAT_STR = "%d/%m/%Y, %H:%M"
 
 
 @app.get("/", tags=["protected"])
@@ -29,7 +30,7 @@ def insert_cocktaildata(cocktail: CocktailData, x_deta_api_key_name: Optional[st
         "countrycode": cocktail.countrycode,
         "keyname": x_deta_api_key_name,
         "makedate": cocktail.makedate,
-        "receivedate": datetime.datetime.now().strftime("%d/%m/%Y, %H:%M"),
+        "receivedate": datetime.datetime.now().strftime(DATEFORMAT_STR),
     })
 
 
