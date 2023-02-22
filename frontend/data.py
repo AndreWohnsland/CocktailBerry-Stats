@@ -2,7 +2,9 @@ import os
 import datetime
 import json
 import requests
+from requests.exceptions import ConnectTimeout, ReadTimeout
 import streamlit as st
+from streamlit.logger import get_logger
 import pandas as pd
 from dotenv import load_dotenv
 
@@ -11,6 +13,7 @@ load_dotenv()
 is_dev = os.getenv("DEBUG") is not None
 backend_url = os.getenv("BACKEND_URL", "http://127.0.0.1:8000")
 DATEFORMAT_STR = "%d/%m/%Y, %H:%M"
+logger = get_logger(__name__)
 
 
 class DataSchema():
@@ -39,10 +42,15 @@ def __myround(x, base=5):
 @st.cache_data(ttl=60)
 def generate_df():
     """Gets the data from deta and converts to df"""
-    cocktails_response = requests.get(f"{backend_url}/public/cocktails", timeout=10)
     cocktails = {}
-    if cocktails_response.ok:
-        cocktails = json.loads(cocktails_response.text)
+    try:
+        cocktails_response = requests.get(f"{backend_url}/public/cocktails", timeout=10)
+        if cocktails_response.ok:
+            cocktails = json.loads(cocktails_response.text)
+        else:
+            logger.warning("Error from backend: %s: %s", cocktails_response.status_code, cocktails_response.text)
+    except (ConnectTimeout, ReadTimeout):
+        logger.error("Timeout when connecting to backend.")
     df = pd.DataFrame(cocktails).rename(columns={
         ReceivedData.COUNTRYCODE: DataSchema.language,
         ReceivedData.MACHINENAME: DataSchema.machine_name,
