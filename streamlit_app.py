@@ -27,7 +27,7 @@ if df.empty:
 else:
     filtered_df = filter_dataframe(df, country_codes, machines, recipes, only_one_day)
     views.display_data(filtered_df, recipes_limit, only_one_day)  # type: ignore
-views.display_api_instructions()
+views.api_guidelines()
 views.display_machine_types()
 views.display_dev(df)
 views.display_footer()
