@@ -8,30 +8,14 @@ from streamlit.logger import get_logger
 import pandas as pd
 from dotenv import load_dotenv
 
+from .models import ReceivedData, CocktailSchema
+
 
 load_dotenv()
 is_dev = os.getenv("DEBUG") is not None
 backend_url = os.getenv("BACKEND_URL", "http://127.0.0.1:8000")
 DATEFORMAT_STR = "%d/%m/%Y, %H:%M"
 logger = get_logger(__name__)
-
-
-class DataSchema():
-    machine_name: str = "Machine Name"
-    cocktail_name: str = "Cocktail Name"
-    cocktail_count: str = "Number of Cocktails"
-    cocktail_volume: str = "Cocktail Volume in Litre"
-    volume: str = "Volume"
-    language: str = "Language"
-    receivedate: str = "Received Date"
-
-
-class ReceivedData():
-    COUNTRYCODE = "countrycode"
-    MACHINENAME = "machinename"
-    COCKTAILNAME = "cocktailname"
-    VOLUME = "volume"
-    RECEIVEDATE = "receivedate"
 
 
 def __myround(x, base=5):
@@ -52,21 +36,21 @@ def generate_df():
     except (ConnectTimeout, ReadTimeout):
         logger.error("Timeout when connecting to backend.")
     df = pd.DataFrame(cocktails).rename(columns={
-        ReceivedData.COUNTRYCODE: DataSchema.language,
-        ReceivedData.MACHINENAME: DataSchema.machine_name,
-        ReceivedData.COCKTAILNAME: DataSchema.cocktail_name,
-        ReceivedData.VOLUME: DataSchema.volume,
-        ReceivedData.RECEIVEDATE: DataSchema.receivedate,
+        ReceivedData.COUNTRYCODE: CocktailSchema.language,
+        ReceivedData.MACHINENAME: CocktailSchema.machine_name,
+        ReceivedData.COCKTAILNAME: CocktailSchema.cocktail_name,
+        ReceivedData.VOLUME: CocktailSchema.volume,
+        ReceivedData.RECEIVEDATE: CocktailSchema.receivedate,
     })
     if not df.empty:
         df = df[[  # pylint: disable=unsubscriptable-object
-            DataSchema.language,
-            DataSchema.machine_name,
-            DataSchema.cocktail_name,
-            DataSchema.volume,
-            DataSchema.receivedate,
+            CocktailSchema.language,
+            CocktailSchema.machine_name,
+            CocktailSchema.cocktail_name,
+            CocktailSchema.volume,
+            CocktailSchema.receivedate,
         ]]
-        df[DataSchema.receivedate] = pd.to_datetime(df[DataSchema.receivedate], format=DATEFORMAT_STR)
+        df[CocktailSchema.receivedate] = pd.to_datetime(df[CocktailSchema.receivedate], format=DATEFORMAT_STR)
     return df
 
 
@@ -74,12 +58,12 @@ def generate_df():
 def filter_dataframe(df: pd.DataFrame, countries: list, machines: list, recipes: list, only_one_day: bool):
     """Applies the sidebar filter option to the data"""
     filtered_df = df.loc[
-        df[DataSchema.language].isin(countries) &
-        df[DataSchema.machine_name].isin(machines) &
-        df[DataSchema.cocktail_name].isin(recipes)
+        df[CocktailSchema.language].isin(countries) &
+        df[CocktailSchema.machine_name].isin(machines) &
+        df[CocktailSchema.cocktail_name].isin(recipes)
     ]
     if only_one_day:
-        filtering = filtered_df[DataSchema.receivedate] >= (
+        filtering = filtered_df[CocktailSchema.receivedate] >= (
             datetime.datetime.now() - datetime.timedelta(hours=24))  # type: ignore
         filtered_df = filtered_df[filtering]
     return filtered_df
@@ -88,51 +72,51 @@ def filter_dataframe(df: pd.DataFrame, countries: list, machines: list, recipes:
 @st.cache_data(ttl=60)
 def sum_volume(df: pd.DataFrame, country_split: bool) -> pd.DataFrame:
     """Aggregate by language and machine Name, returns total volumes and cocktail counts"""
-    grouping = [DataSchema.machine_name]
+    grouping = [CocktailSchema.machine_name]
     if country_split:
-        grouping = [DataSchema.language, DataSchema.machine_name]
+        grouping = [CocktailSchema.language, CocktailSchema.machine_name]
     volumes = (
-        df.groupby(grouping)[DataSchema.volume]   # type: ignore
+        df.groupby(grouping)[CocktailSchema.volume]   # type: ignore
         .agg(["sum", "count"]).reset_index()
         .sort_values(['sum', 'count'], ascending=False)
         .rename(columns={
-            "sum": DataSchema.cocktail_volume,
-            "count": DataSchema.cocktail_count,
+            "sum": CocktailSchema.cocktail_volume,
+            "count": CocktailSchema.cocktail_count,
         }))
-    volumes[DataSchema.cocktail_volume] = volumes[DataSchema.cocktail_volume] / 1000
+    volumes[CocktailSchema.cocktail_volume] = volumes[CocktailSchema.cocktail_volume] / 1000
     return volumes
 
 
 @st.cache_data(ttl=60)
 def cocktail_count(df: pd.DataFrame, limit_recipe: int, country_split: bool) -> pd.DataFrame:
     """Aggregate by language and cocktail name, limits to x most used recipes"""
-    grouping = [DataSchema.cocktail_name]
+    grouping = [CocktailSchema.cocktail_name]
     if country_split:
-        grouping = [DataSchema.cocktail_name, DataSchema.language]
+        grouping = [CocktailSchema.cocktail_name, CocktailSchema.language]
     # first group by the restrictions, this needs to be done in both cases
     cocktails = (
-        df.groupby(grouping)[DataSchema.volume]  # type: ignore
+        df.groupby(grouping)[CocktailSchema.volume]  # type: ignore
         .count()
         .reset_index()
-        .rename(columns={DataSchema.volume: DataSchema.cocktail_count, })
+        .rename(columns={CocktailSchema.volume: CocktailSchema.cocktail_count, })
     )
     # if no split, the logic is quite simple, just sort and limit them
     if not country_split:
-        cocktails.sort_values([DataSchema.cocktail_count], ascending=False, inplace=True)
+        cocktails.sort_values([CocktailSchema.cocktail_count], ascending=False, inplace=True)
         cocktails = cocktails.iloc[:limit_recipe]
         return cocktails
     # If split by country, for the listing, we need to generate a tmp rank
     # that we can order by that rank for the cocktail name (its dependant on total count)
     name_order = (
-        df.groupby([DataSchema.cocktail_name])[DataSchema.volume]
+        df.groupby([CocktailSchema.cocktail_name])[CocktailSchema.volume]
         .count()
         .sort_values()
         .index
         .to_list()[-limit_recipe:]
     )
     sorter_index = dict(zip(name_order, range(len(name_order))))
-    cocktails['Rank'] = cocktails[DataSchema.cocktail_name].map(sorter_index)
-    cocktails.sort_values(['Rank', DataSchema.cocktail_count], ascending=False, inplace=True)
+    cocktails['Rank'] = cocktails[CocktailSchema.cocktail_name].map(sorter_index)
+    cocktails.sort_values(['Rank', CocktailSchema.cocktail_count], ascending=False, inplace=True)
     cocktails.dropna(axis=0, inplace=True)
     cocktails.drop('Rank', axis=1, inplace=True)
     return cocktails
@@ -144,17 +128,17 @@ def time_aggregation(df: pd.DataFrame, hour_grouping: bool, machine_grouping: bo
     freq = "1D"
     if hour_grouping:
         freq = "1h"
-    date_grouper = pd.Grouper(key=DataSchema.receivedate, freq=freq)
+    date_grouper = pd.Grouper(key=CocktailSchema.receivedate, freq=freq)
     grouping = [date_grouper]
     if machine_grouping:
-        grouping = [date_grouper, DataSchema.machine_name]
+        grouping = [date_grouper, CocktailSchema.machine_name]
     time_df = (
-        df.groupby(grouping)[DataSchema.cocktail_name]  # type: ignore
+        df.groupby(grouping)[CocktailSchema.cocktail_name]  # type: ignore
         .count()
         .reset_index()
-        .rename(columns={DataSchema.cocktail_name: DataSchema.cocktail_count, })
+        .rename(columns={CocktailSchema.cocktail_name: CocktailSchema.cocktail_count, })
     )
-    time_df = time_df[time_df[DataSchema.cocktail_count] != 0]
+    time_df = time_df[time_df[CocktailSchema.cocktail_count] != 0]
     return time_df
 
 
@@ -163,18 +147,18 @@ def serving_aggregation(df: pd.DataFrame, machine_split: bool, min_count: int):
     """Aggregates by serving sizes"""
     # rounds to the closest 25
     serving_df = df.copy(deep=True)
-    serving_df[DataSchema.volume] = serving_df[DataSchema.volume].apply(__myround, args=(25,))
-    grouping = [DataSchema.volume]
+    serving_df[CocktailSchema.volume] = serving_df[CocktailSchema.volume].apply(__myround, args=(25,))
+    grouping = [CocktailSchema.volume]
     if machine_split:
-        grouping = [DataSchema.machine_name, DataSchema.volume]
+        grouping = [CocktailSchema.machine_name, CocktailSchema.volume]
     serving_df = (
-        serving_df.groupby(grouping)[DataSchema.language]  # type: ignore
+        serving_df.groupby(grouping)[CocktailSchema.language]  # type: ignore
         .agg(["count"])
         .reset_index()
-        .sort_values([DataSchema.volume], ascending=True)
-        .rename(columns={"count": DataSchema.cocktail_count, })
+        .sort_values([CocktailSchema.volume], ascending=True)
+        .rename(columns={"count": CocktailSchema.cocktail_count, })
     )
     # for multiple grouping needs to calculate the sum per group and only include the ones having more than min
-    serving_size_count = serving_df.groupby(DataSchema.volume).sum()
-    volumes_to_keep = serving_size_count[serving_size_count[DataSchema.cocktail_count] >= min_count].index.to_list()
-    return serving_df[serving_df[DataSchema.volume].isin(volumes_to_keep)]
+    serving_size_count = serving_df.groupby(CocktailSchema.volume).sum()
+    volumes_to_keep = serving_size_count[serving_size_count[CocktailSchema.cocktail_count] >= min_count].index.to_list()
+    return serving_df[serving_df[CocktailSchema.volume].isin(volumes_to_keep)]
