@@ -54,7 +54,7 @@ def generate_df():
     return df
 
 
-@st.cache_data(ttl=60)
+@st.cache_data(ttl=300)
 def filter_dataframe(df: pd.DataFrame, countries: list, machines: list, recipes: list, only_one_day: bool):
     """Applies the sidebar filter option to the data"""
     filtered_df = df.loc[
@@ -69,7 +69,7 @@ def filter_dataframe(df: pd.DataFrame, countries: list, machines: list, recipes:
     return filtered_df
 
 
-@st.cache_data(ttl=60)
+@st.cache_data(ttl=300)
 def sum_volume(df: pd.DataFrame, country_split: bool) -> pd.DataFrame:
     """Aggregate by language and machine Name, returns total volumes and cocktail counts"""
     grouping = [CocktailSchema.machine_name]
@@ -87,7 +87,7 @@ def sum_volume(df: pd.DataFrame, country_split: bool) -> pd.DataFrame:
     return volumes
 
 
-@st.cache_data(ttl=60)
+@st.cache_data(ttl=300)
 def cocktail_count(df: pd.DataFrame, limit_recipe: int, country_split: bool) -> pd.DataFrame:
     """Aggregate by language and cocktail name, limits to x most used recipes"""
     grouping = [CocktailSchema.cocktail_name]
@@ -122,7 +122,7 @@ def cocktail_count(df: pd.DataFrame, limit_recipe: int, country_split: bool) -> 
     return cocktails
 
 
-@st.cache_data(ttl=60)
+@st.cache_data(ttl=300)
 def time_aggregation(df: pd.DataFrame, hour_grouping: bool, machine_grouping: bool) -> pd.DataFrame:
     """Aggregates the data either by day or hour, depending on the last_day param"""
     freq = "1D"
@@ -142,7 +142,7 @@ def time_aggregation(df: pd.DataFrame, hour_grouping: bool, machine_grouping: bo
     return time_df
 
 
-@st.cache_data(ttl=60)
+@st.cache_data(ttl=300)
 def serving_aggregation(df: pd.DataFrame, machine_split: bool, min_count: int):
     """Aggregates by serving sizes"""
     # rounds to the closest 25
