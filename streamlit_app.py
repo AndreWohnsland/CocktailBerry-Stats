@@ -10,7 +10,7 @@ st.set_page_config(
     page_icon="🍹",
     initial_sidebar_state="collapsed",
     menu_items={
-        'Get Help': 'https://github.com/AndreWohnsland/CocktailBerry',
+        'Get Help': 'https://cocktailberry.readthedocs.io/',
         'Report a bug': "https://github.com/AndreWohnsland/CocktailBerry-WebApp/issues",
         'About': "# 🍹 CocktailBerry Dashboard \nDashboard for all the CocktailBerry machines data!"
     }
