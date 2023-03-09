@@ -38,5 +38,5 @@ def insert_cocktaildata(cocktail: CocktailData, x_deta_api_key_name: Optional[st
 def get_cocktaildata() -> list[DetaCocktail]:
     """Get the cocktail data from the database.
     Route is open accessible."""
-    cocktails: list[DetaCocktail] = cocktail_deta.fetch().items
+    cocktails: list[DetaCocktail] = cocktail_deta.fetch(limit=10000).items
     return cocktails
