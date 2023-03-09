@@ -20,7 +20,7 @@ class CocktailSchema():
     cocktail_volume: str = "Cocktail Volume in Litre"
     volume: str = "Volume"
     language: str = "Language"
-    receivedate: str = "Received Date"
+    receivedate: str = "Made Date"
 
 
 class ReceivedData():
@@ -28,4 +28,4 @@ class ReceivedData():
     MACHINENAME = "machinename"
     COCKTAILNAME = "cocktailname"
     VOLUME = "volume"
-    RECEIVEDATE = "receivedate"
+    RECEIVEDATE = "makedate"
