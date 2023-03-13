@@ -28,6 +28,10 @@ class DetaCocktail(BaseModel):
     receivedate: str
 
 
-class DetaEvent(BaseModel):
+class DetaEventData(BaseModel):
     id: str
     trigger: str
+
+
+class DetaEvent(BaseModel):
+    event: DetaEventData

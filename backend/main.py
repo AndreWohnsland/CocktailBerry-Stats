@@ -48,10 +48,11 @@ def get_cocktaildata() -> list[DetaCocktail]:
 
 
 @app.post("/__space/v0/actions", tags=["automation", "protected"])
-def run_actions(event: DetaEvent) -> None:
+def run_actions(event_object: DetaEvent) -> None:
     """Route which is triggered on deta action.
     The event data with id / trigger is provided in the event object.
     """
+    event = event_object.event
     if event.id == "cleanup":
         to_delete: list[dict] = cocktail_deta.fetch({"cocktailname?contains": "testcocktail"}).items
         if len(to_delete) > 0:
