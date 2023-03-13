@@ -20,4 +20,4 @@ micros:
         name: 'Clean Up'
         description: "Cleans up cocktails named 'testcocktail'"
         trigger: 'schedule'
-        default_interval: '1 hour'
+        default_interval: '20 minutes'
