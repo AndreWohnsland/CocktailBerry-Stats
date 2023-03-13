@@ -25,6 +25,10 @@ def init_app():
             "description": "Operations with cocktail data.",
         },
         {
+            "name": "automation",
+            "description": "Operations made by deta on a schedule.",
+        },
+        {
             "name": "protected",
             "description": "Route is protected by API key.",
         },
