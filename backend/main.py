@@ -2,7 +2,8 @@ import datetime
 from typing import Optional
 
 from fastapi import Header
-from models import CocktailData, DetaCocktail
+from fastapi.logger import logger
+from models import CocktailData, DetaCocktail, DetaEvent
 from app import init_app
 
 
@@ -40,3 +41,17 @@ def get_cocktaildata() -> list[DetaCocktail]:
     Route is open accessible."""
     cocktails: list[DetaCocktail] = cocktail_deta.fetch(limit=10000).items
     return cocktails
+
+
+@app.post("/__space/v0/actions", tags=["automation", "protected"])
+def run_actions(event: DetaEvent) -> None:
+    """Route which is triggered on deta action.
+    The event data with id / trigger is provided in the event object.
+    """
+    if event.id == "cleanup":
+        to_delete: list[dict] = cocktail_deta.fetch({"cocktailname": "testcocktail"}).items
+        if len(to_delete) > 0:
+            logger.info("Deleting %s number of items named testcocktail", len(to_delete))
+        for cocktail in to_delete:
+            logger.info("Deleting item: %s", cocktail)
+            cocktail_deta.delete(key=cocktail["key"])
