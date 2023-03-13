@@ -39,7 +39,11 @@ def insert_cocktaildata(cocktail: CocktailData, x_deta_api_key_name: Optional[st
 def get_cocktaildata() -> list[DetaCocktail]:
     """Get the cocktail data from the database.
     Route is open accessible."""
-    cocktails: list[DetaCocktail] = cocktail_deta.fetch(limit=10000).items
+    res = cocktail_deta.fetch(limit=10000)
+    cocktails: list[DetaCocktail] = res.items
+    while res.last:
+        res = cocktail_deta.fetch(limit=10000, last=res.last)
+        cocktails += res.items
     return cocktails
 
 
@@ -49,7 +53,7 @@ def run_actions(event: DetaEvent) -> None:
     The event data with id / trigger is provided in the event object.
     """
     if event.id == "cleanup":
-        to_delete: list[dict] = cocktail_deta.fetch({"cocktailname": "testcocktail"}).items
+        to_delete: list[dict] = cocktail_deta.fetch({"cocktailname?contains": "testcocktail"}).items
         if len(to_delete) > 0:
             logger.info("Deleting %s number of items named testcocktail", len(to_delete))
         for cocktail in to_delete:
