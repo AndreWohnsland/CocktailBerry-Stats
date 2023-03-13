@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 
 class LandEnum(str, Enum):
-    """Limits countrycodes to currently supported ones"""
+    """Limits country codes to currently supported ones"""
     en = 'en'
     de = 'de'
 
@@ -26,3 +26,8 @@ class DetaCocktail(BaseModel):
     keyname: Optional[str]
     makedate: Optional[str]
     receivedate: str
+
+
+class DetaEvent(BaseModel):
+    id: str
+    trigger: str
