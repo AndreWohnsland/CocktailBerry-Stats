@@ -15,3 +15,9 @@ micros:
         - name: MY_DATA_KEY
           description: Data Key to write to deta base
           default: 'please input your data key'
+    actions:
+      - id: 'cleanup'
+        name: 'Clean Up'
+        description: "Cleans up cocktails named 'testcocktail'"
+        trigger: 'schedule'
+        default_interval: '1 hour'
