@@ -2,7 +2,7 @@ import os
 import datetime
 import json
 import requests
-from requests.exceptions import ConnectTimeout, ReadTimeout
+from requests.exceptions import ConnectTimeout, ReadTimeout, ConnectionError as rConnectionError
 import streamlit as st
 from streamlit.logger import get_logger
 import pandas as pd
@@ -33,7 +33,7 @@ def generate_df():
             cocktails = json.loads(cocktails_response.text)
         else:
             logger.warning("Error from backend: %s: %s", cocktails_response.status_code, cocktails_response.text)
-    except (ConnectTimeout, ReadTimeout):
+    except (ConnectTimeout, ReadTimeout, rConnectionError):
         logger.error("Timeout when connecting to backend.")
     df = pd.DataFrame(cocktails).rename(columns={
         ReceivedData.COUNTRYCODE: CocktailSchema.language,
