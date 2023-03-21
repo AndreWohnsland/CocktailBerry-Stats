@@ -56,7 +56,7 @@ def run_actions(event_object: DetaEvent) -> None:
     if event.id == "cleanup":
         to_delete: list[dict] = cocktail_deta.fetch({"cocktailname?contains": "testcocktail"}).items
         if len(to_delete) > 0:
-            logger.info("Deleting %s number of items named testcocktail", len(to_delete))
+            logger.warning("Deleting %s number of items named testcocktail", len(to_delete))
         for cocktail in to_delete:
-            logger.info("Deleting item: %s", cocktail)
+            logger.warning("Deleting item: %s", cocktail)
             cocktail_deta.delete(key=cocktail["key"])
