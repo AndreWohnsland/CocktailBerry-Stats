@@ -1,6 +1,10 @@
 from pathlib import Path
+from typing import Optional, TYPE_CHECKING
 from PIL import Image
 import streamlit as st
+
+if TYPE_CHECKING:
+    from streamlit.delta_generator import DeltaGenerator
 
 _BASE_PATH = Path(__file__).parents[1].absolute()
 _PICTURE_FOLDER = _BASE_PATH / "assets"
@@ -14,6 +18,8 @@ def display_machine_types():
         _display_cocktailberry_mk_one()
     with st.expander("CocktailBerry Mk 2"):
         _display_cocktailberry_mk_two()
+    with st.expander("CocktailBerry Mk 3"):
+        _display_cocktailberry_mk_three()
 
 
 def _display_cocktailberry_mk_one():
@@ -39,7 +45,23 @@ def _display_cocktailberry_mk_two():
         The machine is mounted on a wooden plate for stability and can be disassembled easily for transport.
     """
     _generate_machine_info("Andre Wohnsland", description)
-    _display_picture("cbmk2.jfif", "Fancy newer CocktailBerry Mk 2")
+    _display_picture("cbmk2.jpg", "Fancy newer CocktailBerry Mk 2")
+
+
+def _display_cocktailberry_mk_three():
+    """Shows information about the second CocktailBerry machine"""
+    description = """**CocktailBerry Mk 3** is the next step from Mk2.
+        The build is quite identical to the previous model, so there is no big change in shape or concept.
+        However, the parts got a good chunk smaller.
+        This is thanks to the custom CocktailBerry board, which replaces the old relay array.
+        With this, less inside build volume is needed, which reduces top diameter from 320 to 240 mm.
+        This also reduced needed PLA for ~3 to ~2 kg, and makes production on smaller 3D printers possible.
+        The model also got some WS281x ring LEDs build in, for some RGB action and inserted threads for more durability.
+    """
+    _generate_machine_info("Andre Wohnsland", description)
+    col1, col2 = st.columns(2)
+    _display_picture("cbmk3.jpg", "Next Iteration: CocktailBerry Mk 3", col1)
+    _display_picture("cbmk3-2.jpg", "Additional Side View", col2)
 
 
 def _generate_machine_info(maker, description):
@@ -55,9 +77,12 @@ def _generate_machine_info(maker, description):
         """, unsafe_allow_html=True)
 
 
-def _display_picture(picture_name: str, caption: str):
+def _display_picture(picture_name: str, caption: str, container: Optional["DeltaGenerator"] = None):
     """Displays the given picture with the given caption
     Uses the assets folder as base path"""
     picture_path = _PICTURE_FOLDER / picture_name
     image = Image.open(picture_path)
+    if container is not None:
+        container.image(image, caption=caption, use_column_width=True)
+        return
     st.image(image, caption=caption, use_column_width=True)
