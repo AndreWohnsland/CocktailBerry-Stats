@@ -14,10 +14,20 @@ def display_data(filtered_df: pd.DataFrame, recipes_limit: int, last_day: bool):
     if filtered_df.empty:
         __say_no_data()
         return
+    __show_filtered_size(filtered_df, last_day)
     __show_recipe_data(filtered_df, recipes_limit)
     __show_time_stats(filtered_df, last_day)
     __show_volume_stats(filtered_df)
     __show_serving_size(filtered_df)
+
+
+def __show_filtered_size(filtered_df: pd.DataFrame, last_day: bool):
+    """Also displays some information how much data is left after filtering"""
+    amount_cocktails = filtered_df.shape[0]
+    if not last_day:
+        st.success(f"After filtering, **{amount_cocktails}** cocktails remain")
+        return
+    st.success(f"Today, **{amount_cocktails}** cocktails were produced 🥳")
 
 
 def __show_recipe_data(filtered_df: pd.DataFrame, recipes_limit: int):
