@@ -24,10 +24,12 @@ def display_data(filtered_df: pd.DataFrame, recipes_limit: int, last_day: bool):
 def __show_filtered_size(filtered_df: pd.DataFrame, last_day: bool):
     """Also displays some information how much data is left after filtering"""
     amount_cocktails = filtered_df.shape[0]
+    cocktail_str = "cocktails" if amount_cocktails != 1 else "cocktail"
     if not last_day:
-        st.success(f"After filtering, **{amount_cocktails}** cocktails remain")
+        st.success(f"After filtering, **{amount_cocktails}** {cocktail_str} remain")
         return
-    st.success(f"Today, **{amount_cocktails}** cocktails were produced 🥳")
+    phrasing = "were" if amount_cocktails != 1 else "was"
+    st.success(f"Today, **{amount_cocktails}** {cocktail_str} {phrasing} produced 🥳")
 
 
 def __show_recipe_data(filtered_df: pd.DataFrame, recipes_limit: int):
