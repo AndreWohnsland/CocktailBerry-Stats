@@ -12,7 +12,7 @@ def generate_sidebar(df: pd.DataFrame):
     st.sidebar.write("Here you can limit the data and filter a little bit.")
     if df.empty:
         st.sidebar.write("Nothing to do, need some data ...")
-        return [], [], [], 1, False, DataFrameStats(0, 0, 0, 0, 0, "No Data", "No Data")
+        return [], [], [], 1, False, (None, None), DataFrameStats(0, 0, 0, 0, 0, "No Data", "No Data")
     st.sidebar.subheader("Filter Options")
     st.sidebar.caption("For your Party")
     only_one_day = st.sidebar.checkbox("Only Show last 24h Data", _get_partymode())
@@ -25,8 +25,13 @@ def generate_sidebar(df: pd.DataFrame):
     recipes_limit = st.sidebar.slider(
         "Show x most Popular Recipes:", 2, max(2, len(recipes_selection)), min(10, len(recipes_selection))
     )
-    st.sidebar.caption("Advanced Settings")
-    recipes = st.sidebar.multiselect("Choose Recipes:", recipes_selection, recipes_selection)
+    min_date = datetime.date(min(df[CocktailSchema.receivedate]))
+    max_date = datetime.date(max(df[CocktailSchema.receivedate]))
+    with st.sidebar.expander("Advanced Settings"):
+        start_date = st.date_input("Start Date", value=min_date)
+        end_date = st.date_input("End Date", value=max_date)
+        dates = (start_date, end_date)
+        recipes = st.multiselect("Choose Recipes:", recipes_selection, recipes_selection)
     # also generates the needed data out of the df
     # since we got unique calculation already here (to save some compute things)
     df_stats = DataFrameStats(
@@ -38,7 +43,7 @@ def generate_sidebar(df: pd.DataFrame):
         _build_date(df[CocktailSchema.receivedate].min()),
         _build_date(df[CocktailSchema.receivedate].max()),
     )
-    return country_codes, machines, recipes, recipes_limit, only_one_day, df_stats
+    return country_codes, machines, recipes, recipes_limit, only_one_day, dates, df_stats
 
 
 def _get_partymode() -> bool:

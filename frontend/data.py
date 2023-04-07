@@ -55,12 +55,21 @@ def generate_df():
 
 
 @st.cache_data(ttl=300)
-def filter_dataframe(df: pd.DataFrame, countries: list, machines: list, recipes: list, only_one_day: bool):
+def filter_dataframe(
+    df: pd.DataFrame,
+    countries: list,
+    machines: list,
+    recipes: list,
+    only_one_day: bool,
+    dates: tuple[datetime.date, datetime.date]
+):
     """Applies the sidebar filter option to the data"""
     filtered_df = df.loc[
         df[CocktailSchema.language].isin(countries) &
         df[CocktailSchema.machine_name].isin(machines) &
-        df[CocktailSchema.cocktail_name].isin(recipes)
+        df[CocktailSchema.cocktail_name].isin(recipes) &
+        (df[CocktailSchema.receivedate] >= pd.Timestamp(dates[0])) &
+        (df[CocktailSchema.receivedate] <= pd.Timestamp(dates[1]) + pd.Timedelta(days=1))
     ]
     if only_one_day:
         filtering = filtered_df[CocktailSchema.receivedate] >= (
