@@ -20,6 +20,8 @@ def display_machine_types():
         _display_cocktailberry_mk_two()
     with st.expander("CocktailBerry Mk 3"):
         _display_cocktailberry_mk_three()
+    with st.expander("Bart"):
+        _display_bart()
 
 
 def _display_cocktailberry_mk_one():
@@ -45,7 +47,9 @@ def _display_cocktailberry_mk_two():
         The machine is mounted on a wooden plate for stability and can be disassembled easily for transport.
     """
     _generate_machine_info("Andre Wohnsland", description)
-    _display_picture("cbmk2.jpg", "Fancy newer CocktailBerry Mk 2")
+    col1, col2 = st.columns(2)
+    _display_picture("cbmk2.jpg", "Fancy newer CocktailBerry Mk 2", col1)
+    _display_picture("cbmk2-2.jpg", "Machine in action", col2)
 
 
 def _display_cocktailberry_mk_three():
@@ -62,6 +66,21 @@ def _display_cocktailberry_mk_three():
     col1, col2 = st.columns(2)
     _display_picture("cbmk3.jpg", "Next Iteration: CocktailBerry Mk 3", col1)
     _display_picture("cbmk3-2.jpg", "Additional Side View", col2)
+
+
+def _display_bart():
+    """Shows information about bart"""
+    description = """ The basic structure of the cocktail machine consists of wooden slats and screen printing plates, on which a black plastic covering has been attached.
+        Inside there are 8 water pumps (12V) which transport the ingredients through food save hoses.
+        On top sits a box made of transparent acrylic glass, which contains the electric hardware.
+        This includes: Raspberry Pi 3 Model B, 7 inch HDMI IPS touchscreen (1024x600), 8 channel relay module, power distribution board and step-down module, as well as a LED strip.
+        The other parts were all created using 3D printing.
+        The bottles are located on both sides of the machine.
+    """
+    _generate_machine_info("Thomas", description)
+    col1, col2 = st.columns(2)
+    _display_picture("bart.jpg", "Bart: Front view", col1)
+    _display_picture("bart-2.jpg", "It's short for Bartender", col2)
 
 
 def _generate_machine_info(maker, description):
