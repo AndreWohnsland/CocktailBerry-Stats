@@ -6,7 +6,7 @@ from ..models import DataFrameStats
 def display_introduction(df_stats: DataFrameStats):
     """Displays some basic information and stats about the data & project"""
     st.header("🍹CocktailBerry Dashboard")
-    st.markdown("Dashboard for all the [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry) machines data!")
+    st.markdown("Dashboard for all the [CocktailBerry](https://cocktailberry.readthedocs.io/) machines data!")
     with st.expander("What is this?"):
         _what_is_this()
     st.markdown(
@@ -27,7 +27,7 @@ def _what_is_this():
     """Returns some additional information about the dashboard"""
     st.markdown(
         """
-        This is the official WebApp / Dashboard for the [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry) project.
+        This is the official WebApp / Dashboard for the [CocktailBerry](https://cocktailberry.readthedocs.io/) project.
         If you don't know it, go check it out, it's super cool. 🚀
 
         In short, CocktailBerry is a Python software for the Raspberry Pi
