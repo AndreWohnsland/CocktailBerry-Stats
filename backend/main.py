@@ -3,13 +3,15 @@ from typing import Optional
 
 from fastapi import Header
 from fastapi.logger import logger
-from models import CocktailData, DetaCocktail, DetaEvent
+from models import CocktailData, DetaCocktail, DetaEvent, InstallationData
 from app import init_app
 
 
 app, deta, isDev = init_app()
 TABLE_NAME = "cocktails" + ("_dev" if isDev else "")
 cocktail_deta = deta.Base(TABLE_NAME)
+_INSTALLATION_TBL = "installation" + ("_dev" if isDev else "")
+installation_deta = deta.Base(_INSTALLATION_TBL)
 DATEFORMAT_STR = "%d/%m/%Y, %H:%M"
 
 
@@ -45,6 +47,16 @@ def get_cocktaildata() -> list[DetaCocktail]:
         res = cocktail_deta.fetch(limit=10000, last=res.last)
         cocktails += res.items
     return cocktails
+
+
+@app.post("/public/installation", tags=["installation", "open"])
+def post_installation(information: InstallationData):
+    """Endpoint to receive information about successful installation.
+    Route is open accessible."""
+    return installation_deta.insert({
+        "receivedate": datetime.datetime.now().strftime(DATEFORMAT_STR),
+        "os": information.os_version,
+    })
 
 
 @app.post("/__space/v0/actions", tags=["automation", "protected"])
