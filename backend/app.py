@@ -36,6 +36,10 @@ def init_app():
             "name": "open",
             "description": "Route is accessible by public.",
         },
+        {
+            "name": "installation",
+            "description": "Topics related to CocktailBerry installation.",
+        },
     ]
     app = FastAPI(
         title="CocktailBerry WebApp / Dashboard API",
