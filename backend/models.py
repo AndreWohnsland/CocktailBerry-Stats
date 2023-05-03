@@ -18,6 +18,11 @@ class CocktailData(BaseModel):
     makedate: str
 
 
+class InstallationData(BaseModel):
+    """Model for all needed cocktail data"""
+    os_version: str
+
+
 class DetaCocktail(BaseModel):
     cocktailname: str
     volume: int
