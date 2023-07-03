@@ -8,6 +8,7 @@ if TYPE_CHECKING:
 
 _BASE_PATH = Path(__file__).parents[1].absolute()
 _PICTURE_FOLDER = _BASE_PATH / "assets"
+_NAME_AW = "Andre Wohnsland"
 
 
 def display_machine_types():
@@ -31,7 +32,7 @@ def _display_cocktailberry_mk_one():
         The casing is made out of stainless steel, the electric is inside an electric box for protection as well as display.
         The pumps are located above the bottles.
     """
-    _generate_machine_info("Andre Wohnsland", description)
+    _generate_machine_info(_NAME_AW, description)
     _display_picture("cbmk1.jpg", "Good old CocktailBerry Mk 1")
 
 
@@ -46,7 +47,7 @@ def _display_cocktailberry_mk_two():
         The pumps are still located above the bottles.
         The machine is mounted on a wooden plate for stability and can be disassembled easily for transport.
     """
-    _generate_machine_info("Andre Wohnsland", description)
+    _generate_machine_info(_NAME_AW, description)
     col1, col2 = st.columns(2)
     _display_picture("cbmk2.jpg", "Fancy newer CocktailBerry Mk 2", col1)
     _display_picture("cbmk2-2.jpg", "Machine in action", col2)
@@ -62,7 +63,7 @@ def _display_cocktailberry_mk_three():
         This also reduced needed PLA for ~3 to ~2 kg, and makes production on smaller 3D printers possible.
         The model also got some WS281x ring LEDs build in, for some RGB action and inserted threads for more durability.
     """
-    _generate_machine_info("Andre Wohnsland", description)
+    _generate_machine_info(_NAME_AW, description)
     col1, col2 = st.columns(2)
     _display_picture("cbmk3.jpg", "Next Iteration: CocktailBerry Mk 3", col1)
     _display_picture("cbmk3-2.jpg", "Additional Side View", col2)
@@ -93,7 +94,9 @@ def _generate_machine_info(maker, description):
         {description}
 
         <ins>_Pictures_</ins>:
-        """, unsafe_allow_html=True)
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def _display_picture(picture_name: str, caption: str, container: Optional["DeltaGenerator"] = None):
