@@ -58,6 +58,18 @@ def generate_df():
     return df
 
 
+@st.cache_data(ttl=600)
+def get_installation_count():
+    try:
+        installations = requests.get(f"{backend_url}/public/installations", timeout=30)
+        if installations.ok:
+            return int(installations.text)
+        logger.warning("Error from backend: %s: %s", installations.status_code, installations.text)
+    except (ConnectTimeout, ReadTimeout, rConnectionError):
+        logger.error("Timeout when connecting to backend.")
+    return 0
+
+
 @st.cache_data(ttl=300)
 def filter_dataframe(
     df: pd.DataFrame, countries: list, machines: list, recipes: list, only_one_day: bool, dates: tuple[datetime.date, datetime.date]
