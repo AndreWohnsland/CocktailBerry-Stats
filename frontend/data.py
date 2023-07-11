@@ -1,4 +1,5 @@
 import os
+import time
 import datetime
 import json
 import requests
@@ -26,6 +27,8 @@ def __myround(x, base=5):
 @st.cache_data(ttl=60)
 def generate_df():
     """Gets the data from deta and converts to df"""
+    # something in streamlit cloud seems to block the request, so we need to wait a bit
+    time.sleep(1)
     cocktails = {}
     try:
         cocktails_response = requests.get(f"{backend_url}/public/cocktails", timeout=30)
