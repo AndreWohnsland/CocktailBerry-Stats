@@ -1,6 +1,6 @@
 import streamlit as st
 
-from frontend.data import generate_df, filter_dataframe
+from frontend.data import generate_df, filter_dataframe, get_installation_count
 from frontend.styles import generate_style
 from frontend import views
 
@@ -10,16 +10,17 @@ st.set_page_config(
     page_icon="🍹",
     initial_sidebar_state="collapsed",
     menu_items={
-        'Get Help': 'https://cocktailberry.readthedocs.io/',
-        'Report a bug': "https://github.com/AndreWohnsland/CocktailBerry-WebApp/issues",
-        'About': "# 🍹 CocktailBerry Dashboard \nDashboard for all the CocktailBerry machines data!"
-    }
+        "Get Help": "https://cocktailberry.readthedocs.io/",
+        "Report a bug": "https://github.com/AndreWohnsland/CocktailBerry-WebApp/issues",
+        "About": "# 🍹 CocktailBerry Dashboard \nDashboard for all the CocktailBerry machines data!",
+    },
 )
 generate_style()
 
 df = generate_df()
+installation_count = get_installation_count()
 country_codes, machines, recipes, recipes_limit, only_one_day, dates, df_stats = views.generate_sidebar(df)
-views.display_introduction(df_stats)
+views.display_introduction(df_stats, installation_count)
 
 # skip this part if there is no data
 if df.empty:
