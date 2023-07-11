@@ -26,15 +26,17 @@ def insert_cocktaildata(cocktail: CocktailData, x_deta_api_key_name: Optional[st
     """Insert the cocktail data into the database.
     Route is protected by API key.
     """
-    return cocktail_deta.insert({
-        "cocktailname": cocktail.cocktailname[:30],  # limit by 30 chars
-        "volume": cocktail.volume,
-        "machinename": cocktail.machinename[:30],  # limit by 30 chars
-        "countrycode": cocktail.countrycode,
-        "keyname": x_deta_api_key_name,
-        "makedate": cocktail.makedate,
-        "receivedate": datetime.datetime.now().strftime(DATEFORMAT_STR),
-    })
+    return cocktail_deta.insert(
+        {
+            "cocktailname": cocktail.cocktailname[:30],  # limit by 30 chars
+            "volume": cocktail.volume,
+            "machinename": cocktail.machinename[:30],  # limit by 30 chars
+            "countrycode": cocktail.countrycode,
+            "keyname": x_deta_api_key_name,
+            "makedate": cocktail.makedate,
+            "receivedate": datetime.datetime.now().strftime(DATEFORMAT_STR),
+        }
+    )
 
 
 @app.get("/public/cocktails", tags=["cocktail", "open"], response_model=list[DetaCocktail])
@@ -51,12 +53,26 @@ def get_cocktaildata() -> list[DetaCocktail]:
 
 @app.post("/public/installation", tags=["installation", "open"])
 def post_installation(information: InstallationData):
+    """Endpoint to post information about successful installation.
+    Route is open accessible."""
+    return installation_deta.insert(
+        {
+            "receivedate": datetime.datetime.now().strftime(DATEFORMAT_STR),
+            "os": information.os_version,
+        }
+    )
+
+
+@app.get("/public/installations", tags=["installation", "open"])
+def get_installations():
     """Endpoint to receive information about successful installation.
     Route is open accessible."""
-    return installation_deta.insert({
-        "receivedate": datetime.datetime.now().strftime(DATEFORMAT_STR),
-        "os": information.os_version,
-    })
+    res = installation_deta.fetch(limit=10000)
+    installations: list = res.items
+    while res.last:
+        res = installation_deta.fetch(limit=10000, last=res.last)
+        installations += res.items
+    return len(installations)
 
 
 @app.post("/__space/v0/actions", tags=["automation", "protected"])
