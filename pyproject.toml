@@ -12,8 +12,8 @@ deta = "^1.1.0"
 python-dotenv = "^0.20.0"
 plotly-express = "^0.4.1"
 pandas = "^1.5.3"
-streamlit = "^1.22.0"
-requests = "^2.30.0"
+streamlit = "^1.24.1"
+requests = "^2.31.0"
 
 [tool.poetry.dev-dependencies]
 pylint = "^2.17.4"
