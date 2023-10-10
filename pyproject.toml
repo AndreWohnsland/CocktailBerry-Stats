@@ -8,15 +8,15 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = ">=3.9,<3.9.7 || >3.9.7,<4.0"
 fastapi = "^0.79.1"
-deta = "^1.1.0"
+deta = "^1.2.0"
 python-dotenv = "^0.20.0"
 plotly-express = "^0.4.1"
 pandas = "^1.5.3"
-streamlit = "^1.24.1"
+streamlit = "^1.27.2"
 requests = "^2.31.0"
 
 [tool.poetry.dev-dependencies]
-pylint = "^2.17.4"
+pylint = "^2.17.7"
 autopep8 = "^1.7.0"
 uvicorn = "^0.17.6"
 
