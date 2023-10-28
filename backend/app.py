@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from dotenv import load_dotenv
 
 
-__DESC = """
+_DESC = """
 An endpoint for [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry) to send cocktail data to! 🍹
 
 ## cocktail
@@ -44,7 +44,7 @@ def init_app():
     app = FastAPI(
         title="CocktailBerry WebApp / Dashboard API",
         version="1.0",
-        description=__DESC,
+        description=_DESC,
         openapi_tags=tags_metadata,
     )
     is_dev = os.getenv("DEBUG") is not None
