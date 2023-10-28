@@ -226,7 +226,7 @@ def cumulate_installations(df: pd.DataFrame):
     df = df.copy(deep=True)
     df = (
         df
-        .groupby([pd.Grouper(key=InstallationSchema.RECEIVEDATE, freq='d')])
+        .groupby([pd.Grouper(key=InstallationSchema.RECEIVEDATE, freq='w')])
         .count()
         .reset_index()
         .rename(
