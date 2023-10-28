@@ -33,6 +33,11 @@ class DetaCocktail(BaseModel):
     receivedate: str
 
 
+class DetaInstallation(BaseModel):
+    os: str
+    receivedate: str
+
+
 class DetaEventData(BaseModel):
     id: str
     trigger: str

@@ -3,7 +3,7 @@ from typing import Optional
 
 from fastapi import Header
 from fastapi.logger import logger
-from models import CocktailData, DetaCocktail, DetaEvent, InstallationData
+from models import CocktailData, DetaCocktail, DetaEvent, InstallationData, DetaInstallation
 from app import init_app
 
 
@@ -63,9 +63,20 @@ def post_installation(information: InstallationData):
     )
 
 
-@app.get("/public/installations", tags=["installation", "open"])
+@app.get("/public/installations", tags=["installation", "open"], response_model=list[DetaInstallation])
 def get_installations():
     """Endpoint to receive information about successful installation.
+    Route is open accessible."""
+    res = installation_deta.fetch(limit=10000)
+    installations: list = res.items
+    while res.last:
+        res = installation_deta.fetch(limit=10000, last=res.last)
+        installations += res.items
+    return installations
+
+@app.get("/public/installations/count", tags=["installation", "open"])
+def get_installation_count():
+    """Endpoint to receive information about successful installation count.
     Route is open accessible."""
     res = installation_deta.fetch(limit=10000)
     installations: list = res.items
