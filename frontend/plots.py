@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-from .models import CocktailSchema
+from .models import CocktailSchema, InstallationSchema
 
 # ignore the frame.append deprecation warning cause by plotly
 warnings.filterwarnings("ignore")
@@ -150,5 +150,21 @@ def generate_serving_size_bars(df: pd.DataFrame, machine_split: bool):
         tickvals=df[CocktailSchema.volume],
         ticktext=[f"{x} ml" for x in df[CocktailSchema.volume].to_list()],
         type="category",
+    )
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+
+
+def generate_installation_time_chart(df: pd.DataFrame):
+    """Shows the cumulative sum of the data over time in a filled line chart"""
+    fig = px.area(
+        df,
+        x=InstallationSchema.RECEIVEDATE,
+        y=InstallationSchema.INSTALLATIONS_COUNT,
+        height=_BARPLOT_HEIGHT,
+        # line_shape='spline',
+    )
+    fig.update_layout({"margin": {"l": 0, "r": 0, "t": 0, "b": 0}})
+    fig.update_traces(
+        hovertemplate='Total Installations: %{y:.0f}'
     )
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})

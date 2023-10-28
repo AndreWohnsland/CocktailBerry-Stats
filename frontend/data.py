@@ -9,7 +9,7 @@ from streamlit.logger import get_logger
 import pandas as pd
 from dotenv import load_dotenv
 
-from .models import ReceivedData, CocktailSchema
+from .models import ReceivedData, CocktailSchema, InstallationData, InstallationSchema
 
 
 load_dotenv()
@@ -25,7 +25,7 @@ def __myround(x, base=5):
 
 
 @st.cache_data(ttl=60)
-def generate_df():
+def get_cocktails():
     """Gets the data from deta and converts to df"""
     # something in streamlit cloud seems to block the request, so we need to wait a bit
     time.sleep(1)
@@ -62,15 +62,25 @@ def generate_df():
 
 
 @st.cache_data(ttl=600)
-def get_installation_count():
+def get_installations():
+    installations = {}
     try:
-        installations = requests.get(f"{backend_url}/public/installations", timeout=30)
-        if installations.ok:
-            return int(installations.text)
-        logger.warning("Error from backend: %s: %s", installations.status_code, installations.text)
+        installations_response = requests.get(f"{backend_url}/public/installations", timeout=30)
+        if installations_response.ok:
+            installations = json.loads(installations_response.text)
+        else:
+            logger.warning("Error from backend: %s: %s", installations_response.status_code, installations_response.text)
     except (ConnectTimeout, ReadTimeout, rConnectionError):
         logger.error("Timeout when connecting to backend.")
-    return 0
+    df = pd.DataFrame(installations).rename(
+        columns={
+            InstallationData.OS: InstallationSchema.OS,
+            InstallationData.RECEIVEDATE: InstallationSchema.RECEIVEDATE,
+        }
+    )
+    if not df.empty:
+        df[InstallationSchema.RECEIVEDATE] = pd.to_datetime(df[InstallationSchema.RECEIVEDATE], format=DATEFORMAT_STR)
+    return df
 
 
 @st.cache_data(ttl=300)
@@ -194,3 +204,36 @@ def serving_aggregation(df: pd.DataFrame, machine_split: bool, min_count: int):
     serving_size_count = serving_df.groupby(CocktailSchema.volume).sum()
     volumes_to_keep = serving_size_count[serving_size_count[CocktailSchema.cocktail_count] >= min_count].index.to_list()
     return serving_df[serving_df[CocktailSchema.volume].isin(volumes_to_keep)]
+
+st.cache_data(ttl=300)
+def aggregate_installations(df: pd.DataFrame):
+    return (
+        df
+        .groupby([InstallationSchema.OS])[InstallationSchema.RECEIVEDATE]
+        .count()
+        .reset_index()
+        .rename(
+            columns={
+                InstallationSchema.RECEIVEDATE: InstallationSchema.INSTALLATIONS_COUNT,
+            }
+        )
+        .sort_values([InstallationSchema.INSTALLATIONS_COUNT], ascending=False)
+    )
+    
+st.cache_data(ttl=300)
+def cumulate_installations(df: pd.DataFrame):
+    """Groups the installations by week and returns the count"""
+    df = df.copy(deep=True)
+    df = (
+        df
+        .groupby([pd.Grouper(key=InstallationSchema.RECEIVEDATE, freq='d')])
+        .count()
+        .reset_index()
+        .rename(
+            columns={
+                InstallationSchema.OS: InstallationSchema.INSTALLATIONS_COUNT,
+            }
+        )
+    )
+    df[InstallationSchema.INSTALLATIONS_COUNT] = df[InstallationSchema.INSTALLATIONS_COUNT].cumsum()
+    return df
