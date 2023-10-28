@@ -29,3 +29,12 @@ class ReceivedData():
     COCKTAILNAME = "cocktailname"
     VOLUME = "volume"
     RECEIVEDATE = "makedate"
+
+class InstallationData():
+    OS = "os"
+    RECEIVEDATE = "receivedate"
+    
+class InstallationSchema():
+    OS = "Operating System"
+    RECEIVEDATE = "Registered Date"
+    INSTALLATIONS_COUNT = "Installation Count"

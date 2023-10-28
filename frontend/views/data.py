@@ -106,3 +106,16 @@ def __say_no_data():
         Change your filter or reload the page to reset the filtering.
         """
     )
+
+def display_installations(df: pd.DataFrame):
+    """Shows the installation data over time and distribution"""
+    st.header("📦 Installation Data")
+    if df.empty:
+        st.info("Currently no installation data available. Maybe it's time to install your onw! ✨")
+        return
+    st.write("Installation Count over Time")
+    over_time_df = data.cumulate_installations(df)
+    plots.generate_installation_time_chart(over_time_df)
+    st.write("Installation Distribution")
+    distribution_df = data.aggregate_installations(df)
+    st.table(distribution_df)
