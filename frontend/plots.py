@@ -198,3 +198,17 @@ def generate_installation_time_chart(df: pd.DataFrame, os_split: bool = False):
             )
         )
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+
+def generate_installation_treemap(df: pd.DataFrame):
+    """Uses the language an machine name agg df to generate a treemap"""
+    path = [px.Constant("OS"), InstallationSchema.OS]
+    fig = px.treemap(
+        df, path=path, values=InstallationSchema.INSTALLATIONS_COUNT,
+        height=_TREEMAP_HEIGHT
+    )
+    fig.update_layout({"margin": {"l": 0, "r": 0, "t": 0, "b": 0}})
+    fig.update_traces(
+        texttemplate="<b>%{label}</b><br>%{value:,.0f} Installation(s)",
+        hovertemplate='%{label}<br>Installations: %{value:,.0f}<i>x</i>'
+    )
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
