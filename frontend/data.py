@@ -253,8 +253,6 @@ def cumulate_installations(raw_df: pd.DataFrame, os_split: bool = False):
     else:
         cumulative = df.groupby([InstallationSchema.OS])[InstallationSchema.INSTALLATIONS_COUNT].cumsum()
     df[InstallationSchema.INSTALLATIONS_COUNT] = cumulative
-    print(df)
-    # return df
     # in case of os split, there need to be filled in missing data in the grid,
     # as well as reshape the data to make plotly a happy format
     if not os_split:
