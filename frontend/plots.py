@@ -179,6 +179,7 @@ def generate_installation_time_chart(df: pd.DataFrame, os_split: bool = False):
             x=0
         ),
     )
+    fig.for_each_trace(lambda trace: trace.update(fillcolor = trace.line.color))
     fig.update_traces(
         hovertemplate='Total Installations: %{y:.0f}',        
     )
