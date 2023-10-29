@@ -80,6 +80,8 @@ def get_installations():
     )
     if not df.empty:
         df[InstallationSchema.RECEIVEDATE] = pd.to_datetime(df[InstallationSchema.RECEIVEDATE], format=DATEFORMAT_STR)
+        # there may be the name Raspbian or Debian, for both the Raspberry Pi OS, so we need to unify them
+        df[InstallationSchema.OS] = df[InstallationSchema.OS].str.replace(r"(Raspbian |Debian )","Debian ", regex=True)
     return df
 
 
@@ -221,19 +223,54 @@ def aggregate_installations(df: pd.DataFrame):
     )
     
 st.cache_data(ttl=300)
-def cumulate_installations(df: pd.DataFrame):
+def cumulate_installations(raw_df: pd.DataFrame, os_split: bool = False):
     """Groups the installations by week and returns the count"""
-    df = df.copy(deep=True)
+    df = raw_df.copy(deep=True)
+    df["counter"] = 1
+    grouping = [pd.Grouper(key=InstallationSchema.RECEIVEDATE, freq='w')]
+    # also need to group by os if needed
+    if os_split:
+        grouping.insert(0, InstallationSchema.OS) # type: ignore
     df = (
         df
-        .groupby([pd.Grouper(key=InstallationSchema.RECEIVEDATE, freq='w')])
+        .groupby(grouping)
         .count()
         .reset_index()
         .rename(
             columns={
-                InstallationSchema.OS: InstallationSchema.INSTALLATIONS_COUNT,
+                "counter": InstallationSchema.INSTALLATIONS_COUNT,
             }
         )
     )
-    df[InstallationSchema.INSTALLATIONS_COUNT] = df[InstallationSchema.INSTALLATIONS_COUNT].cumsum()
-    return df
+    # need to aggregate the cumsum accordingly
+    if not os_split:
+        cumulative = df[InstallationSchema.INSTALLATIONS_COUNT].cumsum()
+    else:
+        cumulative = df.groupby([InstallationSchema.OS])[InstallationSchema.INSTALLATIONS_COUNT].cumsum()
+    df[InstallationSchema.INSTALLATIONS_COUNT] = cumulative
+    print(df)
+    # return df
+    # in case of os split, there need to be filled in missing data in the grid,
+    # as well as reshape the data to make plotly a happy format
+    if not os_split:
+        # if aggregating by time interval, there may be days where the installations is 0
+        # so we drop those, where OS is zero
+        # installation count got contains the cumulative sum, so this will not be used
+        # due to the count aggregation, the os got a number as well, we use this
+        df = df[df[InstallationSchema.OS] != 0]
+        return df
+    return (
+        pd.pivot_table(
+            df,
+            index=InstallationSchema.RECEIVEDATE,
+            columns=InstallationSchema.OS,
+            values=InstallationSchema.INSTALLATIONS_COUNT
+        )
+        .sort_index()
+        .ffill()
+        .unstack()
+        .reset_index()
+        .rename(columns={0: InstallationSchema.INSTALLATIONS_COUNT})
+        .sort_values(by=[InstallationSchema.RECEIVEDATE, InstallationSchema.OS])
+        .dropna()
+    )
