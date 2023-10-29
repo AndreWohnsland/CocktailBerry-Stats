@@ -180,7 +180,11 @@ def generate_installation_time_chart(df: pd.DataFrame, os_split: bool = False):
         ),
         xaxis_title=None,
     )
+    # make filling solid
     fig.for_each_trace(lambda trace: trace.update(fillcolor = trace.line.color))
+    # remove line
+    for i in range(len(fig['data'])): # type: ignore
+        fig['data'][i]['line']['width']=0 # type: ignore
     fig.update_traces(
         hovertemplate='Total Installations: %{y:.0f}',        
     )
