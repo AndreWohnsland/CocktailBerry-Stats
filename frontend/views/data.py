@@ -107,6 +107,7 @@ def __say_no_data():
         """
     )
 
+
 def display_installations(df: pd.DataFrame):
     """Shows the installation data over time and distribution"""
     st.header("📦 Installation Data")
