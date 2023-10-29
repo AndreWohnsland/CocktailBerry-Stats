@@ -178,6 +178,7 @@ def generate_installation_time_chart(df: pd.DataFrame, os_split: bool = False):
             xanchor="left",
             x=0
         ),
+        xaxis_title=None,
     )
     fig.for_each_trace(lambda trace: trace.update(fillcolor = trace.line.color))
     fig.update_traces(
