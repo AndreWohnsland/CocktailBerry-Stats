@@ -114,8 +114,9 @@ def display_installations(df: pd.DataFrame):
         st.info("Currently no installation data available. Maybe it's time to install your onw! ✨")
         return
     st.write("Installation Count over Time")
-    over_time_df = data.cumulate_installations(df)
-    plots.generate_installation_time_chart(over_time_df)
+    os_split = st.checkbox("Split by OS")
+    over_time_df = data.cumulate_installations(df, os_split)
+    plots.generate_installation_time_chart(over_time_df, os_split)
     st.write("Installation Distribution")
     distribution_df = data.aggregate_installations(df)
     st.table(distribution_df)

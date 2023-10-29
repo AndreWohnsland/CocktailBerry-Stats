@@ -2,6 +2,7 @@ import warnings
 import datetime
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 import streamlit as st
 
 from .models import CocktailSchema, InstallationSchema
@@ -154,17 +155,46 @@ def generate_serving_size_bars(df: pd.DataFrame, machine_split: bool):
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
 
-def generate_installation_time_chart(df: pd.DataFrame):
+def generate_installation_time_chart(df: pd.DataFrame, os_split: bool = False):
     """Shows the cumulative sum of the data over time in a filled line chart"""
+    add_args = {}
+    if os_split:
+        add_args["color"] = InstallationSchema.OS
     fig = px.area(
         df,
         x=InstallationSchema.RECEIVEDATE,
         y=InstallationSchema.INSTALLATIONS_COUNT,
         height=_BARPLOT_HEIGHT,
+        **add_args
         # line_shape='spline',
     )
-    fig.update_layout({"margin": {"l": 0, "r": 0, "t": 0, "b": 0}})
-    fig.update_traces(
-        hovertemplate='Total Installations: %{y:.0f}'
+    fig.update_layout(
+        {"margin": {"l": 0, "r": 0, "t": 0, "b": 0}},
+        hovermode="x unified",
+        legend=dict(
+            orientation="v",
+            yanchor="top",
+            y=1,
+            xanchor="left",
+            x=0
+        ),
     )
+    fig.update_traces(
+        hovertemplate='Total Installations: %{y:.0f}',        
+    )
+    if os_split:
+        # Calculate the cumulative sum of INSTALLATIONS_COUNT over time
+        os_sum = df.groupby(InstallationSchema.RECEIVEDATE)[InstallationSchema.INSTALLATIONS_COUNT].sum()
+        # Add a new trace with the cumulative sum of INSTALLATIONS_COUNT
+        fig.add_trace(
+            go.Scatter(
+                x=os_sum.index,
+                y=os_sum,
+                mode="lines",
+                hovertemplate="%{y:.0f}",
+                showlegend=False,
+                name="Sum of Installations",
+                line={"color": "rgba(0, 0, 0, 0)"},
+            )
+        )
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
