@@ -74,6 +74,7 @@ def get_installations():
         installations += res.items
     return installations
 
+
 @app.get("/public/installations/count", tags=["installation", "open"])
 def get_installation_count():
     """Endpoint to receive information about successful installation count.
