@@ -69,8 +69,11 @@ def get_installations():
         if installations_response.ok:
             installations = json.loads(installations_response.text)
         else:
-            logger.warning("Error from backend: %s: %s",
-                           installations_response.status_code, installations_response.text)
+            logger.warning(
+                "Error from backend: %s: %s",
+                installations_response.status_code,
+                installations_response.text
+            )
     except (ConnectTimeout, ReadTimeout, rConnectionError):
         logger.error("Timeout when connecting to backend.")
     df = pd.DataFrame(installations).rename(
@@ -88,7 +91,12 @@ def get_installations():
 
 @st.cache_data(ttl=300)
 def filter_dataframe(
-    df: pd.DataFrame, countries: list, machines: list, recipes: list, only_one_day: bool, dates: tuple[datetime.date, datetime.date]
+    df: pd.DataFrame,
+    countries: list,
+    machines: list,
+    recipes: list,
+    only_one_day: bool,
+    dates: tuple[datetime.date, datetime.date]
 ):
     """Applies the sidebar filter option to the data"""
     filtered_df = df.loc[
