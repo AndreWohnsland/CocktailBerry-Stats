@@ -30,3 +30,17 @@ build-backend = "poetry.core.masonry.api"
 [tool.flake8]
 max-line-length = 120
 extend-ignore = "E402"
+
+[tool.ruff]
+line-length = 120
+
+[tool.mypy]
+disable_error_code = ["annotation-unchecked", "import-untyped"]
+
+[tool.pylint]
+disable = ["C0301", "C0114", "C0115", "C0116", "R0912"]
+max-line-length = 120
+
+[tool.autopep8]
+max-line-length = 120
+ignore = ["E402"]
