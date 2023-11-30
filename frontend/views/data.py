@@ -121,5 +121,5 @@ def display_installations(df: pd.DataFrame):
     st.write("Installation Distribution")
     distribution_df = data.aggregate_installations(df)
     plots.generate_installation_treemap(distribution_df)
-    with st.expander(f"[Table] Installation Distribution"):
+    with st.expander("[Table] Installation Distribution"):
         st.table(distribution_df)
