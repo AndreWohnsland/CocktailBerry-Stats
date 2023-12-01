@@ -9,7 +9,7 @@ from ..models import DataFrameStats, CocktailSchema
 def generate_sidebar(df: pd.DataFrame):
     """Generates the sidebar with the option. Returns needed variables"""
     st.sidebar.subheader("🔍 Filter CocktailBerry Data")
-    st.sidebar.write("Here you can limit the data and filter a little bit.")
+    st.sidebar.write("Here you can limit the data and filter it.")
     if df.empty:
         st.sidebar.write("Nothing to do, need some data ...")
         return [], [], [], 1, False, (None, None), DataFrameStats(0, 0, 0, 0, 0, "No Data", "No Data")
