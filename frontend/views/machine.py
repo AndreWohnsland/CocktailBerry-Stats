@@ -23,6 +23,8 @@ def display_machine_types():
         _display_cocktailberry_mk_three()
     with st.expander("Bart"):
         _display_bart()
+    with st.expander("AlcoholFactory"):
+        _display_alcohol_factory()
 
 
 def _display_cocktailberry_mk_one():
@@ -82,6 +84,22 @@ def _display_bart():
     col1, col2 = st.columns(2)
     _display_picture("bart.jpg", "Bart: Front view", col1)
     _display_picture("bart-2.jpg", "It's short for Bartender", col2)
+
+
+def _display_alcohol_factory():
+    """Shows information about AlcoholFactory """
+    description = """ The housing of the cocktail machine was assembled from powder-coated sheet metal and aluminum rails.
+        The technology inside comprises a Raspberry Pi 4 with a 7-inch IPS touch display.
+        The 16 pumps are controlled via 12V relays.
+        Four of the pumps are peristaltic pumps designed to handle thicker liquids such as juices and grenadine syrup more effectively (thus ensuring longer runtime).
+        The remaining 12 pumps are cheaper and faster water pumps.
+        The containers for the liquids were self-designed and 3D printed using food-grade PETG material.
+        To ensure food safety, the components that come into contact with the liquid were coated with food-grade epoxy resin.
+    """
+    _generate_machine_info("ChrisOle", description)
+    col1, col2 = st.columns(2)
+    _display_picture("alcohol_factory1.jpg", "Front view, it's nice", col1)
+    _display_picture("alcohol_factory3.jpg", "Solved the bottle problem", col2)
 
 
 def _generate_machine_info(maker, description):
