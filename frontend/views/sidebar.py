@@ -48,9 +48,9 @@ def generate_sidebar(df: pd.DataFrame):
 
 def _get_partymode() -> bool:
     """Returns if the query requested only data of today"""
-    q_params = st.experimental_get_query_params()
+    q_params = st.query_params.to_dict()
     partymode = q_params.get("partymode")
-    use_party = partymode is not None and partymode[0].lower() == "true"
+    use_party = partymode is not None and partymode.lower() == "true"
     return use_party
 
 
