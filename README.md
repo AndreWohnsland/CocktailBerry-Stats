@@ -12,7 +12,6 @@
 
 WebApp with API and endpoint for [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry). Have insights into made cocktails.
 
-
 # Getting Started
 
 Either cd into `frontend` or `backend` and run `pip install -r requirements.txt` or use poetry in main folder to install everything for both apps with `poetry install`. Then in the corresponding folder run:
@@ -30,7 +29,7 @@ cp backend/.env.example backend/.env
 cp frontend/.env.example frontend/.env
 ```
 
-Using `DEBUG=1` in the env files will enable some dev features, like the creation of an additional `*_dev` database to let you test anything without changing your main one. The `BACKEND_URL` defaults to localhost (http://127.0.0.1:8000), where the backend runs locally. If you deploy backend and frontend on two different places (like streamlit share and deta space), you need to set this variable in the frontend accordingly. For detailed instruction for deployment, please refer to the according docs of your provider. 
+Using `DEBUG=1` in the env files will enable some dev features, like the creation of an additional `*_dev` database to let you test anything without changing your main one. The `BACKEND_URL` defaults to localhost (http://127.0.0.1:8000), where the backend runs locally. If you deploy backend and frontend on two different places (like streamlit share and deta space), you need to set this variable in the frontend accordingly. For detailed instruction for deployment, please refer to the according docs of your provider.
 
 # Architecture
 
