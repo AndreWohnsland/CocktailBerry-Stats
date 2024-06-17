@@ -1,7 +1,8 @@
 from pathlib import Path
-from typing import Optional, TYPE_CHECKING
-from PIL import Image
+from typing import TYPE_CHECKING, Optional
+
 import streamlit as st
+from PIL import Image
 
 if TYPE_CHECKING:
     from streamlit.delta_generator import DeltaGenerator
@@ -12,9 +13,11 @@ _NAME_AW = "Andre Wohnsland"
 
 
 def display_machine_types():
-    """Shows the different machine types which were submitted"""
+    """Show the different machine types which were submitted."""
     st.header("🤖 Existing Machines")
-    st.markdown("Here are some of the machines which were build and are used. Maybe they inspired you to build your own?")
+    st.markdown(
+        "Here are some of the machines which were build and are used. Maybe they inspired you to build your own?"
+    )
     with st.expander("CocktailBerry Mk 1"):
         _display_cocktailberry_mk_one()
     with st.expander("CocktailBerry Mk 2"):
@@ -28,10 +31,11 @@ def display_machine_types():
 
 
 def _display_cocktailberry_mk_one():
-    """Shows information about the first CocktailBerry machine"""
+    """Show information about the first CocktailBerry machine."""
     description = """**CocktailBerry Mk 1** was the start of the journey and the birth of this project.
         It got 10 12V Pumps, a Raspberry Pi 3b+, relays to control the pumps and a 5-inch touch screen.
-        The casing is made out of stainless steel, the electric is inside an electric box for protection as well as display.
+        The casing is made out of stainless steel,
+        the electric is inside an electric box for protection as well as display.
         The pumps are located above the bottles.
     """
     _generate_machine_info(_NAME_AW, description)
@@ -39,7 +43,7 @@ def _display_cocktailberry_mk_one():
 
 
 def _display_cocktailberry_mk_two():
-    """Shows information about the second CocktailBerry machine"""
+    """Show information about the second CocktailBerry machine."""
     description = """**CocktailBerry Mk 2** is the successor of the first model.
         The pumps were reduced to 8, to make it smaller and better portable.
         The design was changed to be more modern and for production on a 3D printer.
@@ -56,7 +60,7 @@ def _display_cocktailberry_mk_two():
 
 
 def _display_cocktailberry_mk_three():
-    """Shows information about the second CocktailBerry machine"""
+    """Show information about the second CocktailBerry machine."""
     description = """**CocktailBerry Mk 3** is the next step from Mk2.
         The build is quite identical to the previous model, so there is no big change in shape or concept.
         However, the parts got a good chunk smaller.
@@ -72,11 +76,13 @@ def _display_cocktailberry_mk_three():
 
 
 def _display_bart():
-    """Shows information about bart"""
-    description = """ The basic structure of the cocktail machine consists of wooden slats and screen printing plates, on which a black plastic covering has been attached.
+    """Show information about bart."""
+    description = """ The basic structure of the cocktail machine consists of wooden slats and screen printing plates,
+        on which a black plastic covering has been attached.
         Inside there are 8 water pumps (12V) which transport the ingredients through food save hoses.
         On top sits a box made of transparent acrylic glass, which contains the electric hardware.
-        This includes: Raspberry Pi 3 Model B, 7 inch HDMI IPS touchscreen (1024x600), 8 channel relay module, power distribution board and step-down module, as well as a LED strip.
+        This includes: Raspberry Pi 3 Model B, 7 inch HDMI IPS touchscreen (1024x600),
+        8 channel relay module, power distribution board and step-down module, as well as a LED strip.
         The other parts were all created using 3D printing.
         The bottles are located on both sides of the machine.
     """
@@ -87,14 +93,15 @@ def _display_bart():
 
 
 def _display_alcohol_factory():
-    """Shows information about AlcoholFactory """
-    description = """ The housing of the cocktail machine was assembled from powder-coated sheet metal and aluminum rails.
+    """Show information about AlcoholFactory."""
+    description = """ The housing of the machine was assembled from powder-coated sheet metal and aluminum rails.
         The technology inside comprises a Raspberry Pi 4 with a 7-inch IPS touch display.
         The 16 pumps are controlled via 12V relays.
-        Four of the pumps are peristaltic pumps designed to handle thicker liquids such as juices and grenadine syrup more effectively (thus ensuring longer runtime).
+        Four of the pumps are peristaltic pumps designed to handle thicker liquids,
+        such as juices and grenadine syrup more effectively (thus ensuring longer runtime).
         The remaining 12 pumps are cheaper and faster water pumps.
         The containers for the liquids were self-designed and 3D printed using food-grade PETG material.
-        To ensure food safety, the components that come into contact with the liquid were coated with food-grade epoxy resin.
+        To ensure food safety, the components that come into contact with the liquid were coated with food-grade epoxy.
     """
     _generate_machine_info("ChrisOle", description)
     col1, col2 = st.columns(2)
@@ -118,8 +125,10 @@ def _generate_machine_info(maker, description):
 
 
 def _display_picture(picture_name: str, caption: str, container: Optional["DeltaGenerator"] = None):
-    """Displays the given picture with the given caption
-    Uses the assets folder as base path"""
+    """Display the given picture with the given caption.
+
+    Uses the assets folder as base path.
+    """
     picture_path = _PICTURE_FOLDER / picture_name
     image = Image.open(picture_path)
     if container is not None:

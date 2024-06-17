@@ -2,7 +2,7 @@ import streamlit as st
 
 
 def api_guidelines():
-    """Shows the needed information to get the API key for CocktailBerry"""
+    """Show the needed information to get the API key for CocktailBerry."""
     st.header("❓ How to participate")
     st.markdown(
         """
@@ -20,7 +20,8 @@ def _detailed_explanation():
         """
         #### How To
 
-        The current procedure require you to build your own **CocktailBerry** machine and deliver some kind of proof of its existence.
+        The current procedure require you to build your own **CocktailBerry**
+        machine and deliver some kind of proof of its existence.
         The easiest way to do this is to submit a video or some photos of your machine.
         The machine does **NOT** need to be fancy in any way, it should simply work, be able to make cocktails
         and run the CocktailBerry software.
@@ -29,14 +30,15 @@ def _detailed_explanation():
         Please upload your video / photos to some sort of hosting site (Imgur, etc.) and provide the link,
         or give a reference to your blog post (own blog, Reddit, social media) if you did such things for your machine.
         It would be nice to write some words in addition to the submission, even if it's just a kind greeting,
-        and provide me some sort of name or alias how should I reply to you (first name or your preferred alias is fine).
+        and provide me some sort of name or alias how should I reply to you (first name / preferred alias is fine).
         You can [contact me](mailto:cocktailmakeraw@gmail.com) for further questions or just to get the API-key.
 
         #### Why a Protected API
 
         The reason behind this is that only **real machines** should submit data for the dashboard (you could otherwise
-        just run the Python program anywhere and submit a lot of data) and to minimize any other kinds of exploits
-        of the API. There is no option to submit a photo (the implementation here would be quite simple) because this could
+        just run the Python program anywhere and submit a lot of data)
+        and to minimize any other kinds of exploits of the API.
+        There is no option to submit a photo (the implementation here would be quite simple) because this could
         also be exploited quite easily. The internet is still a wild and scary place! 🦖
         Also, I would love to see what you did in combination with my software.
 

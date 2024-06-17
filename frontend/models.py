@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class DataFrameStats():
+class DataFrameStats:
     countries: int
     machines: int
     recipes: int
@@ -13,7 +13,7 @@ class DataFrameStats():
     last_data: str
 
 
-class CocktailSchema():
+class CocktailSchema:
     machine_name: str = "Machine Name"
     cocktail_name: str = "Cocktail Name"
     cocktail_count: str = "Number of Cocktails"
@@ -23,18 +23,18 @@ class CocktailSchema():
     receivedate: str = "Made Date"
 
 
-class ReceivedData():
+class ReceivedData:
     COUNTRYCODE = "countrycode"
     MACHINENAME = "machinename"
     COCKTAILNAME = "cocktailname"
     VOLUME = "volume"
     RECEIVEDATE = "makedate"
 
-class InstallationData():
+class InstallationData:
     OS = "os"
     RECEIVEDATE = "receivedate"
-    
-class InstallationSchema():
+
+class InstallationSchema:
     OS = "Operating System"
     RECEIVEDATE = "Registered Date"
     INSTALLATIONS_COUNT = "Installation Count"

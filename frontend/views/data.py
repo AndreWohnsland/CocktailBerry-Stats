@@ -1,16 +1,15 @@
 
-import streamlit as st
 import pandas as pd
+import streamlit as st
 
-from .. import plots
-from .. import data
+from .. import data, plots
 from ..models import CocktailSchema
 
 LANGUAGE_SPLIT_DESC = "Split by Language Used"
 
 
 def display_data(filtered_df: pd.DataFrame, recipes_limit: int, last_day: bool):
-    """Generates all the data views (plots and tables) from the data"""
+    """Generate all the data views (plots and tables) from the data."""
     if filtered_df.empty:
         __say_no_data()
         return
@@ -22,7 +21,7 @@ def display_data(filtered_df: pd.DataFrame, recipes_limit: int, last_day: bool):
 
 
 def __show_filtered_size(filtered_df: pd.DataFrame, last_day: bool):
-    """Also displays some information how much data is left after filtering"""
+    """Also displays some information how much data is left after filtering."""
     amount_cocktails = filtered_df.shape[0]
     cocktail_str = "cocktails" if amount_cocktails != 1 else "cocktail"
     if not last_day:
@@ -33,7 +32,7 @@ def __show_filtered_size(filtered_df: pd.DataFrame, last_day: bool):
 
 
 def __show_recipe_data(filtered_df: pd.DataFrame, recipes_limit: int):
-    """Display Recipes count by recipe and country"""
+    """Display Recipes count by recipe and country."""
     st.header("🧾 Recipes Made")
     country_split = st.checkbox(LANGUAGE_SPLIT_DESC, False, key="country_recipe")
     recipe_df = data.cocktail_count(filtered_df, recipes_limit, country_split)
@@ -44,7 +43,7 @@ def __show_recipe_data(filtered_df: pd.DataFrame, recipes_limit: int):
 
 
 def __show_time_stats(filtered_df: pd.DataFrame, last_day: bool):
-    """Displays Cocktail count over time"""
+    """Display Cocktail count over time."""
     st.header("⏱️ Data Over Time")
     hour_grouping, machine_grouping = __define_granularity(last_day)
     time_df = data.time_aggregation(filtered_df, hour_grouping, machine_grouping)
@@ -52,7 +51,7 @@ def __show_time_stats(filtered_df: pd.DataFrame, last_day: bool):
 
 
 def __show_volume_stats(filtered_df: pd.DataFrame):
-    """Lets the user decide to also split by country code"""
+    """Lets the user decide to also split by country code."""
     st.header("🍸 Volume and Number of Cocktails")
     country_split = st.checkbox(LANGUAGE_SPLIT_DESC, False, key="country_machine")
     volume_df = data.sum_volume(filtered_df, country_split)
@@ -63,7 +62,7 @@ def __show_volume_stats(filtered_df: pd.DataFrame):
 
 
 def __show_serving_size(filtered_df: pd.DataFrame):
-    """Show stats over the prepared volume choices"""
+    """Show stats over the prepared volume choices."""
     st.header("🥃 Serving Sizes")
     col1, col2 = st.columns(2)
     machine_split = col1.checkbox("Split by Machine", False, key="serving_machine")
@@ -78,7 +77,7 @@ def __show_serving_size(filtered_df: pd.DataFrame):
 
 
 def __define_granularity(last_day):
-    """Lets the user choose in case of all data to aggregate by hour or day"""
+    """Lets the user choose in case of all data to aggregate by hour or day."""
     col1, col2 = st.columns(2)
     with col1:
         st.caption("Different Machines?")
@@ -96,7 +95,7 @@ def __define_granularity(last_day):
 
 
 def __say_no_data():
-    """Displays a warning that there is no data to plot"""
+    """Display a warning that there is no data to plot."""
     st.warning(
         """
         ⚠️ There is currently no detailed data to be displayed.
@@ -109,7 +108,7 @@ def __say_no_data():
 
 
 def display_installations(df: pd.DataFrame):
-    """Shows the installation data over time and distribution"""
+    """Show the installation data over time and distribution."""
     st.header("📦 Installation Data")
     if df.empty:
         st.info("Currently no installation data available. Maybe it's time to install your onw! ✨")
