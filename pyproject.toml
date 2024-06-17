@@ -4,24 +4,23 @@ version = "1.0.0"
 description = "WebApp with API and endpoint for CocktailBerry. Have insights into made cocktails."
 authors = ["Andre Wohnsland <50302161+AndreWohnsland@users.noreply.github.com>"]
 license = "MIT"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = ">=3.9.18,<3.13"
 fastapi = "^0.103.2"
 deta = "^1.2.0"
-python-dotenv = "^0.20.0"
-pandas = "^2.2.0"
-streamlit = "^1.30.0"
-requests = "^2.31.0"
-plotly = "^5.18.0"
-
-[tool.poetry.dev-dependencies]
-pylint = "^2.17.7"
-autopep8 = "^1.7.0"
-uvicorn = "^0.17.6"
+python-dotenv = "^1.0.1"
+pandas = "^2.2.2"
+streamlit = "^1.35.0"
+requests = "^2.32.3"
+plotly = "^5.22.0"
 
 [tool.poetry.group.dev.dependencies]
-jupyterlab = "^3.6.1"
+jupyterlab = "^4.2.2"
+uvicorn = "^0.17.6"
+ruff = "^0.4.9"
+mypy = "^1.10.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -32,7 +31,43 @@ max-line-length = 120
 extend-ignore = "E402"
 
 [tool.ruff]
+# don't check import order in the migration script
 line-length = 120
+exclude = ["ui_elements", "addon_skeleton"]
+target-version = "py39"
+
+[tool.ruff.lint]
+extend-safe-fixes = [
+  "UP", # pyupgrade
+  "D107", # Missing docstring in __init__
+  "D205", # 1 blank line required between summary line and description
+  "W291", # Trailing whitespace
+  ]
+per-file-ignores = { "runme.py" = ["E402"], "migrator.py" = ["E402"] }
+select = [
+  "C", # Convention
+  "D", # pydocstyle 
+  "E", # pycodestyle
+  "F", # Pyflakes
+  "I", # isort 
+  "ICN001", # {name} should be imported as {asname},
+  "R", # Refactor
+  "RUF", # Ruff
+  "SIM", # flake8-simplify
+  "UP", # pyupgrade
+  "W", # Pylint (Warning)
+]
+ignore = [
+  "D100", # Missing docstring in public module
+  "D101", # Missing docstring in public class
+  "D102", # Missing docstring in public method
+  "D103",  # Missing docstring in public function
+  "D104", # Missing docstring in public package
+  "D105", # Missing docstring in magic method
+  "D107", # Missing docstring in __init__
+  "D203", # 1 blank line required before class docstring
+  "D213", # Multi-line docstring summary should start at the second line
+]
 
 [tool.mypy]
 disable_error_code = ["annotation-unchecked", "import-untyped"]

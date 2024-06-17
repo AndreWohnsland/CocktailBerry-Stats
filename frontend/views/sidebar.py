@@ -1,13 +1,13 @@
 from datetime import datetime
 
-import streamlit as st
 import pandas as pd
+import streamlit as st
 
-from ..models import DataFrameStats, CocktailSchema
+from ..models import CocktailSchema, DataFrameStats
 
 
 def generate_sidebar(df: pd.DataFrame):
-    """Generates the sidebar with the option. Returns needed variables"""
+    """Generate the sidebar with the option. Returns needed variables."""
     st.sidebar.subheader("🔍 Filter CocktailBerry Data")
     st.sidebar.write("Here you can limit the data and filter it.")
     if df.empty:
@@ -17,11 +17,11 @@ def generate_sidebar(df: pd.DataFrame):
     st.sidebar.caption("For your Party")
     only_one_day = st.sidebar.checkbox("Only Show last 24h Data", _get_partymode())
     st.sidebar.caption("Basic Settings")
-    country_selection = sorted(list(df[CocktailSchema.language].unique()))
+    country_selection = sorted(df[CocktailSchema.language].unique())
     country_codes = st.sidebar.multiselect("Choose Used Languages:", country_selection, country_selection)
-    machine_selection = sorted(list(df[CocktailSchema.machine_name].unique()))
+    machine_selection = sorted(df[CocktailSchema.machine_name].unique())
     machines = st.sidebar.multiselect("Choose Machines:", machine_selection, machine_selection)
-    recipes_selection = sorted(list(df[CocktailSchema.cocktail_name].unique()))
+    recipes_selection = sorted(df[CocktailSchema.cocktail_name].unique())
     recipes_limit = st.sidebar.slider(
         "Show x most Popular Recipes:", 2, max(2, len(recipes_selection)), min(10, len(recipes_selection))
     )
@@ -47,11 +47,10 @@ def generate_sidebar(df: pd.DataFrame):
 
 
 def _get_partymode() -> bool:
-    """Returns if the query requested only data of today"""
+    """Return if the query requested only data of today."""
     q_params = st.query_params.to_dict()
     partymode = q_params.get("partymode")
-    use_party = partymode is not None and partymode.lower() == "true"
-    return use_party
+    return partymode is not None and partymode.lower() == "true"
 
 
 def _build_date(checkdate: datetime) -> str:

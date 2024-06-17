@@ -1,9 +1,8 @@
 import streamlit as st
 
-from frontend.data import get_cocktails, filter_dataframe, get_installations
-from frontend.styles import generate_style
 from frontend import views
-
+from frontend.data import filter_dataframe, get_cocktails, get_installations
+from frontend.styles import generate_style
 
 st.set_page_config(
     page_title="CocktailBerry Dashboard",

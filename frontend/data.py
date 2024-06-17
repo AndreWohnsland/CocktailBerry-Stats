@@ -1,16 +1,17 @@
-import os
-import time
 import datetime
 import json
-import requests
-from requests.exceptions import ConnectTimeout, ReadTimeout, ConnectionError as rConnectionError
-import streamlit as st
-from streamlit.logger import get_logger
+import os
+import time
+
 import pandas as pd
+import requests
+import streamlit as st
 from dotenv import load_dotenv
+from requests.exceptions import ConnectionError as rConnectionError
+from requests.exceptions import ConnectTimeout, ReadTimeout
+from streamlit.logger import get_logger
 
-from .models import ReceivedData, CocktailSchema, InstallationData, InstallationSchema
-
+from .models import CocktailSchema, InstallationData, InstallationSchema, ReceivedData
 
 load_dotenv()
 is_dev = os.getenv("DEBUG") is not None
@@ -20,13 +21,13 @@ logger = get_logger(__name__)
 
 
 def __myround(x, base=5):
-    """Rounds to the nearest number to given base"""
+    """Round to the nearest number to given base."""
     return base * round(x / base)
 
 
 @st.cache_data(ttl=60)
 def get_cocktails():
-    """Gets the data from deta and converts to df"""
+    """Get the data from deta and converts to df."""
     # something in streamlit cloud seems to block the request, so we need to wait a bit
     time.sleep(1)
     cocktails = {}
@@ -98,7 +99,7 @@ def filter_dataframe(
     only_one_day: bool,
     dates: tuple[datetime.date, datetime.date]
 ):
-    """Applies the sidebar filter option to the data"""
+    """Apply the sidebar filter option to the data."""
     filtered_df = df.loc[
         df[CocktailSchema.language].isin(countries)
         & df[CocktailSchema.machine_name].isin(machines)
@@ -115,7 +116,7 @@ def filter_dataframe(
 
 @st.cache_data(ttl=300)
 def sum_volume(df: pd.DataFrame, country_split: bool) -> pd.DataFrame:
-    """Aggregate by language and machine Name, returns total volumes and cocktail counts"""
+    """Aggregate by language and machine Name, returns total volumes and cocktail counts."""
     grouping = [CocktailSchema.machine_name]
     if country_split:
         grouping = [CocktailSchema.language, CocktailSchema.machine_name]
@@ -137,7 +138,7 @@ def sum_volume(df: pd.DataFrame, country_split: bool) -> pd.DataFrame:
 
 @st.cache_data(ttl=300)
 def cocktail_count(df: pd.DataFrame, limit_recipe: int, country_split: bool) -> pd.DataFrame:
-    """Aggregate by language and cocktail name, limits to x most used recipes"""
+    """Aggregate by language and cocktail name, limits to x most used recipes."""
     grouping = [CocktailSchema.cocktail_name]
     if country_split:
         grouping = [CocktailSchema.cocktail_name, CocktailSchema.language]
@@ -155,8 +156,7 @@ def cocktail_count(df: pd.DataFrame, limit_recipe: int, country_split: bool) -> 
     # if no split, the logic is quite simple, just sort and limit them
     if not country_split:
         cocktails.sort_values([CocktailSchema.cocktail_count], ascending=False, inplace=True)
-        cocktails = cocktails.iloc[:limit_recipe]
-        return cocktails
+        return cocktails.iloc[:limit_recipe]
     # If split by country, for the listing, we need to generate a tmp rank
     # that we can order by that rank for the cocktail name (its dependant on total count)
     name_order = df.groupby([CocktailSchema.cocktail_name])[
@@ -171,7 +171,7 @@ def cocktail_count(df: pd.DataFrame, limit_recipe: int, country_split: bool) -> 
 
 @st.cache_data(ttl=300)
 def time_aggregation(df: pd.DataFrame, hour_grouping: bool, machine_grouping: bool) -> pd.DataFrame:
-    """Aggregates the data either by day or hour, depending on the last_day param"""
+    """Aggregate the data either by day or hour, depending on the last_day param."""
     freq = "1D"
     if hour_grouping:
         freq = "1h"
@@ -189,13 +189,12 @@ def time_aggregation(df: pd.DataFrame, hour_grouping: bool, machine_grouping: bo
             }
         )
     )
-    time_df = time_df[time_df[CocktailSchema.cocktail_count] != 0]
-    return time_df
+    return time_df[time_df[CocktailSchema.cocktail_count] != 0]
 
 
 @st.cache_data(ttl=300)
 def serving_aggregation(df: pd.DataFrame, machine_split: bool, min_count: int):
-    """Aggregates by serving sizes"""
+    """Aggregate by serving sizes."""
     # rounds to the closest 25
     serving_df = df.copy(deep=True)
     serving_df[CocktailSchema.volume] = serving_df[CocktailSchema.volume].apply(__myround, args=(25,))
@@ -237,7 +236,7 @@ def aggregate_installations(df: pd.DataFrame):
 
 @st.cache_data(ttl=300)
 def cumulate_installations(raw_df: pd.DataFrame, os_split: bool = False):
-    """Groups the installations by week and returns the count"""
+    """Group the installations by week and returns the count."""
     df = raw_df.copy(deep=True)
     df["counter"] = 1
     grouping = [pd.Grouper(key=InstallationSchema.RECEIVEDATE, freq='w')]
@@ -268,8 +267,7 @@ def cumulate_installations(raw_df: pd.DataFrame, os_split: bool = False):
         # so we drop those, where OS is zero
         # installation count got contains the cumulative sum, so this will not be used
         # due to the count aggregation, the os got a number as well, we use this
-        df = df[df[InstallationSchema.OS] != 0]
-        return df
+        return df[df[InstallationSchema.OS] != 0]
     return (
         pd.pivot_table(
             df,

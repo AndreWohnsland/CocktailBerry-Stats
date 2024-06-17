@@ -2,7 +2,7 @@ import streamlit as st
 
 
 def display_footer():
-    """Generates the footer element with from HTML data"""
+    """Generate the footer element with from HTML data."""
     footer = """
     <div class="footer">
         <p class="left">Made with ❤️</p>
