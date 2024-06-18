@@ -1,8 +1,8 @@
 import os
-from deta import Deta
-from fastapi import FastAPI
-from dotenv import load_dotenv
 
+from deta import Deta
+from dotenv import load_dotenv
+from fastapi import FastAPI
 
 _DESC = """
 An endpoint for [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry) to send cocktail data to! 🍹
