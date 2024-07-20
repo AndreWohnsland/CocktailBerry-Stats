@@ -87,6 +87,8 @@ def get_installations():
         df[InstallationSchema.RECEIVEDATE] = pd.to_datetime(df[InstallationSchema.RECEIVEDATE], format=DATEFORMAT_STR)
         # there may be the name Raspbian or Debian, for both the Raspberry Pi OS, so we need to unify them
         df[InstallationSchema.OS] = df[InstallationSchema.OS].str.replace(r"(Raspbian |Debian )", "Debian ", regex=True)
+        # convert all entries of os having "Armbian" in the name to "Armbian"
+        df[InstallationSchema.OS] = df[InstallationSchema.OS].str.replace(r"Armbian.*", "Armbian (all)", regex=True)
     return df
 
 
