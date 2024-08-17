@@ -67,7 +67,7 @@ def _display_cocktailberry_mk_three():
         However, the parts got a good chunk smaller.
         This is thanks to the custom CocktailBerry board, which replaces the old relay array.
         With this, less inside build volume is needed, which reduces top diameter from 320 to 240 mm.
-        This also reduced needed PLA for ~3 to ~2 kg, and makes production on smaller 3D printers possible.
+        This also reduced needed PLA from ~3 to ~2 kg, and makes production on smaller 3D printers possible.
         The model also got some WS281x ring LEDs build in, for some RGB action and inserted threads for more durability.
     """
     _generate_machine_info(_NAME_AW, description)
