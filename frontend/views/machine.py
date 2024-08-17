@@ -18,16 +18,17 @@ def display_machine_types():
     st.markdown(
         "Here are some of the machines which were build and are used. Maybe they inspired you to build your own?"
     )
-    with st.expander("CocktailBerry Mk 1"):
-        _display_cocktailberry_mk_one()
-    with st.expander("CocktailBerry Mk 2"):
-        _display_cocktailberry_mk_two()
-    with st.expander("CocktailBerry Mk 3"):
-        _display_cocktailberry_mk_three()
-    with st.expander("Bart"):
-        _display_bart()
-    with st.expander("AlcoholFactory"):
-        _display_alcohol_factory()
+    machine_data = [
+        ("CocktailBerry Mk 1", _display_cocktailberry_mk_one),
+        ("CocktailBerry Mk 2", _display_cocktailberry_mk_two),
+        ("CocktailBerry Mk 3", _display_cocktailberry_mk_three),
+        ("CocktailBerry 2Go", display_cocktailberry_2go),
+        ("Bart", _display_bart),
+        ("AlcoholFactory", _display_alcohol_factory),
+    ]
+    for name, function in machine_data:
+        with st.expander(name):
+            function()
 
 
 def _display_cocktailberry_mk_one():
@@ -73,6 +74,20 @@ def _display_cocktailberry_mk_three():
     col1, col2 = st.columns(2)
     _display_picture("cbmk3.jpg", "Next Iteration: CocktailBerry Mk 3", col1)
     _display_picture("cbmk3-2.jpg", "Additional Side View", col2)
+
+
+def display_cocktailberry_2go():
+    """Show information about the CocktailBerry 2Go machine."""
+    description = """**CocktailBerry 2Go** is a portable version of the CocktailBerry machine series.
+        The machine is designed to be easily transportable and to be used on the go.
+        It is built into a euro box, which can be closed and carried around.
+        A custom PCB (CocktailBerryBoard Slim) was designed to control the pumps.
+        In this case, a RockPi was used instead of a Raspberry Pi, since it has 12V input and does not need a converter.
+        From a personal view, I would not recommend this board to a beginner,
+        as it is harder to setup and may have some issues on the software side.
+    """
+    _generate_machine_info(_NAME_AW, description)
+    _display_picture("cb2go.jpg", "CocktailBerry 2Go: Front view")
 
 
 def _display_bart():
