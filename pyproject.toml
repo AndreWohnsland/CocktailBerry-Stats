@@ -12,15 +12,15 @@ fastapi = "^0.103.2"
 deta = "^1.2.0"
 python-dotenv = "^1.0.1"
 pandas = "^2.2.2"
-streamlit = "^1.36.0"
+streamlit = "^1.37.1"
 requests = "^2.32.3"
-plotly = "^5.22.0"
+plotly = "^5.23.0"
 
 [tool.poetry.group.dev.dependencies]
 jupyterlab = "^4.2.4"
 uvicorn = "^0.17.6"
 ruff = "^0.4.9"
-mypy = "^1.11.0"
+mypy = "^1.11.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
