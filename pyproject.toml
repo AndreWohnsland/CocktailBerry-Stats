@@ -8,16 +8,18 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = ">=3.9.18,<3.13"
-fastapi = "^0.103.2"
+fastapi = "^0.112.2"
 deta = "^1.2.0"
 python-dotenv = "^1.0.1"
 pandas = "^2.2.2"
-streamlit = "^1.37.1"
+streamlit = "^1.38.0"
 requests = "^2.32.3"
-plotly = "^5.23.0"
+plotly = "^5.24.0"
+motor = {extras = ["srv"], version = "^3.5.1"}
+beanie = "^1.26.0"
 
 [tool.poetry.group.dev.dependencies]
-jupyterlab = "^4.2.4"
+jupyterlab = "^4.2.5"
 uvicorn = "^0.17.6"
 ruff = "^0.4.9"
 mypy = "^1.11.2"

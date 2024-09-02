@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Optional
 
-from pydantic import BaseModel
+from beanie import Document
 
 
 class LandEnum(str, Enum):
@@ -11,23 +11,7 @@ class LandEnum(str, Enum):
     de = 'de'
 
 
-class CocktailData(BaseModel):
-    """Model for all needed cocktail data."""
-
-    cocktailname: str
-    volume: int
-    machinename: str
-    countrycode: LandEnum
-    makedate: str
-
-
-class InstallationData(BaseModel):
-    """Model for all needed cocktail data."""
-
-    os_version: str
-
-
-class DetaCocktail(BaseModel):
+class CocktailDocument(Document):
     cocktailname: str
     volume: int
     machinename: str
@@ -36,16 +20,13 @@ class DetaCocktail(BaseModel):
     makedate: Optional[str]
     receivedate: str
 
+    class Settings:  # noqa: D106
+        name = "cocktails"
 
-class DetaInstallation(BaseModel):
+
+class InstallationDocument(Document):
     os: str
     receivedate: str
 
-
-class DetaEventData(BaseModel):
-    id: str
-    trigger: str
-
-
-class DetaEvent(BaseModel):
-    event: DetaEventData
+    class Settings:  # noqa: D106
+        name = "installations"
