@@ -1,8 +1,12 @@
-import os
+from contextlib import asynccontextmanager
 
-from deta import Deta
-from dotenv import load_dotenv
+from beanie import init_beanie
+from environment import CONNECTION_STRING, is_dev
 from fastapi import FastAPI
+from fastapi.logger import logger
+from models import ApiKeyDocument, CocktailDocument, InstallationDocument
+from motor.motor_asyncio import AsyncIOMotorClient
+from routes import public_router, router
 
 _DESC = """
 An endpoint for [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry) to send cocktail data to! 🍹
@@ -16,37 +20,50 @@ Usually routes inserting or changing data are protected, routes getting data are
 This API is still quite minimal, since not much endpoints are needed for CocktailBerry.
 """
 
+_TAGS_METADATA = [
+    {
+        "name": "cocktail",
+        "description": "Operations with cocktail data.",
+    },
+    {
+        "name": "installation",
+        "description": "Topics related to CocktailBerry installation.",
+    },
+    {
+        "name": "protected",
+        "description": "Route is protected by API key.",
+    },
+    {
+        "name": "public",
+        "description": "Route is accessible by public.",
+    },
+]
 
-def init_app():
-    load_dotenv()
-    tags_metadata = [
-        {
-            "name": "cocktail",
-            "description": "Operations with cocktail data.",
-        },
-        {
-            "name": "automation",
-            "description": "Operations made by deta on a schedule.",
-        },
-        {
-            "name": "protected",
-            "description": "Route is protected by API key.",
-        },
-        {
-            "name": "open",
-            "description": "Route is accessible by public.",
-        },
-        {
-            "name": "installation",
-            "description": "Topics related to CocktailBerry installation.",
-        },
-    ]
-    app = FastAPI(
-        title="CocktailBerry WebApp / Dashboard API",
-        version="1.0",
-        description=_DESC,
-        openapi_tags=tags_metadata,
-    )
-    is_dev = os.getenv("DEBUG") is not None
-    deta = Deta(os.getenv("MY_DATA_KEY", "no_key_found"))
-    return app, deta, is_dev
+
+@asynccontextmanager
+async def db_lifespan(app: FastAPI):
+    # Startup
+    mongodb_client = AsyncIOMotorClient(CONNECTION_STRING)
+    database = mongodb_client.get_database("cocktailberry" + ("_dev" if is_dev else ""))
+    await init_beanie(database, document_models=[CocktailDocument, InstallationDocument, ApiKeyDocument])
+    ping_response = await database.command("ping")
+    if int(ping_response["ok"]) != 1:
+        raise Exception("Problem connecting to database cluster.")
+    else:
+        logger.info("Connected to database cluster.")
+
+    yield
+
+    # Shutdown
+    mongodb_client.close()
+
+
+app = FastAPI(
+    title="CocktailBerry WebApp / Dashboard API",
+    version="1.1",
+    description=_DESC,
+    openapi_tags=_TAGS_METADATA,
+    lifespan=db_lifespan,
+)
+app.include_router(router)
+app.include_router(public_router)
