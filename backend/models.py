@@ -1,14 +1,6 @@
-from enum import Enum
 from typing import Optional
 
 from beanie import Document
-
-
-class LandEnum(str, Enum):
-    """Limits country codes to currently supported ones."""
-
-    en = 'en'
-    de = 'de'
 
 
 class CocktailDocument(Document):
@@ -30,3 +22,12 @@ class InstallationDocument(Document):
 
     class Settings:  # noqa: D106
         name = "installations"
+
+
+class ApiKeyDocument(Document):
+    name: str
+    api_key: str
+    invalid: Optional[bool] = False
+
+    class Settings:  # noqa: D106
+        name = "api_keys"

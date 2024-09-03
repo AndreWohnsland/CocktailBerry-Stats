@@ -1,3 +1,5 @@
 fastapi
 python-dotenv
-deta
+motor[srv]
+beanie
+uvicorn

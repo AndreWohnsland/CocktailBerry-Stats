@@ -4,9 +4,9 @@ from beanie import init_beanie
 from environment import CONNECTION_STRING, is_dev
 from fastapi import FastAPI
 from fastapi.logger import logger
-from main import public_router, router
-from models import CocktailDocument, InstallationDocument
+from models import ApiKeyDocument, CocktailDocument, InstallationDocument
 from motor.motor_asyncio import AsyncIOMotorClient
+from routes import public_router, router
 
 _DESC = """
 An endpoint for [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry) to send cocktail data to! 🍹
@@ -45,7 +45,7 @@ async def db_lifespan(app: FastAPI):
     # Startup
     mongodb_client = AsyncIOMotorClient(CONNECTION_STRING)
     database = mongodb_client.get_database("cocktailberry" + ("_dev" if is_dev else ""))
-    await init_beanie(database, document_models=[CocktailDocument, InstallationDocument])
+    await init_beanie(database, document_models=[CocktailDocument, InstallationDocument, ApiKeyDocument])
     ping_response = await database.command("ping")
     if int(ping_response["ok"]) != 1:
         raise Exception("Problem connecting to database cluster.")
@@ -60,7 +60,7 @@ async def db_lifespan(app: FastAPI):
 
 app = FastAPI(
     title="CocktailBerry WebApp / Dashboard API",
-    version="1.0",
+    version="1.1",
     description=_DESC,
     openapi_tags=_TAGS_METADATA,
     lifespan=db_lifespan,
