@@ -1,8 +1,12 @@
-name: Build & publish docker images
+name: Manual Build & publish
+run-name: Build & publish CocktailBerry ${{ github.event.inputs.service }} image version ${{ github.event.inputs.version }}
 on:
-  release:
-    types: [published]
-
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version of the image'
+        required: true
+        default: 'latest'
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
@@ -26,17 +30,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: ⛏️ Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: andrewo92/cocktailberry-api
-          tags: |
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-
       - name: 📂 Cache pip packages
         uses: actions/cache@v4
         with:
@@ -52,5 +45,4 @@ jobs:
           file: ./backend/Dockerfile
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: andrewo92/cocktailberry-api:${{ github.event.inputs.version }}
