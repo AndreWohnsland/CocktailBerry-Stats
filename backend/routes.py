@@ -1,9 +1,10 @@
 import datetime
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Security
 from fastapi.logger import logger
-from models import CocktailDocument, InstallationDocument
-from schemas import CocktailData, InstallationData
+from models import ApiKeyDocument, CocktailDocument, InstallationDocument
+from schemas import CocktailData, CocktailWithoutKey, InstallationData
+from security import get_api_key
 
 DATEFORMAT_STR = "%d/%m/%Y, %H:%M"
 
@@ -12,13 +13,13 @@ public_router = APIRouter(prefix="/api/v1/public", tags=["public"])
 
 
 @router.get("/", tags=["protected"])
-async def check_api():
+async def check_api(api_key: ApiKeyDocument = Security(get_api_key)):
     """Route to check if api is working."""
-    return {"message": "Welcome to the API of the CocktailBerry-WebApp"}
+    return {"message": f"Welcome to the API of the CocktailBerry-WebApp, user: {api_key.name}"}
 
 
 @router.post("/cocktail", tags=["cocktail"])
-async def insert_cocktaildata(cocktail: CocktailData):
+async def insert_cocktaildata(cocktail: CocktailData, api_key: ApiKeyDocument = Security(get_api_key)):
     """Insert the cocktail data into the database.
 
     Route is protected by API key.
@@ -28,19 +29,19 @@ async def insert_cocktaildata(cocktail: CocktailData):
         volume=cocktail.volume,
         machinename=cocktail.machinename[:30],  # limit by 30 chars
         countrycode=cocktail.countrycode,
-        keyname=None,
+        keyname=api_key.name,
         makedate=cocktail.makedate,
         receivedate=datetime.datetime.now().strftime(DATEFORMAT_STR),
     ).create()
 
 
-@public_router.get("/cocktails", tags=["cocktail"], response_model=list[CocktailDocument])
-async def get_cocktaildata() -> list[CocktailDocument]:
+@public_router.get("/cocktails", tags=["cocktail"], response_model=list[CocktailWithoutKey])
+async def get_cocktaildata() -> list[CocktailWithoutKey]:
     """Get the cocktail data from the database.
 
     Route is open accessible.
     """
-    return await CocktailDocument.find_all().to_list()
+    return await CocktailDocument.find_all().project(CocktailWithoutKey).to_list()
 
 
 @public_router.post("/installation", tags=["installation"])

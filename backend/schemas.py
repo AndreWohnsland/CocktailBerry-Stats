@@ -20,6 +20,17 @@ class CocktailData(BaseModel):
     makedate: str
 
 
+class CocktailWithoutKey(BaseModel):
+    """Model for all needed cocktail data without key."""
+
+    cocktailname: str
+    volume: int
+    machinename: str
+    countrycode: LandEnum
+    makedate: str
+    receivedate: str
+
+
 class InstallationData(BaseModel):
     """Model for all needed cocktail data."""
 
