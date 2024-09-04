@@ -6,8 +6,8 @@ from pydantic import BaseModel
 class LandEnum(str, Enum):
     """Limits country codes to currently supported ones."""
 
-    en = 'en'
-    de = 'de'
+    en = "en"
+    de = "de"
 
 
 class CocktailData(BaseModel):
