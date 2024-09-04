@@ -11,6 +11,8 @@
 !include DEVICONS/aptana.puml
 !include DEVICONS/database.puml
 !include DEVICONS/html5.puml
+!include DEVICONS/docker.puml
+!include DEVICONS/mongodb.puml
 !include FONTAWESOME/users.puml
 !include FONTAWESOME/user.puml
 !include FONTAWESOMEOLD/send_o.puml
@@ -19,9 +21,9 @@ skinparam backgroundColor #fff
 
 HIDE_STEREOTYPE()
 
-System_Boundary(c1, "Deta") {
+System_Boundary(c1, "Hosted") {
   Container(api, "API", "Python (FastAPI)", "Endpoint to receive and process cocktail data", "python")
-  Container(detastore, "Deta Store", "Deta", "Saves cocktail data into a NoSql format database", "database")
+  System(mongodb, "Mongodb", "Database to hold the cocktail data", "mongodb")
 }
 Container(webapp, "WebApp", "Python (Streamlit)", "Displays information and option for the user to filter", "python")
 Person_Ext(user, "Users", "Person who wants cocktails and see the data", "users")
@@ -34,8 +36,8 @@ Rel_R(cocktailberry,  user, "cocktails")
 Rel(user, webapp, "uses", "https")
 Rel(cocktailberry, api, "posts\n(protected)", "https")
 Rel_L(webapp, api, "gets\n(open)", "https")
-Rel_L(api, detastore, "saves")
-Rel_R(detastore, api, "provides")
+Rel_L(api, mongodb, "saves")
+Rel_R(mongodb, api, "provides")
 
 
 @enduml

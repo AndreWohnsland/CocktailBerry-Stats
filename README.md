@@ -14,31 +14,43 @@ WebApp with API and endpoint for [CocktailBerry](https://github.com/AndreWohnsla
 
 # Getting Started
 
-Either cd into `frontend` or `backend` and run `pip install -r requirements.txt` or use poetry in main folder to install everything for both apps with `poetry install`. Then in the corresponding folder run:
+Either cd into `frontend` or `backend` and run `pip install -r requirements.txt` or use poetry in main folder to install everything for both apps with `poetry install`.
+Then in the corresponding folder run:
 
 ```bash
 # omit poetry run if using normal python
-poetry run uvicorn main:app --reload # backend
+poetry run uvicorn app:app --reload # backend
 poetry run streamlit run streamlit_app.py # frontend, use in main folder
 ```
 
-If you want everything to work properly, you need a [deta space account](https://deta.space/) and a collection access token (go to Space>Collection>Your Collection>Collection Settings>Generate Token). Deta is used for Deta Collection e.g. storing of the data and for the later deployment of the API. Don't worry it's free (and will always be that way, according to deta). Copy the `.env.example` in both folders as a `.env` file and change the token dummy to your project access token:
+If you want to have everything working, you will need to set up a mongodb, which can be done locally (docker) or with a cloud provider.
+Copy the `.env.example` in both folders as a `.env` file and change the url dummy to your mongo db url:
 
 ```bash
 cp backend/.env.example backend/.env
 cp frontend/.env.example frontend/.env
 ```
 
-Using `DEBUG=1` in the env files will enable some dev features, like the creation of an additional `*_dev` database to let you test anything without changing your main one. The `BACKEND_URL` defaults to localhost (http://127.0.0.1:8000), where the backend runs locally. If you deploy backend and frontend on two different places (like streamlit share and deta space), you need to set this variable in the frontend accordingly. For detailed instruction for deployment, please refer to the according docs of your provider.
+Using `DEBUG=1` in the env files will enable some dev features, like the creation of an additional `*_dev` database to let you test anything without changing your main one.
+The `BACKEND_URL` defaults to localhost (http://127.0.0.1:8000), where the backend runs locally.
+If you deploy backend and frontend on two different places (like streamlit share and deta space), you need to set this variable in the frontend accordingly.
+For detailed instruction for deployment, please refer to the according docs of your provider.
 
 # Architecture
 
-In this project, [Deta](https://deta.space/docs/en/introduction/start) was used for the hosting. The WebApp can be accessed freely over any browser. The API is protected an can be only accessed with an according API key to prevent unauthorized access. To get an API key for your [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry) machine follow the instructions on the website. Alternatively, you can clone this repo, set up your own dashboard with backend and use the according hook endpoint and header values with the CocktailBerry microservice for your own, private dashboard.
+In this project, a self hosted web server is used to host the backend.
+Currently, streamlit share is used to host the backend, but it can be easily deployed to any other provider.
+The WebApp can be accessed freely over any browser.
+The API is protected an can be only accessed with an according API key to prevent unauthorized access.
+To get an API key for your [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry) machine follow the instructions on the website.
+Alternatively, you can clone this repo, set up your own dashboard with backend and use the according hook endpoint and header values with the CocktailBerry microservice for your own, private dashboard.
 
 ![ProgramSchema](docs/diagrams/out/Schema.svg)
 
 # Access
 
-Simply go to the [site](https://stats-cocktailberry.streamlit.app/) and have nice insight into the data. If you have build your [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry) and use the official software, you can get an API key for CocktailBerry to use the provided endpoint to submit your production data. This way, you can actively participate. 🙌
+Simply go to the [site](https://stats-cocktailberry.streamlit.app/) and have nice insight into the data.
+If you have build your [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry) and use the official software, you can get an API key for CocktailBerry to use the provided endpoint to submit your production data. This way, you can actively participate. 🙌
 
-Also, if you directly just want the data for the last 24 hours, for example if you want to give your guest insights in the current developments of the cocktail stats, there is the possibility to add the `?partymode=true` query parameter to the url. This will cause the "Only Show last 24h Data" checkbox to be checked by default.
+Also, if you directly just want the data for the last 24 hours, for example if you want to give your guest insights in the current developments of the cocktail stats, there is the possibility to add the `?partymode=true` query parameter to the url.
+This will cause the "Only Show last 24h Data" checkbox to be checked by default.
