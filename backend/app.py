@@ -44,7 +44,7 @@ _TAGS_METADATA = [
 @asynccontextmanager
 async def db_lifespan(app: FastAPI):
     # Startup
-    mongodb_client = AsyncIOMotorClient(CONNECTION_STRING)
+    mongodb_client = AsyncIOMotorClient(CONNECTION_STRING)  # type: ignore
     database = mongodb_client.get_database("cocktailberry" + ("_dev" if is_dev else ""))
     await init_beanie(database, document_models=[CocktailDocument, InstallationDocument, ApiKeyDocument])
     ping_response = await database.command("ping")
