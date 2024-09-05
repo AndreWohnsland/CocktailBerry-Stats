@@ -15,7 +15,7 @@ from .models import CocktailSchema, InstallationData, InstallationSchema, Receiv
 
 load_dotenv()
 is_dev = os.getenv("DEBUG") is not None
-backend_url = os.getenv("BACKEND_URL", "http://127.0.0.1:8000")
+backend_url = os.getenv("BACKEND_URL", "http://127.0.0.1:8000/api/v1")
 DATEFORMAT_STR = "%d/%m/%Y, %H:%M"
 logger = get_logger(__name__)
 
