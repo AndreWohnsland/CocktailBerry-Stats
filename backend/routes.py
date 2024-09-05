@@ -1,7 +1,6 @@
 import datetime
 
 from fastapi import APIRouter, Security
-from fastapi.logger import logger
 from models import ApiKeyDocument, CocktailDocument, InstallationDocument
 from schemas import CocktailData, CocktailWithoutKey, InstallationData
 from security import get_api_key
@@ -51,8 +50,7 @@ async def post_installation(information: InstallationData):
     Route is open accessible.
     """
     return await InstallationDocument(
-        os=information.os_version,
-        receivedate=datetime.datetime.now().strftime(DATEFORMAT_STR)
+        os=information.os_version, receivedate=datetime.datetime.now().strftime(DATEFORMAT_STR)
     ).create()
 
 
@@ -73,14 +71,3 @@ async def get_installation_count():
     """
     installation_data = await InstallationDocument.find_all().to_list()
     return len(installation_data)
-
-
-# TODO: Implement a scheduled cleanup task
-async def run_cleanup() -> None:
-    """Route which is triggered on deta action."""
-    to_delete: list[CocktailDocument] = []
-    if len(to_delete) > 0:
-        logger.warning("Deleting %s number of items named testcocktail", len(to_delete))
-    for cocktail in to_delete:
-        logger.warning("Deleting item: %s", cocktail)
-        await cocktail.delete()

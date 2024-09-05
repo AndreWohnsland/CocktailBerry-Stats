@@ -17,6 +17,7 @@ requests = "^2.32.3"
 plotly = "^5.24.0"
 motor = {extras = ["srv"], version = "^3.5.1"}
 beanie = "^1.26.0"
+fastapi-utilities = "^0.2.0"
 
 [tool.poetry.group.dev.dependencies]
 jupyterlab = "^4.2.5"
