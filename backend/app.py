@@ -7,6 +7,7 @@ from fastapi.logger import logger
 from models import ApiKeyDocument, CocktailDocument, InstallationDocument
 from motor.motor_asyncio import AsyncIOMotorClient
 from routes import public_router, router
+from utils import run_cleanup
 
 _DESC = """
 An endpoint for [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry) to send cocktail data to! 🍹
@@ -51,6 +52,7 @@ async def db_lifespan(app: FastAPI):
         raise Exception("Problem connecting to database cluster.")
     else:
         logger.info("Connected to database cluster.")
+    await run_cleanup()
 
     yield
 
