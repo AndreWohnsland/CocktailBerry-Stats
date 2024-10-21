@@ -12,7 +12,7 @@
 
 WebApp with API and endpoint for [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry). Have insights into made cocktails.
 
-# Getting Started
+## Getting Started
 
 Either cd into `frontend` or `backend` and run `pip install -r requirements.txt` or use poetry in main folder to install everything for both apps with `poetry install`.
 Then in the corresponding folder run:
@@ -36,7 +36,7 @@ The `BACKEND_URL` defaults to localhost (http://127.0.0.1:8000), where the backe
 If you deploy backend and frontend on two different places (like streamlit share and deta space), you need to set this variable in the frontend accordingly.
 For detailed instruction for deployment, please refer to the according docs of your provider.
 
-# Architecture
+## Architecture
 
 In this project, a self hosted web server is used to host the backend.
 Currently, streamlit share is used to host the backend, but it can be easily deployed to any other provider.
@@ -47,7 +47,7 @@ Alternatively, you can clone this repo, set up your own dashboard with backend a
 
 ![ProgramSchema](docs/diagrams/out/Schema.svg)
 
-# Access
+## Access
 
 Simply go to the [site](https://stats-cocktailberry.streamlit.app/) and have nice insight into the data.
 If you have build your [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry) and use the official software, you can get an API key for CocktailBerry to use the provided endpoint to submit your production data. This way, you can actively participate. 🙌
