@@ -24,8 +24,11 @@ def display_machine_types():
         ("CocktailBerry Mk 3", _display_cocktailberry_mk_three),
         ("CocktailBerry 2Go", display_cocktailberry_2go),
         ("Bart", _display_bart),
+        ("Alumat", _display_alumat),
         ("AlcoholFactory", _display_alcohol_factory),
     ]
+    # sort machines by name
+    machine_data.sort(key=lambda x: x[0])
     for name, function in machine_data:
         with st.expander(name):
             function()
@@ -105,6 +108,25 @@ def _display_bart():
     col1, col2 = st.columns(2)
     _display_picture("bart.jpg", "Bart: Front view", col1)
     _display_picture("bart-2.jpg", "It's short for Bartender", col2)
+
+
+def _display_alumat():
+    """Show information about alumat."""
+    description = """ The structure is built from 15 meters of black aluminum profiles (B-type, 20x20mm),
+        connected with various brackets.
+        At the core is a Raspberry Pi 3 B+, powered with its official power supply to avoid known voltage issues.
+        The Pi controls two 8-channel 5V relays, powering a total of 16 membrane pumps (12V).
+        Due to unavailability of smaller pumps, larger ones are used this time, but there's enough space for them.
+
+        A 7-inch mini touchscreen (1024x600) is used for operation and display.
+        The electronics are housed in a 3mm thick plexiglass case.
+        Two LED fans were planned for the case, but due to power supply issues, an LED strip was used instead.
+        The mounting brackets for the 16 pumps, the tube funnel, labels, and various spacers were 3D-printed from PLA.
+    """
+    _generate_machine_info("Thomas", description)
+    col1, col2 = st.columns(2)
+    _display_picture("alumat.jpg", "Alumat: Front view", col1)
+    _display_picture("alumat-2.jpg", "Quite a solid build", col2)
 
 
 def _display_alcohol_factory():
