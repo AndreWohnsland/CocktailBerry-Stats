@@ -9,9 +9,9 @@ from .sidebar import generate_sidebar
 __all__ = [
     "api_guidelines",
     "display_data",
-    "display_installations",
     "display_dev",
     "display_footer",
+    "display_installations",
     "display_introduction",
     "display_machine_types",
     "generate_sidebar",
