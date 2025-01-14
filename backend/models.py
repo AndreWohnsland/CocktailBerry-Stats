@@ -1,5 +1,3 @@
-from typing import Optional
-
 from beanie import Document
 
 
@@ -8,8 +6,8 @@ class CocktailDocument(Document):
     volume: int
     machinename: str
     countrycode: str
-    keyname: Optional[str]
-    makedate: Optional[str]
+    keyname: str | None
+    makedate: str | None
     receivedate: str
 
     class Settings:  # noqa: D106
@@ -27,7 +25,7 @@ class InstallationDocument(Document):
 class ApiKeyDocument(Document):
     name: str
     api_key: str
-    invalid: Optional[bool] = False
+    invalid: bool | None = False
 
     class Settings:  # noqa: D106
         name = "api_keys"

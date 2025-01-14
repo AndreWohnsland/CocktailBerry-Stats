@@ -14,13 +14,13 @@ WebApp with API and endpoint for [CocktailBerry](https://github.com/AndreWohnsla
 
 ## Getting Started
 
-Either cd into `frontend` or `backend` and run `pip install -r requirements.txt` or use poetry in main folder to install everything for both apps with `poetry install`.
+Either cd into `frontend` or `backend` and run `pip install -r requirements.txt` or use poetry in main folder to install everything for both apps with [`uv install`](https://docs.astral.sh/uv/).
 Then in the corresponding folder run:
 
 ```bash
 # omit poetry run if using normal python
-poetry run uvicorn app:app --reload # backend
-poetry run streamlit run streamlit_app.py # frontend, use in main folder
+uv run uvicorn app:app --reload # backend
+uv run streamlit run streamlit_app.py # frontend, use in main folder
 ```
 
 If you want to have everything working, you will need to set up a mongodb, which can be done locally (docker) or with a cloud provider.
