@@ -17,6 +17,14 @@ dependencies = [
 ]
 requires-python = ">=3.10"
 
+[tool.uv]
+dev-dependencies = [
+    "jupyterlab>=4.2.5",
+    "mypy>=1.12.1",
+    "ruff>=0.7.0",
+    "uvicorn>=0.32.0",
+]
+
 [tool.flake8]
 max-line-length = 120
 extend-ignore = "E402"
@@ -71,10 +79,3 @@ max-line-length = 120
 max-line-length = 120
 ignore = ["E402"]
 
-[tool.uv]
-dev-dependencies = [
-    "jupyterlab>=4.2.5",
-    "mypy>=1.12.1",
-    "ruff>=0.7.0",
-    "uvicorn>=0.32.0",
-]
