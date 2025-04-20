@@ -14,11 +14,11 @@ WebApp with API and endpoint for [CocktailBerry](https://github.com/AndreWohnsla
 
 ## Getting Started
 
-Either cd into `frontend` or `backend` and run `pip install -r requirements.txt` or use poetry in main folder to install everything for both apps with [`uv install`](https://docs.astral.sh/uv/).
+Either cd into `frontend` or `backend` and run `pip install -r requirements.txt` or use uv in main folder to install everything for both apps with [`uv install`](https://docs.astral.sh/uv/).
 Then in the corresponding folder run:
 
 ```bash
-# omit poetry run if using normal python
+# omit uv run if using normal python
 uv run uvicorn app:app --reload # backend
 uv run streamlit run streamlit_app.py # frontend, use in main folder
 ```
