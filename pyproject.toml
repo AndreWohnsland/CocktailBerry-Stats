@@ -6,22 +6,22 @@ authors = [{name="Andre Wohnsland", email="<50302161+AndreWohnsland@users.norepl
 license = "MIT"
 dependencies = [
     "beanie>=1.29.0",
-    "fastapi>=0.115.6",
+    "fastapi>=0.115.12",
     "fastapi-utilities>=0.3",
-    "motor[srv]>=3.6.0",
+    "motor[srv]>=3.7.0",
     "pandas>=2.2.3",
-    "plotly>=5.24.1",
-    "python-dotenv>=1.0.1",
+    "plotly>=6.0.1",
+    "python-dotenv>=1.1.0",
     "requests>=2.32.3",
-    "streamlit>=1.41.1",
-    "uvicorn>=0.34.0",
+    "streamlit>=1.44.1",
+    "uvicorn>=0.34.2",
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 
 [tool.uv]
 dev-dependencies = [
     "jupyterlab>=4.3.4",
-    "mypy>=1.14.1",
+    "mypy>=1.15.0",
     "ruff>=0.9.1",
 ]
 
@@ -33,7 +33,7 @@ extend-ignore = "E402"
 # don't check import order in the migration script
 line-length = 120
 exclude = ["ui_elements", "addon_skeleton"]
-target-version = "py310"
+target-version = "py312"
 
 [tool.ruff.lint]
 extend-safe-fixes = [
