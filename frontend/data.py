@@ -73,7 +73,7 @@ def get_installations():
             logger.warning(
                 "Error from backend: %s: %s",
                 installations_response.status_code,
-                installations_response.text
+                installations_response.text,
             )
     except (ConnectTimeout, ReadTimeout, rConnectionError):
         logger.error("Timeout when connecting to backend.")
@@ -89,6 +89,8 @@ def get_installations():
         df[InstallationSchema.OS] = df[InstallationSchema.OS].str.replace(r"(Raspbian |Debian )", "Debian ", regex=True)
         # convert all entries of os having "Armbian" in the name to "Armbian"
         df[InstallationSchema.OS] = df[InstallationSchema.OS].str.replace(r"Armbian.*", "Armbian (all)", regex=True)
+        # it might be that there is an empty string for the os, we need to remove those
+        df = df[df[InstallationSchema.OS] != ""]
     return df
 
 
@@ -99,7 +101,7 @@ def filter_dataframe(
     machines: list,
     recipes: list,
     only_one_day: bool,
-    dates: tuple[datetime.date, datetime.date]
+    dates: tuple[datetime.date, datetime.date],
 ):
     """Apply the sidebar filter option to the data."""
     filtered_df = df.loc[
@@ -110,8 +112,7 @@ def filter_dataframe(
         & (df[CocktailSchema.receivedate] <= pd.Timestamp(dates[1]) + pd.Timedelta(days=1))
     ]
     if only_one_day:
-        filtering = filtered_df[CocktailSchema.receivedate] >= (
-            datetime.datetime.now() - datetime.timedelta(hours=24))  # type: ignore
+        filtering = filtered_df[CocktailSchema.receivedate] >= (datetime.datetime.now() - datetime.timedelta(hours=24))  # type: ignore
         filtered_df = filtered_df[filtering]
     return filtered_df
 
@@ -161,8 +162,12 @@ def cocktail_count(df: pd.DataFrame, limit_recipe: int, country_split: bool) -> 
         return cocktails.iloc[:limit_recipe]
     # If split by country, for the listing, we need to generate a tmp rank
     # that we can order by that rank for the cocktail name (its dependant on total count)
-    name_order = df.groupby([CocktailSchema.cocktail_name])[
-        CocktailSchema.volume].count().sort_values().index.to_list()[-limit_recipe:]
+    name_order = (
+        df.groupby([CocktailSchema.cocktail_name])[CocktailSchema.volume]
+        .count()
+        .sort_values()
+        .index.to_list()[-limit_recipe:]
+    )
     sorter_index = dict(zip(name_order, range(len(name_order))))
     cocktails["Rank"] = cocktails[CocktailSchema.cocktail_name].map(sorter_index)
     cocktails.sort_values(["Rank", CocktailSchema.cocktail_count], ascending=False, inplace=True)
@@ -223,8 +228,7 @@ def serving_aggregation(df: pd.DataFrame, machine_split: bool, min_count: int):
 @st.cache_data(ttl=300)
 def aggregate_installations(df: pd.DataFrame):
     return (
-        df
-        .groupby([InstallationSchema.OS])[InstallationSchema.RECEIVEDATE]
+        df.groupby([InstallationSchema.OS])[InstallationSchema.RECEIVEDATE]
         .count()
         .reset_index()
         .rename(
@@ -241,13 +245,12 @@ def cumulate_installations(raw_df: pd.DataFrame, os_split: bool = False):
     """Group the installations by week and returns the count."""
     df = raw_df.copy(deep=True)
     df["counter"] = 1
-    grouping = [pd.Grouper(key=InstallationSchema.RECEIVEDATE, freq='w')]
+    grouping = [pd.Grouper(key=InstallationSchema.RECEIVEDATE, freq="w")]
     # also need to group by os if needed
     if os_split:
         grouping.insert(0, InstallationSchema.OS)  # type: ignore
     df = (
-        df
-        .groupby(grouping)
+        df.groupby(grouping)
         .count()
         .reset_index()
         .rename(
@@ -275,7 +278,7 @@ def cumulate_installations(raw_df: pd.DataFrame, os_split: bool = False):
             df,
             index=InstallationSchema.RECEIVEDATE,
             columns=InstallationSchema.OS,
-            values=InstallationSchema.INSTALLATIONS_COUNT
+            values=InstallationSchema.INSTALLATIONS_COUNT,
         )
         .sort_index()
         .ffill()
