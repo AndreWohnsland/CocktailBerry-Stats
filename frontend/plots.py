@@ -1,10 +1,12 @@
 import datetime
 import warnings
+from typing import Any
 
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
+from streamlit_theme import st_theme
 
 from .models import CocktailSchema, InstallationSchema
 
@@ -13,6 +15,33 @@ warnings.filterwarnings("ignore")
 _TREEMAP_HEIGHT = 400
 _BARPLOT_HEIGHT = 380
 
+# Helper to get Streamlit's default color palette
+# only needed because you can't extract streamlit's default color palette
+_DEF_ST_COLORS = [
+    "#83C9FF",
+    "#0068C9",
+    "#FFABAB",
+    "#FF2B2B",
+    "#7DEFA1",
+    "#29B09D",
+    "#FFD16A",
+    "#FF8700",
+    "#6D3FC0",
+    "#D5DAE5",
+    "#E9F5FF",
+    "#309BFF",
+    "#FFFFFF",
+    "#FF9191",
+    "#D8FAE3",
+    "#64DBCA",
+]
+
+
+@st.cache_data(ttl=3600)
+def _get_machine_color_map(df: pd.DataFrame) -> dict[str, str]:
+    machines: list[str] = sorted(df[CocktailSchema.machine_name].unique())
+    return {m: _DEF_ST_COLORS[i % len(_DEF_ST_COLORS)] for i, m in enumerate(machines)}
+
 
 def generate_volume_treemap(df: pd.DataFrame, country_split: bool = True):
     """Use the language an machine name agg df to generate a treemap."""
@@ -20,17 +49,23 @@ def generate_volume_treemap(df: pd.DataFrame, country_split: bool = True):
     if country_split:
         path = [px.Constant("Language used"), CocktailSchema.language, CocktailSchema.machine_name]
 
+    theme = st_theme()
+    background_color = theme["backgroundColor"] if theme else "#0E1117"
+
     fig = px.treemap(
         df,
         path=path,
         values=CocktailSchema.cocktail_volume,
         height=_TREEMAP_HEIGHT,
         hover_data=[CocktailSchema.cocktail_count],
+        color=CocktailSchema.machine_name,
+        color_discrete_sequence=[background_color],  # will set bg color of the constant
+        color_discrete_map=_get_machine_color_map(df),
     )
     fig.update_layout({"margin": {"l": 0, "r": 0, "t": 0, "b": 0}})
     fig.update_traces(
-        texttemplate="<b>%{label}</b><br>%{customdata} Cocktails<br>%{value:,.2f} l",
-        hovertemplate="%{label}<br>Cocktails Made: %{customdata}<i>x</i><br>Cocktail Volume: %{value:,.2f} l",
+        texttemplate="<b>%{label}</b><br>%{customdata[0]} Cocktails<br>%{value:,.2f} l",
+        hovertemplate="%{label}<br>Cocktails Made: %{customdata[0]}<i>x</i><br>Cocktail Volume: %{value:,.2f} l",
     )
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
@@ -52,15 +87,16 @@ def generate_recipes_treemap(df: pd.DataFrame, country_split: bool = True):
 
 def generate_time_plot(df: pd.DataFrame, machine_grouping: bool):
     """Generate the cocktail count over the time."""
-    additional_params = {}
+    additional_args: dict[str, Any] = {}
     if machine_grouping:
-        additional_params["color"] = CocktailSchema.machine_name
+        additional_args["color"] = CocktailSchema.machine_name
+        additional_args["color_discrete_map"] = _get_machine_color_map(df)
     fig = px.bar(
         df,
         x=CocktailSchema.receivedate,
         y=CocktailSchema.cocktail_count,
         height=_BARPLOT_HEIGHT,
-        **additional_params,
+        **additional_args,
     )
     fig.update_layout(
         {"margin": {"l": 0, "r": 0, "t": 0, "b": 0}},
@@ -110,9 +146,10 @@ def _generate_excluded_days(date_data: pd.Series) -> list[str]:
 
 def generate_serving_size_bars(df: pd.DataFrame, machine_split: bool):
     """Create a bar chart with the serving sizes."""
-    additional_args = {}
+    additional_args: dict[str, Any] = {}
     if machine_split:
         additional_args["color"] = CocktailSchema.machine_name
+        additional_args["color_discrete_map"] = _get_machine_color_map(df)
 
     fig = px.bar(
         df,
