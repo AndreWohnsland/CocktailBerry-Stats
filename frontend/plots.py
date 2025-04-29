@@ -6,7 +6,6 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
-from streamlit_theme import st_theme
 
 from .models import CocktailSchema, InstallationSchema
 
@@ -49,9 +48,6 @@ def generate_volume_treemap(df: pd.DataFrame, country_split: bool = True):
     if country_split:
         path = [px.Constant("Language used"), CocktailSchema.language, CocktailSchema.machine_name]
 
-    theme = st_theme()
-    background_color = theme["backgroundColor"] if theme else "#0E1117"
-
     fig = px.treemap(
         df,
         path=path,
@@ -59,7 +55,7 @@ def generate_volume_treemap(df: pd.DataFrame, country_split: bool = True):
         height=_TREEMAP_HEIGHT,
         hover_data=[CocktailSchema.cocktail_count],
         color=CocktailSchema.machine_name,
-        color_discrete_sequence=[background_color],  # will set bg color of the constant
+        color_discrete_sequence=["#0E1117"],  # will set bg color of the constant
         color_discrete_map=_get_machine_color_map(df),
     )
     fig.update_layout({"margin": {"l": 0, "r": 0, "t": 0, "b": 0}})
