@@ -4,3 +4,4 @@ python-dotenv
 motor[srv]
 beanie
 uvicorn
+st-theme
