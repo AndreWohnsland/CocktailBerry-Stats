@@ -13,6 +13,7 @@ dependencies = [
     "plotly>=6.0.1",
     "python-dotenv>=1.1.0",
     "requests>=2.32.3",
+    "st-theme>=1.2.3",
     "streamlit>=1.44.1",
     "uvicorn>=0.34.2",
 ]
