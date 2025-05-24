@@ -8,11 +8,11 @@ dependencies = [
     "beanie>=1.29.0",
     "fastapi>=0.115.12",
     "fastapi-utilities>=0.3",
-    "motor[srv]>=3.7.0",
     "pandas>=2.2.3",
     "plotly>=6.0.1",
     "python-dotenv>=1.1.0",
     "requests>=2.32.3",
+    "slowapi>=0.1.9",
     "streamlit>=1.44.1",
     "uvicorn>=0.34.2",
 ]

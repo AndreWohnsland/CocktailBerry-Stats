@@ -1,7 +1,8 @@
 import datetime
 
-from fastapi import APIRouter, Security
+from fastapi import APIRouter, Request, Security
 from models import ApiKeyDocument, CocktailDocument, InstallationDocument
+from rate_limiting import limiter
 from schemas import CocktailData, CocktailWithoutKey, InstallationData
 from security import get_api_key
 
@@ -44,7 +45,8 @@ async def get_cocktaildata() -> list[CocktailWithoutKey]:
 
 
 @public_router.post("/installation", tags=["installation"])
-async def post_installation(information: InstallationData):
+@limiter.limit("1/minute")
+async def post_installation(request: Request, information: InstallationData):
     """Endpoint to post information about successful installation.
 
     Route is open accessible.
