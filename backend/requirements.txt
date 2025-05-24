@@ -1,4 +1,5 @@
 fastapi
+slowapi
 fastapi-utilities
 python-dotenv
 motor[srv]
