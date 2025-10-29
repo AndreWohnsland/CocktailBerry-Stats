@@ -7,6 +7,7 @@ from schemas import CocktailData, CocktailWithoutKey, InstallationData
 from security import get_api_key
 
 DATEFORMAT_STR = "%d/%m/%Y, %H:%M"
+MAX_NAME_LENGTH = 30
 
 router = APIRouter(prefix="/api/v1", tags=["protected"])
 public_router = APIRouter(prefix="/api/v1/public", tags=["public"])
@@ -25,9 +26,9 @@ async def insert_cocktaildata(cocktail: CocktailData, api_key: ApiKeyDocument = 
     Route is protected by API key.
     """
     return await CocktailDocument(
-        cocktailname=cocktail.cocktailname[:30],  # limit by 30 chars
+        cocktailname=cocktail.cocktailname[:MAX_NAME_LENGTH],
         volume=cocktail.volume,
-        machinename=cocktail.machinename[:30],  # limit by 30 chars
+        machinename=cocktail.machinename[:MAX_NAME_LENGTH],
         countrycode=cocktail.countrycode,
         keyname=api_key.name,
         makedate=cocktail.makedate,
