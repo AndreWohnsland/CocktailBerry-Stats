@@ -5,24 +5,24 @@ description = "WebApp with API and endpoint for CocktailBerry. Have insights int
 authors = [{name="Andre Wohnsland", email="<50302161+AndreWohnsland@users.noreply.github.com>"}]
 license = "MIT"
 dependencies = [
-    "beanie>=1.29.0",
-    "fastapi>=0.115.12",
-    "fastapi-utilities>=0.3",
-    "pandas>=2.2.3",
-    "plotly>=6.0.1",
-    "python-dotenv>=1.1.0",
-    "requests>=2.32.3",
+    "beanie>=2.0.0",
+    "fastapi>=0.116.1",
+    "fastapi-utilities>=0.3.1",
+    "pandas>=2.3.2",
+    "plotly>=6.3.0",
+    "python-dotenv>=1.1.1",
+    "requests>=2.32.5",
     "slowapi>=0.1.9",
-    "streamlit>=1.44.1",
-    "uvicorn>=0.34.2",
+    "streamlit>=1.48.1",
+    "uvicorn>=0.35.0",
 ]
 requires-python = ">=3.12"
 
 [tool.uv]
 dev-dependencies = [
-    "jupyterlab>=4.3.4",
-    "mypy>=1.15.0",
-    "ruff>=0.9.1",
+    "jupyterlab>=4.4.6",
+    "mypy>=1.17.1",
+    "ruff>0.12.10",
 ]
 
 [tool.flake8]
