@@ -1,13 +1,17 @@
+import logging
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
 from beanie import init_beanie
 from environment import CONNECTION_STRING, is_dev
 from fastapi import FastAPI
-from fastapi.logger import logger
 from models import ApiKeyDocument, CocktailDocument, InstallationDocument
 from pymongo import AsyncMongoClient
 from routes import public_router, router
 from utils import run_cleanup
+
+_logger = logging.getLogger(__name__)
+
 
 _DESC = """
 An endpoint for [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry) to send cocktail data to! 🍹
@@ -42,7 +46,7 @@ _TAGS_METADATA = [
 
 
 @asynccontextmanager
-async def db_lifespan(app: FastAPI):
+async def db_lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     # Startup
     mongodb_client: AsyncMongoClient = AsyncMongoClient(CONNECTION_STRING)
     database = mongodb_client.get_database("cocktailberry" + ("_dev" if is_dev else ""))
@@ -51,7 +55,7 @@ async def db_lifespan(app: FastAPI):
     if int(ping_response["ok"]) != 1:
         raise Exception("Problem connecting to database cluster.")
     else:
-        logger.info("Connected to database cluster.")
+        _logger.info("Connected to database cluster.")
     await run_cleanup()
 
     yield
