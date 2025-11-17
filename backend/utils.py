@@ -7,6 +7,10 @@ from models import CocktailDocument
 _logger = logging.getLogger(__name__)
 
 
+def setup_logging() -> None:
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)-9s [%(name)s] %(message)s")
+
+
 @repeat_every(seconds=60 * 20)  # 20 minutes
 async def run_cleanup() -> None:
     """Route which is triggered on deta action."""

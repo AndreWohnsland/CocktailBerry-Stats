@@ -8,7 +8,7 @@ from fastapi import FastAPI
 from models import ApiKeyDocument, CocktailDocument, InstallationDocument
 from pymongo import AsyncMongoClient
 from routes import public_router, router
-from utils import run_cleanup
+from utils import run_cleanup, setup_logging
 
 _logger = logging.getLogger(__name__)
 
@@ -63,6 +63,8 @@ async def db_lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     # Shutdown
     await mongodb_client.close()
 
+
+setup_logging()
 
 app = FastAPI(
     title="CocktailBerry WebApp / Dashboard API",
