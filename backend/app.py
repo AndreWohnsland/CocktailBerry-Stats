@@ -5,7 +5,7 @@ from environment import CONNECTION_STRING, is_dev
 from fastapi import FastAPI
 from fastapi.logger import logger
 from models import ApiKeyDocument, CocktailDocument, InstallationDocument
-from motor.motor_asyncio import AsyncIOMotorClient
+from pymongo import AsyncMongoClient
 from routes import public_router, router
 from utils import run_cleanup
 
@@ -44,7 +44,7 @@ _TAGS_METADATA = [
 @asynccontextmanager
 async def db_lifespan(app: FastAPI):
     # Startup
-    mongodb_client = AsyncIOMotorClient(CONNECTION_STRING)  # type: ignore
+    mongodb_client: AsyncMongoClient = AsyncMongoClient(CONNECTION_STRING)
     database = mongodb_client.get_database("cocktailberry" + ("_dev" if is_dev else ""))
     await init_beanie(database, document_models=[CocktailDocument, InstallationDocument, ApiKeyDocument])
     ping_response = await database.command("ping")
@@ -57,7 +57,7 @@ async def db_lifespan(app: FastAPI):
     yield
 
     # Shutdown
-    mongodb_client.close()
+    await mongodb_client.close()
 
 
 app = FastAPI(
