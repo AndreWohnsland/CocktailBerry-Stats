@@ -2,7 +2,7 @@
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/AndreWohnsland/CocktailBerry-WebApp)
 ![GitHub Release Date](https://img.shields.io/github/release-date/AndreWohnsland/CocktailBerry-WebApp)
-![Python Version](https://img.shields.io/badge/python-%3E%3D%203.9-blue)
+![Python Version](https://img.shields.io/badge/python-%3E%3D%203.13-blue)
 ![GitHub](https://img.shields.io/github/license/AndreWohnsland/CocktailBerry-WebApp)
 ![GitHub issues](https://img.shields.io/github/issues-raw/AndreWohnsland/CocktailBerry-WebApp)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=AndreWohnsland_CocktailBerry-WebApp&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=AndreWohnsland_CocktailBerry-WebApp)
@@ -14,12 +14,19 @@ WebApp with API and endpoint for [CocktailBerry](https://github.com/AndreWohnsla
 
 ## Getting Started
 
-Either cd into `frontend` or `backend` and run `pip install -r requirements.txt` or use uv in main folder to install everything for both apps with [`uv install`](https://docs.astral.sh/uv/).
-Then in the corresponding folder run:
+### Installing Dependencies
+
+We use [Astral UV](https://docs.astral.sh/uv/) to manage dependencies and run the applications:
+
+```bash
+uv sync --all-packages
+```
+
+### Running the Application
 
 ```bash
 # omit uv run if using normal python
-uv run uvicorn app:app --reload # backend
+uv run uvicorn app:app --reload # backend -> cd backend first
 uv run streamlit run streamlit_app.py # frontend, use in main folder
 ```
 

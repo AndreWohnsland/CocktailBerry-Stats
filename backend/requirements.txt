@@ -1,8 +1,0 @@
-fastapi
-slowapi
-fastapi-utilities
-python-dotenv
-motor[srv]
-beanie
-uvicorn
-pyyaml
