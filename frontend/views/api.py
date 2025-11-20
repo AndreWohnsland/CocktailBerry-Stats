@@ -1,7 +1,7 @@
 import streamlit as st
 
 
-def api_guidelines():
+def api_guidelines() -> None:
     """Show the needed information to get the API key for CocktailBerry."""
     st.header("❓ How to participate")
     st.markdown(
@@ -10,12 +10,13 @@ def api_guidelines():
         machine and install the software on it. After that, you [provide me proof](mailto:cocktailmakeraw@gmail.com)
         that it exists / works  (video / pictures / blog or social media post).
         Afterwards, you will get an API key to submit your machine data.
-        """)
+        """
+    )
     with st.expander("Show details and reasons behind them:"):
         _detailed_explanation()
 
 
-def _detailed_explanation():
+def _detailed_explanation() -> None:
     st.markdown(
         """
         #### How To

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 
 import pandas as pd
 import streamlit as st
@@ -6,7 +6,17 @@ import streamlit as st
 from ..models import CocktailSchema, DataFrameStats
 
 
-def generate_sidebar(df: pd.DataFrame):
+def generate_sidebar(
+    df: pd.DataFrame,
+) -> tuple[
+    list[str],
+    list[str],
+    list[str],
+    int,
+    bool,
+    tuple[date, date] | tuple[None, None],
+    DataFrameStats,
+]:
     """Generate the sidebar with the option. Returns needed variables."""
     st.sidebar.subheader("🔍 Filter CocktailBerry Data")
     st.sidebar.write("Here you can limit the data and filter it.")
@@ -17,11 +27,11 @@ def generate_sidebar(df: pd.DataFrame):
     st.sidebar.caption("For your Party")
     only_one_day = st.sidebar.checkbox("Only Show last 24h Data", _get_partymode())
     st.sidebar.caption("Basic Settings")
-    country_selection = sorted(df[CocktailSchema.language].unique())
+    country_selection: list[str] = sorted(df[CocktailSchema.language].unique())
     country_codes = st.sidebar.multiselect("Choose Used Languages:", country_selection, country_selection)
-    machine_selection = sorted(df[CocktailSchema.machine_name].unique())
+    machine_selection: list[str] = sorted(df[CocktailSchema.machine_name].unique())
     machines = st.sidebar.multiselect("Choose Machines:", machine_selection, machine_selection)
-    recipes_selection = sorted(df[CocktailSchema.cocktail_name].unique())
+    recipes_selection: list[str] = sorted(df[CocktailSchema.cocktail_name].unique())
     recipes_limit = st.sidebar.slider(
         "Show x most Popular Recipes:", 2, max(2, len(recipes_selection)), min(10, len(recipes_selection))
     )

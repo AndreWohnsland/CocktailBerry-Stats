@@ -12,7 +12,7 @@ _PICTURE_FOLDER = _BASE_PATH / "assets"
 _NAME_AW = "Andre Wohnsland"
 
 
-def display_machine_types():
+def display_machine_types() -> None:
     """Show the different machine types which were submitted."""
     st.header("🤖 Existing Machines")
     st.markdown(
@@ -34,7 +34,7 @@ def display_machine_types():
             function()
 
 
-def _display_cocktailberry_mk_one():
+def _display_cocktailberry_mk_one() -> None:
     """Show information about the first CocktailBerry machine."""
     description = """**CocktailBerry Mk 1** was the start of the journey and the birth of this project.
         It got 10 12V Pumps, a Raspberry Pi 3b+, relays to control the pumps and a 5-inch touch screen.
@@ -46,7 +46,7 @@ def _display_cocktailberry_mk_one():
     _display_picture("cbmk1.jpg", "Good old CocktailBerry Mk 1")
 
 
-def _display_cocktailberry_mk_two():
+def _display_cocktailberry_mk_two() -> None:
     """Show information about the second CocktailBerry machine."""
     description = """**CocktailBerry Mk 2** is the successor of the first model.
         The pumps were reduced to 8, to make it smaller and better portable.
@@ -63,7 +63,7 @@ def _display_cocktailberry_mk_two():
     _display_picture("cbmk2-2.jpg", "Machine in action", col2)
 
 
-def _display_cocktailberry_mk_three():
+def _display_cocktailberry_mk_three() -> None:
     """Show information about the second CocktailBerry machine."""
     description = """**CocktailBerry Mk 3** is the next step from Mk2.
         The build is quite identical to the previous model, so there is no big change in shape or concept.
@@ -79,7 +79,7 @@ def _display_cocktailberry_mk_three():
     _display_picture("cbmk3-2.jpg", "Additional Side View", col2)
 
 
-def display_cocktailberry_2go():
+def display_cocktailberry_2go() -> None:
     """Show information about the CocktailBerry 2Go machine."""
     description = """**CocktailBerry 2Go** is a portable version of the CocktailBerry machine series.
         The machine is designed to be easily transportable and to be used on the go.
@@ -93,7 +93,7 @@ def display_cocktailberry_2go():
     _display_picture("cb2go.jpg", "CocktailBerry 2Go: Front view")
 
 
-def _display_bart():
+def _display_bart() -> None:
     """Show information about bart."""
     description = """ The basic structure of the cocktail machine consists of wooden slats and screen printing plates,
         on which a black plastic covering has been attached.
@@ -110,7 +110,7 @@ def _display_bart():
     _display_picture("bart-2.jpg", "It's short for Bartender", col2)
 
 
-def _display_alumat():
+def _display_alumat() -> None:
     """Show information about alumat."""
     description = """ The structure is built from 15 meters of black aluminum profiles (B-type, 20x20mm),
         connected with various brackets.
@@ -129,7 +129,7 @@ def _display_alumat():
     _display_picture("alumat-2.jpg", "Quite a solid build", col2)
 
 
-def _display_alcohol_factory():
+def _display_alcohol_factory() -> None:
     """Show information about AlcoholFactory."""
     description = """ The housing of the machine was assembled from powder-coated sheet metal and aluminum rails.
         The technology inside comprises a Raspberry Pi 4 with a 7-inch IPS touch display.
@@ -146,7 +146,7 @@ def _display_alcohol_factory():
     _display_picture("alcohol_factory3.jpg", "Solved the bottle problem", col2)
 
 
-def _generate_machine_info(maker, description):
+def _generate_machine_info(maker: str, description: str) -> None:
     st.markdown(
         f"""
         <ins>_Maker_</ins>:<br>
@@ -161,7 +161,7 @@ def _generate_machine_info(maker, description):
     )
 
 
-def _display_picture(picture_name: str, caption: str, container: Optional["DeltaGenerator"] = None):
+def _display_picture(picture_name: str, caption: str, container: Optional["DeltaGenerator"] = None) -> None:
     """Display the given picture with the given caption.
 
     Uses the assets folder as base path.

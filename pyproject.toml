@@ -43,13 +43,23 @@ extend-safe-fixes = [
   ]
 per-file-ignores = { "runme.py" = ["E402"], "migrator.py" = ["E402"] }
 select = [
+  "A", # flake8-builtins
+  "ANN", # Type annotations
   "C", # Convention
+  "C4", # flake-comprehensions
   "D", # pydocstyle 
   "E", # pycodestyle
   "F", # Pyflakes
+  "FAST", # FastAPI
   "I", # isort 
   "ICN001", # {name} should be imported as {asname},
+  "PIE", # flake8-pie
+  "PL", # pylint
+  "PTH", # flake8-use-pathlib
+  "PYI", # flake8-pyi
+  "Q", # flake8-quotes
   "R", # Refactor
+  "RET", # flake8-return
   "RUF", # Ruff
   "SIM", # flake8-simplify
   "UP", # pyupgrade
@@ -65,6 +75,9 @@ ignore = [
   "D107", # Missing docstring in __init__
   "D203", # 1 blank line required before class docstring
   "D213", # Multi-line docstring summary should start at the second line
+  "ANN401", # no Any for *args or **kwargs
+  "PLR0913", # Too many arguments
+  "PLC0415", # `import` should be at the top-level of a file
 ]
 
 [tool.mypy]

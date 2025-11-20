@@ -1,4 +1,5 @@
 import datetime
+from typing import Annotated
 
 from fastapi import APIRouter, Request, Security
 from models import ApiKeyDocument, CocktailDocument, InstallationDocument
@@ -14,13 +15,18 @@ public_router = APIRouter(prefix="/api/v1/public", tags=["public"])
 
 
 @router.get("/", tags=["protected"])
-async def check_api(api_key: ApiKeyDocument = Security(get_api_key)):
+async def check_api(
+    api_key: Annotated[ApiKeyDocument, Security(get_api_key)],
+) -> dict:
     """Route to check if api is working."""
     return {"message": f"Welcome to the API of the CocktailBerry-WebApp, user: {api_key.name}"}
 
 
 @router.post("/cocktail", tags=["cocktail"])
-async def insert_cocktaildata(cocktail: CocktailData, api_key: ApiKeyDocument = Security(get_api_key)):
+async def insert_cocktaildata(
+    cocktail: CocktailData,
+    api_key: Annotated[ApiKeyDocument, Security(get_api_key)],
+) -> CocktailDocument:
     """Insert the cocktail data into the database.
 
     Route is protected by API key.
@@ -36,7 +42,7 @@ async def insert_cocktaildata(cocktail: CocktailData, api_key: ApiKeyDocument = 
     ).create()
 
 
-@public_router.get("/cocktails", tags=["cocktail"], response_model=list[CocktailWithoutKey])
+@public_router.get("/cocktails", tags=["cocktail"])
 async def get_cocktaildata() -> list[CocktailWithoutKey]:
     """Get the cocktail data from the database.
 
@@ -47,7 +53,7 @@ async def get_cocktaildata() -> list[CocktailWithoutKey]:
 
 @public_router.post("/installation", tags=["installation"])
 @limiter.limit("1/minute")
-async def post_installation(request: Request, information: InstallationData):
+async def post_installation(request: Request, information: InstallationData) -> InstallationDocument:
     """Endpoint to post information about successful installation.
 
     Route is open accessible.
@@ -57,7 +63,7 @@ async def post_installation(request: Request, information: InstallationData):
     ).create()
 
 
-@public_router.get("/installations", tags=["installation"], response_model=list[InstallationDocument])
+@public_router.get("/installations", tags=["installation"])
 async def get_installations() -> list[InstallationDocument]:
     """Endpoint to receive information about successful installation.
 
@@ -67,7 +73,7 @@ async def get_installations() -> list[InstallationDocument]:
 
 
 @public_router.get("/installations/count", tags=["installation"])
-async def get_installation_count():
+async def get_installation_count() -> int:
     """Endpoint to receive information about successful installation count.
 
     Route is open accessible.
