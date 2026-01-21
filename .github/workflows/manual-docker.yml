@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version of the image'
+        description: "Version of the image"
         required: true
-        default: 'latest'
+        default: "latest"
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: ⤵️ Check out code from GitHub
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 🐳 Set up QEMU
         uses: docker/setup-qemu-action@v3

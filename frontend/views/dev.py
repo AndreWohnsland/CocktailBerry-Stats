@@ -1,9 +1,10 @@
+import pandas as pd
 import streamlit as st
 
 from ..data import is_dev
 
 
-def display_dev(df):
+def display_dev(df: pd.DataFrame) -> None:
     """Show dev thingies if devmode is on."""
     if is_dev:
         st.header("⚙️ Debug Stuff")

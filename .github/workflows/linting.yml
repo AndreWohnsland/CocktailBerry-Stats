@@ -4,22 +4,22 @@ jobs:
   ruff:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: chartboost/ruff-action@v1
+      - uses: actions/checkout@v6
+      - uses: astral-sh/ruff-action@v3
         with:
-          src: './backend'
-      - uses: chartboost/ruff-action@v1
+          src: "./backend"
+      - uses: astral-sh/ruff-action@v3
         with:
-          src: './frontend'
+          src: "./frontend"
   mypy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v7
         with:
           version: "latest"
       - name: Lint with mypy
         run: |
+          uv sync --all-packages
           uv run mypy .
-

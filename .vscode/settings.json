@@ -16,8 +16,10 @@
     "Sideview"
   ],
   "[python]": {
-    "editor.defaultFormatter": "charliermarsh.ruff",
-    "editor.formatOnSave": true
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
   },
   "[dotenv]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"

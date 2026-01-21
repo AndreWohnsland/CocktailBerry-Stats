@@ -1,5 +1,8 @@
 version: 1
 disable_existing_loggers: false
+filters:
+  endpoint_filter:
+    (): core.logging.EndpointFilter
 formatters:
   default:
     '()': uvicorn.logging.DefaultFormatter
@@ -28,3 +31,4 @@ loggers:
     handlers: [access]
     level: INFO
     propagate: false
+    filters: [endpoint_filter]

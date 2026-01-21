@@ -3,7 +3,7 @@ import streamlit as st
 from ..models import DataFrameStats
 
 
-def display_introduction(df_stats: DataFrameStats, installations: int):
+def display_introduction(df_stats: DataFrameStats, installations: int) -> None:
     """Display some basic information and stats about the data & project."""
     st.header("🍹CocktailBerry Dashboard")
     st.markdown("Dashboard for all the [CocktailBerry](https://cocktailberry.readthedocs.io/) machines data!")
@@ -24,7 +24,7 @@ def display_introduction(df_stats: DataFrameStats, installations: int):
     )
 
 
-def _what_is_this():
+def _what_is_this() -> None:
     """Return some additional information about the dashboard."""
     st.markdown(
         """
