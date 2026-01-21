@@ -63,7 +63,7 @@ def generate_volume_treemap(df: pd.DataFrame, country_split: bool = True) -> Non
         texttemplate="<b>%{label}</b><br>%{customdata[0]} Cocktails<br>%{value:,.2f} l",
         hovertemplate="%{label}<br>Cocktails Made: %{customdata[0]}<i>x</i><br>Cocktail Volume: %{value:,.2f} l",
     )
-    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+    st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
 
 
 def generate_recipes_treemap(df: pd.DataFrame, country_split: bool = True) -> None:
@@ -78,7 +78,7 @@ def generate_recipes_treemap(df: pd.DataFrame, country_split: bool = True) -> No
     fig = px.treemap(df, path=path, values=CocktailSchema.cocktail_count, height=_TREEMAP_HEIGHT)
     fig.update_layout({"margin": {"l": 0, "r": 0, "t": 0, "b": 0}})
     fig.update_traces(texttemplate=texttemplate, hovertemplate=hovertemplate)
-    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+    st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
 
 
 def generate_time_plot(df: pd.DataFrame, machine_grouping: bool) -> None:
@@ -122,7 +122,7 @@ def generate_time_plot(df: pd.DataFrame, machine_grouping: bool) -> None:
             {"values": excluded_days}  # hide days without values
         ],
     )
-    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+    st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
 
 
 def _generate_excluded_days(date_data: pd.Series) -> list[str]:
@@ -169,7 +169,7 @@ def generate_serving_size_bars(df: pd.DataFrame, machine_split: bool) -> None:
         ticktext=[f"{x} ml" for x in df[CocktailSchema.volume].to_list()],
         type="category",
     )
-    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+    st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
 
 
 def generate_installation_time_chart(df: pd.DataFrame, os_split: bool = False) -> None:
@@ -214,7 +214,7 @@ def generate_installation_time_chart(df: pd.DataFrame, os_split: bool = False) -
                 line={"color": "rgba(0, 0, 0, 0)"},
             )
         )
-    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+    st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
 
 
 def generate_installation_treemap(df: pd.DataFrame) -> None:
@@ -226,4 +226,4 @@ def generate_installation_treemap(df: pd.DataFrame) -> None:
         texttemplate="<b>%{label}</b><br>%{value:,.0f} Installation(s)",
         hovertemplate="%{label}<br>Installations: %{value:,.0f}<i>x</i>",
     )
-    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+    st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})

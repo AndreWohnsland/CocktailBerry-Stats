@@ -169,6 +169,6 @@ def _display_picture(picture_name: str, caption: str, container: Optional["Delta
     picture_path = _PICTURE_FOLDER / picture_name
     image = Image.open(picture_path)
     if container is not None:
-        container.image(image, caption=caption, use_container_width=True)
+        container.image(image, caption=caption, width="stretch")
         return
-    st.image(image, caption=caption, use_container_width=True)
+    st.image(image, caption=caption, width="stretch")
