@@ -24,6 +24,7 @@ dev = [
 [tool.uv]
 override-dependencies = [
     "pyarrow>=22.0.0",
+    "rpds-py>=0.30.0"
 ]
 
 [tool.uv.workspace]
