@@ -21,6 +21,11 @@ dev = [
     "ruff>=0.14.13",
 ]
 
+[tool.uv]
+override-dependencies = [
+    "pyarrow>=22.0.0",
+]
+
 [tool.uv.workspace]
 members = ["backend"]
 
