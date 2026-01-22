@@ -1,6 +1,6 @@
 from enum import StrEnum
 
-VERSION = "1.4.1"
+VERSION = "1.5.0"
 
 DESCRIPTION = """
 An endpoint for [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry) to send cocktail data to! 🍹
