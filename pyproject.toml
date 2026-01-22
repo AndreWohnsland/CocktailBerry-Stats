@@ -1,6 +1,6 @@
 [project]
 name = "cocktailberry-webapp"
-version = "1.4.1"
+version = "1.5.0"
 description = "WebApp with API and endpoint for CocktailBerry. Have insights into made cocktails."
 authors = [{name="Andre Wohnsland", email="<50302161+AndreWohnsland@users.noreply.github.com>"}]
 license = "MIT"
