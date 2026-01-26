@@ -30,7 +30,7 @@ uv run uvicorn app:app --reload # backend -> cd backend first
 uv run streamlit run streamlit_app.py # frontend, use in main folder
 ```
 
-If you want to have everything working, you will need to set up a mongodb, which can be done locally (docker) or with a cloud provider.
+If you want to have everything working, you will need to set up a mongodb, which can be done locally ([docker](https://hub.docker.com/_/mongo)) or with a cloud provider.
 Copy the `.env.example` in both folders as a `.env` file and change the url dummy to your mongo db url:
 
 ```bash
@@ -40,7 +40,7 @@ cp frontend/.env.example frontend/.env
 
 Using `DEBUG=1` in the env files will enable some dev features, like the creation of an additional `*_dev` database to let you test anything without changing your main one.
 The `BACKEND_URL` defaults to localhost (http://127.0.0.1:8000), where the backend runs locally.
-If you deploy backend and frontend on two different places (like streamlit share and deta space), you need to set this variable in the frontend accordingly.
+If you deploy backend and frontend on two different places (like streamlit share and a vps), you need to set this variable in the frontend accordingly.
 For detailed instruction for deployment, please refer to the according docs of your provider.
 
 ## Architecture
