@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
     menu_items={
         "Get Help": "https://cocktailberry.readthedocs.io/",
-        "Report a bug": "https://github.com/AndreWohnsland/CocktailBerry-WebApp/issues",
+        "Report a bug": "https://github.com/AndreWohnsland/CocktailBerry-Stats/issues",
         "About": "# 🍹 CocktailBerry Dashboard \nDashboard for all the CocktailBerry machines data!",
     },
 )
@@ -26,8 +26,8 @@ views.display_introduction(df_stats, installation_count)
 if cocktails.empty:
     st.info("Currently no data available. Let CocktailBerry send some data! ✨")
 else:
-    filtered_cocktails = filter_dataframe(cocktails, country_codes, machines, recipes, only_one_day, dates)  # type: ignore
-    views.display_data(filtered_cocktails, recipes_limit, only_one_day)  # type: ignore
+    filtered_cocktails = filter_dataframe(cocktails, country_codes, machines, recipes, only_one_day, dates)
+    views.display_data(filtered_cocktails, recipes_limit, only_one_day)
 views.api_guidelines()
 views.display_machine_types()
 views.display_installations(installations)
