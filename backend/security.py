@@ -8,24 +8,12 @@ api_key_header = APIKeyHeader(name="x-api-key", auto_error=False)
 async def get_api_key(
     api_key_header: str = Security(api_key_header),
 ) -> ApiKeyDocument:
-    """Retrieve and validate an API key from the query parameters or HTTP header.
+    """Validate the API key from the x-api-key HTTP header.
 
-    Args:
-    ----
-        api_key_query: The API key passed as a query parameter.
-        api_key_header: The API key passed in the HTTP header.
-
-    Returns:
-    -------
-        The validated API key.
-
-    Raises:
-    ------
-        HTTPException: If the API key is invalid or missing.
-
+    Raises an HTTPException if the key is missing, unknown or revoked (invalid flag).
     """
     api_key = await ApiKeyDocument.find(ApiKeyDocument.api_key == api_key_header).first_or_none()
-    if api_key is not None:
+    if api_key is not None and not api_key.invalid:
         return api_key
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,

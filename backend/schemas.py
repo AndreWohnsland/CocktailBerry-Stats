@@ -1,9 +1,9 @@
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import BaseModel
 
 
-class LandEnum(str, Enum):
+class LandEnum(StrEnum):
     """Limits country codes to currently supported ones."""
 
     en = "en"

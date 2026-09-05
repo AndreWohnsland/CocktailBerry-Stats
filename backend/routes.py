@@ -20,7 +20,7 @@ async def check_api(
     api_key: Annotated[ApiKeyDocument, Security(get_api_key)],
 ) -> dict:
     """Route to check if api is working."""
-    return {"message": f"Welcome to the API of the CocktailBerry-WebApp, user: {api_key.name}"}
+    return {"message": f"Welcome to the API of CocktailBerry-Stats, user: {api_key.name}"}
 
 
 @router.post("/cocktail", tags=[Tags.COCKTAIL])
@@ -79,5 +79,4 @@ async def get_installation_count() -> int:
 
     Route is open accessible.
     """
-    installation_data = await InstallationDocument.find_all().to_list()
-    return len(installation_data)
+    return await InstallationDocument.find_all().count()

@@ -1,7 +1,15 @@
-import os
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from dotenv import load_dotenv
 
-load_dotenv()
-is_dev = os.getenv("DEBUG") is not None
-CONNECTION_STRING = os.environ["ATLAS_URI"]
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env")
+
+    atlas_uri: str
+    debug: bool = False
+
+    @property
+    def database_name(self) -> str:
+        return "cocktailberry" + ("_dev" if self.debug else "")
+
+
+SETTINGS = Settings()

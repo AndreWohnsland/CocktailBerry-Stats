@@ -1,6 +1,9 @@
+import tomllib
 from enum import StrEnum
+from pathlib import Path
 
-VERSION = "1.5.0"
+# single version source for the api, kept in sync with the root pyproject by the release guard
+VERSION = tomllib.loads((Path(__file__).parents[1] / "pyproject.toml").read_text())["project"]["version"]
 
 DESCRIPTION = """
 An endpoint for [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry) to send cocktail data to! 🍹
