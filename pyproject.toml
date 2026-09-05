@@ -7,38 +7,27 @@ license = "MIT"
 requires-python = ">=3.13,<3.14"
 
 dependencies = [
-    "pandas>=2.3.3,<3",
-    "plotly>=6.5.2",
-    "python-dotenv>=1.2.1",
-    "requests>=2.32.5",
-    "streamlit>=1.53.0",
+    "pandas>=3.0.5,<4",
+    "plotly>=7.0.0",
+    "pydantic-settings>=2.15.0",
+    "requests>=2.34.2",
+    "streamlit>=1.63.0",
 ]
 
 [dependency-groups]
 dev = [
-    "jupyterlab>=4.5.2",
-    "mypy>=1.19.1",
-    "ruff>=0.14.13",
-]
-
-[tool.uv]
-override-dependencies = [
-    "pyarrow>=22.0.0",
-    "rpds-py>=0.30.0"
+    "jupyterlab>=4.6.3",
+    "pandas-stubs>=3.0.5.260730",
+    "ruff>=0.16.6",
+    "ty==0.0.78",
 ]
 
 [tool.uv.workspace]
 members = ["backend"]
 
-[tool.flake8]
-max-line-length = 120
-extend-ignore = "E402"
-
 [tool.ruff]
-# don't check import order in the migration script
 line-length = 120
-exclude = ["ui_elements", "addon_skeleton"]
-target-version = "py312"
+target-version = "py313"
 
 [tool.ruff.lint]
 extend-safe-fixes = [
@@ -47,7 +36,6 @@ extend-safe-fixes = [
   "D205", # 1 blank line required between summary line and description
   "W291", # Trailing whitespace
   ]
-per-file-ignores = { "runme.py" = ["E402"], "migrator.py" = ["E402"] }
 select = [
   "A", # flake8-builtins
   "ANN", # Type annotations
@@ -83,17 +71,7 @@ ignore = [
   "D213", # Multi-line docstring summary should start at the second line
   "ANN401", # no Any for *args or **kwargs
   "PLR0913", # Too many arguments
+  "PLR0917", # Too many positional arguments
   "PLC0415", # `import` should be at the top-level of a file
 ]
-
-[tool.mypy]
-disable_error_code = ["annotation-unchecked", "import-untyped"]
-
-[tool.pylint]
-disable = ["C0301", "C0114", "C0115", "C0116", "R0912"]
-max-line-length = 120
-
-[tool.autopep8]
-max-line-length = 120
-ignore = ["E402"]
 
