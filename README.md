@@ -30,23 +30,38 @@ uv run uvicorn app:app --reload # backend -> cd backend first
 uv run streamlit run streamlit_app.py # frontend, use in main folder
 ```
 
-If you want to have everything working, you will need to set up a mongodb, which can be done locally ([docker](https://hub.docker.com/_/mongo)) or with a cloud provider.
-Copy the `.env.example` in both folders as a `.env` file and change the url dummy to your mongo db url:
+The backend needs a mongodb, which can run locally in docker or with a cloud provider.
+Copy the `.env.example` in both folders as a `.env` file:
 
 ```bash
 cp backend/.env.example backend/.env
 cp frontend/.env.example frontend/.env
 ```
 
-Using `DEBUG=1` in the env files will enable some dev features, like the creation of an additional `*_dev` database to let you test anything without changing your main one.
-The `BACKEND_URL` defaults to localhost (http://127.0.0.1:8000), where the backend runs locally.
+The backend example points at the local docker mongodb, replace `ATLAS_URI` with your cloud url if you use one.
+Using `DEBUG=1` in the backend env will make the app use a separate `cocktailberry_dev` database, so you can test anything without changing your main one.
+The `BACKEND_URL` defaults to the local backend (http://127.0.0.1:8000/api/v1) and must include the `/api/v1` suffix.
+
+### Local Database with Sample Data
+
+Start the mongodb from the compose file and fill it with sample data:
+
+```bash
+cd backend
+docker compose up -d mongo
+uv run python seed_dev.py
+```
+
+The seed script uses the same env logic as the app, prints an API key for the protected routes, and skips seeding if data already exists.
+To reset the data, remove the container and its volume with `docker compose down -v`.
+Alternatively, `docker compose up` starts the whole backend stack (api + db) in docker.
 If you deploy backend and frontend on two different places (like streamlit share and a vps), you need to set this variable in the frontend accordingly.
 For detailed instruction for deployment, please refer to the according docs of your provider.
 
 ## Architecture
 
 In this project, a self hosted web server is used to host the backend.
-Currently, streamlit share is used to host the backend, but it can be easily deployed to any other provider.
+Currently, streamlit share is used to host the frontend, but it can be easily deployed to any other provider.
 The WebApp can be accessed freely over any browser.
 The API is protected an can be only accessed with an according API key to prevent unauthorized access.
 To get an API key for your [CocktailBerry](https://github.com/AndreWohnsland/CocktailBerry) machine follow the instructions on the website.
