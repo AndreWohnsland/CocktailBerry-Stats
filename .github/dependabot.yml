@@ -1,0 +1,28 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    labels:
+      - dependencies
+      - skip-changelog
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 3
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+  - package-ecosystem: uv
+    directory: /
+    labels:
+      - dependencies
+      - skip-changelog
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 3
+    groups:
+      python:
+        patterns:
+          - "*"

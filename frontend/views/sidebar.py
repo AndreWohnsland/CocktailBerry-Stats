@@ -14,7 +14,7 @@ def generate_sidebar(
     list[str],
     int,
     bool,
-    tuple[date, date] | tuple[None, None],
+    tuple[date, date],
     DataFrameStats,
 ]:
     """Generate the sidebar with the option. Returns needed variables."""
@@ -22,7 +22,8 @@ def generate_sidebar(
     st.sidebar.write("Here you can limit the data and filter it.")
     if df.empty:
         st.sidebar.write("Nothing to do, need some data ...")
-        return [], [], [], 1, False, (None, None), DataFrameStats(0, 0, 0, 0, 0, "No Data", "No Data")
+        # dates are never used on this path, the app skips filtering when there is no data
+        return [], [], [], 1, False, (date.today(), date.today()), DataFrameStats(0, 0, 0, 0, 0, "No Data", "No Data")
     st.sidebar.subheader("Filter Options")
     st.sidebar.caption("For your Party")
     only_one_day = st.sidebar.checkbox("Only Show last 24h Data", _get_partymode())

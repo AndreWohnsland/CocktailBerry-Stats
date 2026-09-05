@@ -1,4 +1,3 @@
-
 from dataclasses import dataclass
 
 
@@ -30,9 +29,11 @@ class ReceivedData:
     VOLUME = "volume"
     RECEIVEDATE = "makedate"
 
+
 class InstallationData:
     OS = "os"
     RECEIVEDATE = "receivedate"
+
 
 class InstallationSchema:
     OS = "Operating System"

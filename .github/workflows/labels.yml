@@ -1,0 +1,25 @@
+---
+name: Sync labels
+run-name: 🏷️ Sync repo labels
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - .github/labels.yml
+  workflow_dispatch:
+
+jobs:
+  labels:
+    permissions:
+      pull-requests: write
+    name: ♻️ Sync labels
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⤵️ Check out code from GitHub
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: 🚀 Run Label Syncer
+        uses: micnncim/action-label-syncer@3abd5ab72fda571e69fffd97bd4e0033dd5f495c # v1.3.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

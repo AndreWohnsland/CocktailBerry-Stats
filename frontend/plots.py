@@ -1,5 +1,3 @@
-import datetime
-import warnings
 from typing import Any
 
 import pandas as pd
@@ -9,8 +7,6 @@ import streamlit as st
 
 from .models import CocktailSchema, InstallationSchema
 
-# ignore the frame.append deprecation warning cause by plotly
-warnings.filterwarnings("ignore")
 _TREEMAP_HEIGHT = 400
 _BARPLOT_HEIGHT = 380
 
@@ -130,13 +126,8 @@ def _generate_excluded_days(date_data: pd.Series) -> list[str]:
 
     Leaving only existing dates in the dataframe.
     """
-    start_date = min(date_data)
-    end_date = max(date_data)
-    delta = end_date - start_date
-    used_days = date_data.unique()
-    used_days = [pd.to_datetime(day).strftime("%Y-%m-%d") for day in used_days]
-    all_days = [start_date + datetime.timedelta(days=i) for i in range(delta.days + 1)]
-    all_days = [day.strftime("%Y-%m-%d") for day in all_days]
+    all_days = pd.date_range(date_data.min(), date_data.max()).strftime("%Y-%m-%d")
+    used_days = date_data.dt.strftime("%Y-%m-%d").unique()
     return list(set(all_days) - set(used_days))
 
 
@@ -194,8 +185,8 @@ def generate_installation_time_chart(df: pd.DataFrame, os_split: bool = False) -
     # make filling solid
     fig.for_each_trace(lambda trace: trace.update(fillcolor=trace.line.color))
     # remove line
-    for i in range(len(fig["data"])):  # type: ignore
-        fig["data"][i]["line"]["width"] = 0  # type: ignore
+    for i in range(len(fig["data"])):
+        fig["data"][i]["line"]["width"] = 0
     fig.update_traces(
         hovertemplate="Total Installations: %{y:.0f}",
     )

@@ -1,5 +1,6 @@
 name: Manual Build & publish
-run-name: Build & publish CocktailBerry API image version ${{ github.event.inputs.version }}
+run-name: 🐳 Build & publish CocktailBerry API image version ${{ github.event.inputs.version }}
+
 on:
   workflow_dispatch:
     inputs:
@@ -7,6 +8,7 @@ on:
         description: "Version of the image"
         required: true
         default: "latest"
+
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
@@ -16,33 +18,29 @@ jobs:
 
     steps:
       - name: ⤵️ Check out code from GitHub
-        uses: actions/checkout@v6
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: 🐳 Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@96fe6ef7f33517b61c61be40b68a1882f3264fb8 # v4.2.0
 
       - name: 🐳 Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e # v4.3.0
 
       - name: 🐳 Log in to the Container registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: 📂 Cache pip packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      - name: 🍸 Build and push Docker image CocktailBerry
-        uses: docker/build-push-action@v5
+      - name: 🍸 Build and push Docker image CocktailBerry API
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
         with:
           context: ./backend/
           file: ./backend/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: andrewo92/cocktailberry-api:${{ github.event.inputs.version }}
+          # pull keeps base images fresh while still using the layer cache
+          pull: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

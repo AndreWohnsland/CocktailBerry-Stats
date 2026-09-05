@@ -2,7 +2,20 @@ services:
   backend:
     build: ./
     environment:
-      - ATLAS_URI=${ATLAS_URI}
+      # defaults to the local mongo service below, set ATLAS_URI to use a cloud db instead
+      - ATLAS_URI=${ATLAS_URI:-mongodb://mongo:27017}
       - DEBUG=1
     ports:
       - "8000:8000"
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:8
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

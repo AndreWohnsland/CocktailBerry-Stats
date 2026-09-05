@@ -1,40 +1,30 @@
 import datetime
-import json
-import os
 import time
 
 import pandas as pd
 import requests
 import streamlit as st
-from dotenv import load_dotenv
 from requests.exceptions import ConnectionError as rConnectionError
 from requests.exceptions import ConnectTimeout, ReadTimeout
 from streamlit.logger import get_logger
 
+from .environment import SETTINGS
 from .models import CocktailSchema, InstallationData, InstallationSchema, ReceivedData
 
-load_dotenv()
-is_dev = os.getenv("DEBUG") is not None
-backend_url = os.getenv("BACKEND_URL", "http://127.0.0.1:8000/api/v1")
 DATEFORMAT_STR = "%d/%m/%Y, %H:%M"
 logger = get_logger(__name__)
 
 
-def __myround(x: float, base: int = 5) -> int:
-    """Round to the nearest number to given base."""
-    return base * round(x / base)
-
-
 @st.cache_data(ttl=60)
 def get_cocktails() -> pd.DataFrame:
-    """Get the data from deta and converts to df."""
+    """Get the cocktail data from the backend and convert it to a df."""
     # something in streamlit cloud seems to block the request, so we need to wait a bit
     time.sleep(1)
     cocktails = {}
     try:
-        cocktails_response = requests.get(f"{backend_url}/public/cocktails", timeout=30)
+        cocktails_response = requests.get(f"{SETTINGS.backend_url}/public/cocktails", timeout=30)
         if cocktails_response.ok:
-            cocktails = json.loads(cocktails_response.text)
+            cocktails = cocktails_response.json()
         else:
             logger.warning("Error from backend: %s: %s", cocktails_response.status_code, cocktails_response.text)
     except (ConnectTimeout, ReadTimeout, rConnectionError):
@@ -66,9 +56,9 @@ def get_cocktails() -> pd.DataFrame:
 def get_installations() -> pd.DataFrame:
     installations = {}
     try:
-        installations_response = requests.get(f"{backend_url}/public/installations", timeout=30)
+        installations_response = requests.get(f"{SETTINGS.backend_url}/public/installations", timeout=30)
         if installations_response.ok:
-            installations = json.loads(installations_response.text)
+            installations = installations_response.json()
         else:
             logger.warning(
                 "Error from backend: %s: %s",
@@ -112,7 +102,7 @@ def filter_dataframe(
         & (df[CocktailSchema.receivedate] <= pd.Timestamp(dates[1]) + pd.Timedelta(days=1))
     ]
     if only_one_day:
-        filtering = filtered_df[CocktailSchema.receivedate] >= (datetime.datetime.now() - datetime.timedelta(hours=24))  # type: ignore
+        filtering = filtered_df[CocktailSchema.receivedate] >= (datetime.datetime.now() - datetime.timedelta(hours=24))
         filtered_df = filtered_df[filtering]
     return filtered_df
 
@@ -124,7 +114,7 @@ def sum_volume(df: pd.DataFrame, country_split: bool) -> pd.DataFrame:
     if country_split:
         grouping = [CocktailSchema.language, CocktailSchema.machine_name]
     volumes = (
-        df.groupby(grouping)[CocktailSchema.volume]  # type: ignore
+        df.groupby(grouping)[CocktailSchema.volume]
         .agg(["sum", "count"])
         .reset_index()
         .sort_values(["sum", "count"], ascending=False)
@@ -147,7 +137,7 @@ def cocktail_count(df: pd.DataFrame, limit_recipe: int, country_split: bool) -> 
         grouping = [CocktailSchema.cocktail_name, CocktailSchema.language]
     # first group by the restrictions, this needs to be done in both cases
     cocktails = (
-        df.groupby(grouping)[CocktailSchema.volume]  # type: ignore
+        df.groupby(grouping)[CocktailSchema.volume]
         .count()
         .reset_index()
         .rename(
@@ -168,12 +158,9 @@ def cocktail_count(df: pd.DataFrame, limit_recipe: int, country_split: bool) -> 
         .sort_values()
         .index.to_list()[-limit_recipe:]
     )
-    sorter_index = dict(zip(name_order, range(len(name_order))))
+    sorter_index = {name: rank for rank, name in enumerate(name_order)}
     cocktails["Rank"] = cocktails[CocktailSchema.cocktail_name].map(sorter_index)
-    cocktails.sort_values(["Rank", CocktailSchema.cocktail_count], ascending=False, inplace=True)
-    cocktails.dropna(axis=0, inplace=True)
-    cocktails.drop("Rank", axis=1, inplace=True)
-    return cocktails
+    return cocktails.sort_values(["Rank", CocktailSchema.cocktail_count], ascending=False).dropna().drop(columns="Rank")
 
 
 @st.cache_data(ttl=300)
@@ -187,7 +174,7 @@ def time_aggregation(df: pd.DataFrame, hour_grouping: bool, machine_grouping: bo
     if machine_grouping:
         grouping = [date_grouper, CocktailSchema.machine_name]
     time_df = (
-        df.groupby(grouping)[CocktailSchema.cocktail_name]  # type: ignore
+        df.groupby(grouping)[CocktailSchema.cocktail_name]
         .count()
         .reset_index()
         .rename(
@@ -204,12 +191,12 @@ def serving_aggregation(df: pd.DataFrame, machine_split: bool, min_count: int) -
     """Aggregate by serving sizes."""
     # rounds to the closest 25
     serving_df = df.copy(deep=True)
-    serving_df[CocktailSchema.volume] = serving_df[CocktailSchema.volume].apply(__myround, args=(25,))
+    serving_df[CocktailSchema.volume] = (serving_df[CocktailSchema.volume] / 25).round().astype(int) * 25
     grouping = [CocktailSchema.volume]
     if machine_split:
         grouping = [CocktailSchema.machine_name, CocktailSchema.volume]
     serving_df = (
-        serving_df.groupby(grouping)[CocktailSchema.language]  # type: ignore
+        serving_df.groupby(grouping)[CocktailSchema.language]
         .agg(["count"])
         .reset_index()
         .sort_values([CocktailSchema.volume], ascending=True)
@@ -220,8 +207,8 @@ def serving_aggregation(df: pd.DataFrame, machine_split: bool, min_count: int) -
         )
     )
     # for multiple grouping needs to calculate the sum per group and only include the ones having more than min
-    serving_size_count = serving_df.groupby(CocktailSchema.volume).sum()
-    volumes_to_keep = serving_size_count[serving_size_count[CocktailSchema.cocktail_count] >= min_count].index.to_list()
+    serving_size_count = serving_df.groupby(CocktailSchema.volume)[CocktailSchema.cocktail_count].sum()
+    volumes_to_keep = serving_size_count[serving_size_count >= min_count].index.to_list()
     return serving_df[serving_df[CocktailSchema.volume].isin(volumes_to_keep)]
 
 
@@ -245,10 +232,10 @@ def cumulate_installations(raw_df: pd.DataFrame, os_split: bool = False) -> pd.D
     """Group the installations by week and returns the count."""
     df = raw_df.copy(deep=True)
     df["counter"] = 1
-    grouping = [pd.Grouper(key=InstallationSchema.RECEIVEDATE, freq="w")]
+    grouping = [pd.Grouper(key=InstallationSchema.RECEIVEDATE, freq="W")]
     # also need to group by os if needed
     if os_split:
-        grouping.insert(0, InstallationSchema.OS)  # type: ignore
+        grouping.insert(0, InstallationSchema.OS)
     df = (
         df.groupby(grouping)
         .count()
