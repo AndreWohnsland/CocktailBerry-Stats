@@ -1,6 +1,24 @@
+from datetime import datetime
 from enum import StrEnum
+from typing import Annotated
 
-from pydantic import BaseModel
+from pydantic import BaseModel, BeforeValidator
+
+# format old field machines send, they will keep doing so for years
+LEGACY_DATEFORMAT = "%d/%m/%Y, %H:%M"
+
+
+def _accept_legacy_format(value: object) -> object:
+    if isinstance(value, str):
+        try:
+            return datetime.strptime(value, LEGACY_DATEFORMAT)
+        except ValueError:
+            return value
+    return value
+
+
+# datetime that also accepts the legacy string format besides ISO
+LegacyDatetime = Annotated[datetime, BeforeValidator(_accept_legacy_format)]
 
 
 class LandEnum(StrEnum):
@@ -17,7 +35,7 @@ class CocktailData(BaseModel):
     volume: int
     machinename: str
     countrycode: LandEnum
-    makedate: str
+    makedate: LegacyDatetime
 
 
 class CocktailWithoutKey(BaseModel):
@@ -27,8 +45,8 @@ class CocktailWithoutKey(BaseModel):
     volume: int
     machinename: str
     countrycode: LandEnum
-    makedate: str
-    receivedate: str
+    makedate: datetime | None
+    receivedate: datetime
 
 
 class InstallationData(BaseModel):

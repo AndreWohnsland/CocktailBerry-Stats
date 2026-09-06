@@ -11,8 +11,20 @@ from streamlit.logger import get_logger
 from .environment import SETTINGS
 from .models import CocktailSchema, InstallationData, InstallationSchema, ReceivedData
 
-DATEFORMAT_STR = "%d/%m/%Y, %H:%M"
 logger = get_logger(__name__)
+
+
+LEGACY_DATEFORMAT = "%d/%m/%Y, %H:%M"
+
+
+def _parse_dates(column: pd.Series) -> pd.Series:
+    # the legacy fallback is only needed while the api transitions to ISO
+    # dates, remove it with the next release (a plain ISO8601 parse remains)
+    parsed = pd.to_datetime(column, format="ISO8601", errors="coerce")
+    legacy_mask = parsed.isna() & column.notna()
+    if legacy_mask.any():
+        parsed[legacy_mask] = pd.to_datetime(column[legacy_mask], format=LEGACY_DATEFORMAT)
+    return parsed
 
 
 @st.cache_data(ttl=60)
@@ -48,7 +60,7 @@ def get_cocktails() -> pd.DataFrame:
                 CocktailSchema.receivedate,
             ]
         ]
-        df[CocktailSchema.receivedate] = pd.to_datetime(df[CocktailSchema.receivedate], format=DATEFORMAT_STR)
+        df[CocktailSchema.receivedate] = _parse_dates(df[CocktailSchema.receivedate])
     return df
 
 
@@ -74,7 +86,7 @@ def get_installations() -> pd.DataFrame:
         }
     )
     if not df.empty:
-        df[InstallationSchema.RECEIVEDATE] = pd.to_datetime(df[InstallationSchema.RECEIVEDATE], format=DATEFORMAT_STR)
+        df[InstallationSchema.RECEIVEDATE] = _parse_dates(df[InstallationSchema.RECEIVEDATE])
         # there may be the name Raspbian or Debian, for both the Raspberry Pi OS, so we need to unify them
         df[InstallationSchema.OS] = df[InstallationSchema.OS].str.replace(r"(Raspbian |Debian )", "Debian ", regex=True)
         # convert all entries of os having "Armbian" in the name to "Armbian"

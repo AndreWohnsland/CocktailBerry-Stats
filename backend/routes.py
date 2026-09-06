@@ -8,7 +8,6 @@ from rate_limiting import limiter
 from schemas import CocktailData, CocktailWithoutKey, InstallationData
 from security import get_api_key
 
-DATEFORMAT_STR = "%d/%m/%Y, %H:%M"
 MAX_NAME_LENGTH = 30
 
 router = APIRouter(prefix="/api/v1", tags=[Tags.PROTECTED])
@@ -39,7 +38,7 @@ async def insert_cocktaildata(
         countrycode=cocktail.countrycode,
         keyname=api_key.name,
         makedate=cocktail.makedate,
-        receivedate=datetime.datetime.now().strftime(DATEFORMAT_STR),
+        receivedate=datetime.datetime.now(datetime.UTC),
     ).create()
 
 
@@ -60,7 +59,7 @@ async def post_installation(request: Request, information: InstallationData) -> 
     Route is open accessible.
     """
     return await InstallationDocument(
-        os=information.os_version, receivedate=datetime.datetime.now().strftime(DATEFORMAT_STR)
+        os=information.os_version, receivedate=datetime.datetime.now(datetime.UTC)
     ).create()
 
 

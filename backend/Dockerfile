@@ -10,4 +10,5 @@ COPY . /app
 
 EXPOSE 8000
 
-CMD ["uv", "run", "uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000", "--log-config=log_config.yaml"] 
+# migrations run before the app serves, so the data always matches the deployed models
+CMD ["sh", "-c", "uv run python migrate.py && uv run uvicorn app:app --host 0.0.0.0 --port 8000 --log-config=log_config.yaml"] 
