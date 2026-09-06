@@ -17,7 +17,7 @@ jobs:
       - name: Install the latest version of uv
         uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
         with:
-          python-version: "3.13"
+          python-version: "3.14"
       - name: 🔍 Lint with ruff
         run: uvx ruff check .
       - name: 🔍 Check formatting with ruff
@@ -31,6 +31,6 @@ jobs:
       - name: Install the latest version of uv
         uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
         with:
-          python-version: "3.13"
+          python-version: "3.14"
       - name: 🔍 Type Checking with ty
         run: uv run --all-packages ty check

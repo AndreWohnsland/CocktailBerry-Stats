@@ -4,7 +4,7 @@ version = "1.5.0"
 description = "WebApp with API and endpoint for CocktailBerry. Have insights into made cocktails."
 authors = [{name="Andre Wohnsland", email="<50302161+AndreWohnsland@users.noreply.github.com>"}]
 license = "MIT"
-requires-python = ">=3.13,<3.14"
+requires-python = ">=3.14,<3.15"
 
 dependencies = [
     "pandas>=3.0.5,<4",
@@ -27,7 +27,7 @@ members = ["backend"]
 
 [tool.ruff]
 line-length = 120
-target-version = "py313"
+target-version = "py314"
 
 [tool.ruff.lint]
 extend-safe-fixes = [

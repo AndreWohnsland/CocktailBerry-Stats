@@ -2,7 +2,7 @@
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/AndreWohnsland/CocktailBerry-Stats)
 ![GitHub Release Date](https://img.shields.io/github/release-date/AndreWohnsland/CocktailBerry-Stats)
-![Python Version](https://img.shields.io/badge/python-%3E%3D%203.13-blue)
+![Python Version](https://img.shields.io/badge/python-%3E%3D%203.14-blue)
 ![GitHub](https://img.shields.io/github/license/AndreWohnsland/CocktailBerry-Stats)
 ![GitHub issues](https://img.shields.io/github/issues-raw/AndreWohnsland/CocktailBerry-Stats)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=AndreWohnsland_CocktailBerry-WebApp&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=AndreWohnsland_CocktailBerry-WebApp)
