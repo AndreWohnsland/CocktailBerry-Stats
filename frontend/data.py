@@ -5,7 +5,7 @@ import pandas as pd
 import requests
 import streamlit as st
 from requests.exceptions import ConnectionError as rConnectionError
-from requests.exceptions import ConnectTimeout, ReadTimeout
+from requests.exceptions import Timeout
 from streamlit.logger import get_logger
 
 from .environment import SETTINGS
@@ -39,7 +39,7 @@ def get_cocktails() -> pd.DataFrame:
             cocktails = cocktails_response.json()
         else:
             logger.warning("Error from backend: %s: %s", cocktails_response.status_code, cocktails_response.text)
-    except ConnectTimeout, ReadTimeout, rConnectionError:
+    except Timeout, rConnectionError:
         logger.error("Timeout when connecting to backend.")
     df = pd.DataFrame(cocktails).rename(
         columns={
@@ -77,7 +77,7 @@ def get_installations() -> pd.DataFrame:
                 installations_response.status_code,
                 installations_response.text,
             )
-    except ConnectTimeout, ReadTimeout, rConnectionError:
+    except Timeout, rConnectionError:
         logger.error("Timeout when connecting to backend.")
     df = pd.DataFrame(installations).rename(
         columns={
