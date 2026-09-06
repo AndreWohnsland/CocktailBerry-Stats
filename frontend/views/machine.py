@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 import streamlit as st
 from PIL import Image
@@ -161,7 +161,7 @@ def _generate_machine_info(maker: str, description: str) -> None:
     )
 
 
-def _display_picture(picture_name: str, caption: str, container: Optional["DeltaGenerator"] = None) -> None:
+def _display_picture(picture_name: str, caption: str, container: DeltaGenerator | None = None) -> None:
     """Display the given picture with the given caption.
 
     Uses the assets folder as base path.
