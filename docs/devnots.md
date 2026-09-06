@@ -36,6 +36,14 @@ Set the `invalid` flag of the key document to `true`.
 The backend rejects revoked keys on the protected routes.
 Prefer revoking over deleting, so the key name stays around for the existing cocktail data.
 
+## Database Migrations
+
+Schema migrations live in `backend/migrations` and use the beanie migration framework.
+The container runs `migrate.py` before the app starts, applied migrations are tracked in the `migrations_log` collection.
+Add a new migration as a timestamped file with `Forward` and `Backward` classes, see the existing one as reference.
+Roll the newest migration back with `uv run python migrate.py backward` and redeploy the previous image.
+Take a `mongodump` before deploying a migration that rewrites existing data.
+
 ## Version Bumps
 
 The release tag, the root `pyproject.toml` and `backend/pyproject.toml` must carry the same version.

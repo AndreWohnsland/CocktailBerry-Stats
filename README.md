@@ -1,12 +1,12 @@
 <img src="docs/pictures/logo_dashboard.png" alt="CocktailBerry" width="750"/>
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/AndreWohnsland/CocktailBerry-WebApp)
-![GitHub Release Date](https://img.shields.io/github/release-date/AndreWohnsland/CocktailBerry-WebApp)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/AndreWohnsland/CocktailBerry-Stats)
+![GitHub Release Date](https://img.shields.io/github/release-date/AndreWohnsland/CocktailBerry-Stats)
 ![Python Version](https://img.shields.io/badge/python-%3E%3D%203.13-blue)
-![GitHub](https://img.shields.io/github/license/AndreWohnsland/CocktailBerry-WebApp)
-![GitHub issues](https://img.shields.io/github/issues-raw/AndreWohnsland/CocktailBerry-WebApp)
+![GitHub](https://img.shields.io/github/license/AndreWohnsland/CocktailBerry-Stats)
+![GitHub issues](https://img.shields.io/github/issues-raw/AndreWohnsland/CocktailBerry-Stats)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=AndreWohnsland_CocktailBerry-WebApp&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=AndreWohnsland_CocktailBerry-WebApp)
-![GitHub Repo stars](https://img.shields.io/github/stars/AndreWohnsland/CocktailBerry-WebApp?style=social)
+![GitHub Repo stars](https://img.shields.io/github/stars/AndreWohnsland/CocktailBerry-Stats?style=social)
 
 [![Support CocktailBerry](https://img.shields.io/badge/Support%20CocktailBerry-donate-yellow)](https://www.buymeacoffee.com/AndreWohnsland)
 
@@ -41,6 +41,8 @@ cp frontend/.env.example frontend/.env
 The backend example points at the local docker mongodb, replace `ATLAS_URI` with your cloud url if you use one.
 Using `DEBUG=1` in the backend env will make the app use a separate `cocktailberry_dev` database, so you can test anything without changing your main one.
 The `BACKEND_URL` defaults to the local backend (http://127.0.0.1:8000/api/v1) and must include the `/api/v1` suffix.
+If you deploy backend and frontend on two different places (like streamlit share and a vps), set `BACKEND_URL` in the frontend env accordingly.
+For detailed instruction for deployment, please refer to the according docs of your provider.
 
 ### Local Database with Sample Data
 
@@ -55,8 +57,6 @@ uv run python seed_dev.py
 The seed script uses the same env logic as the app, prints an API key for the protected routes, and skips seeding if data already exists.
 To reset the data, remove the container and its volume with `docker compose down -v`.
 Alternatively, `docker compose up` starts the whole backend stack (api + db) in docker.
-If you deploy backend and frontend on two different places (like streamlit share and a vps), you need to set this variable in the frontend accordingly.
-For detailed instruction for deployment, please refer to the according docs of your provider.
 
 ## Architecture
 

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from beanie import Document
 
 
@@ -7,8 +9,10 @@ class CocktailDocument(Document):
     machinename: str
     countrycode: str
     keyname: str | None
-    makedate: str | None
-    receivedate: str
+    # wall clock time on the machine, no timezone by design (hour of day analytics)
+    makedate: datetime | None
+    # utc instant when the api received the data
+    receivedate: datetime
 
     class Settings:  # noqa: D106
         name = "cocktails"
@@ -16,7 +20,7 @@ class CocktailDocument(Document):
 
 class InstallationDocument(Document):
     os: str
-    receivedate: str
+    receivedate: datetime
 
     class Settings:  # noqa: D106
         name = "installations"
