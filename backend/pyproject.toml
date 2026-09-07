@@ -11,5 +11,6 @@ dependencies = [
     "pydantic-settings>=2.15.0",
     "pyyaml>=6.0.3",
     "slowapi>=0.1.10",
+    "typer>=0.27.2",
     "uvicorn>=0.52.4",
 ]

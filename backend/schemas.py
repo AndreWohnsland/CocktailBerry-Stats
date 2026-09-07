@@ -45,7 +45,7 @@ class CocktailWithoutKey(BaseModel):
     volume: int
     machinename: str
     countrycode: LandEnum
-    makedate: datetime | None
+    makedate: datetime
     receivedate: datetime
 
 
