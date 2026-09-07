@@ -10,7 +10,7 @@ class CocktailDocument(Document):
     countrycode: str
     keyname: str | None
     # wall clock time on the machine, no timezone by design (hour of day analytics)
-    makedate: datetime | None
+    makedate: datetime
     # utc instant when the api received the data
     receivedate: datetime
 
