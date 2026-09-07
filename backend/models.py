@@ -8,7 +8,7 @@ class CocktailDocument(Document):
     volume: int
     machinename: str
     countrycode: str
-    keyname: str | None
+    keyname: str
     # wall clock time on the machine, no timezone by design (hour of day analytics)
     makedate: datetime
     # utc instant when the api received the data
