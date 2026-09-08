@@ -7,7 +7,7 @@ class DataFrameStats:
     machines: int
     recipes: int
     cocktails: int
-    volume: int
+    volume: float
     first_data: str
     last_data: str
 

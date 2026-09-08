@@ -1,6 +1,9 @@
 services:
   backend:
-    build: ./
+    build:
+      # repo root context, so the docker build can use the workspace lock
+      context: ../
+      dockerfile: backend/Dockerfile
     environment:
       # defaults to the local mongo service below, set ATLAS_URI to use a cloud db instead
       - ATLAS_URI=${ATLAS_URI:-mongodb://mongo:27017}

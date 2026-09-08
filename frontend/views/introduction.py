@@ -32,7 +32,7 @@ def _what_is_this() -> None:
         If you don't know it, go check it out, it's super cool. 🚀
 
         In short, CocktailBerry is a Python software for the Raspberry Pi
-        to easily server cocktails and do lots of additional things for your party.
+        to easily serve cocktails and do lots of additional things for your party.
         The users can send their cocktail data (volume, cocktail name)
         with the according machine data (machine name, language settings) to an API endpoint. ⚙️
 

@@ -36,8 +36,8 @@ def generate_sidebar(
     recipes_limit = st.sidebar.slider(
         "Show x most Popular Recipes:", 2, max(2, len(recipes_selection)), min(10, len(recipes_selection))
     )
-    min_date = datetime.date(min(df[CocktailSchema.receivedate]))
-    max_date = datetime.date(max(df[CocktailSchema.receivedate]))
+    min_date = df[CocktailSchema.receivedate].min().date()
+    max_date = df[CocktailSchema.receivedate].max().date()
     with st.sidebar.expander("Advanced Settings"):
         start_date = st.date_input("Start Date", value=min_date)
         end_date = st.date_input("End Date", value=max_date)

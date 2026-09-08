@@ -34,3 +34,22 @@ jobs:
           python-version: "3.14"
       - name: 🔍 Type Checking with ty
         run: uv run --all-packages ty check
+
+  pytest:
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo:8
+        ports:
+          - 27017:27017
+    steps:
+      - name: ⤵️ Check out code from GitHub
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          python-version: "3.14"
+      - name: 🔍 Run PyTest
+        run: uv run --all-packages pytest
+        env:
+          ATLAS_URI: mongodb://localhost:27017

@@ -117,3 +117,6 @@ venv.bak/
 
 # tool caches
 .ruff_cache/
+
+# IDE
+.idea/

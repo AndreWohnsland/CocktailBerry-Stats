@@ -1,5 +1,5 @@
 [project]
-name = "cocktailberry-webapp"
+name = "cocktailberry-stats"
 version = "2.0.0"
 description = "WebApp with API and endpoint for CocktailBerry. Have insights into made cocktails."
 authors = [{name="Andre Wohnsland", email="<50302161+AndreWohnsland@users.noreply.github.com>"}]
@@ -16,11 +16,27 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "httpx>=0.28.1",
     "jupyterlab>=4.6.3",
     "pandas-stubs>=3.0.5.260730",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
     "ruff>=0.16.6",
     "ty==0.0.78",
 ]
+
+[tool.ty.environment]
+# tests import the backend modules flat (from models import ...), like the backend itself does
+extra-paths = ["backend"]
+
+[tool.pytest.ini_options]
+# backend uses flat imports (from models import ...), so it needs to be on the path
+pythonpath = [".", "backend"]
+# -ra always shows the reasons for skipped and failed tests
+addopts = "-ra"
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = ["mongo: needs a running mongodb (docker compose up -d mongo in backend)"]
 
 [tool.uv.workspace]
 members = ["backend"]
@@ -74,4 +90,8 @@ ignore = [
   "PLR0917", # Too many positional arguments
   "PLC0415", # `import` should be at the top-level of a file
 ]
+
+[tool.ruff.lint.per-file-ignores]
+# test names document themselves, fixtures stay untyped, asserts use literal values
+"tests/*" = ["ANN", "D", "E402", "PLR2004"]
 
