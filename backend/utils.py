@@ -25,12 +25,6 @@ async def run_cleanup_loop() -> None:
 
 async def _run_cleanup() -> None:
     """Delete test data (cocktails named testcocktail) from the database."""
-    _logger.warning("Running cleanup")
-    to_delete: list[CocktailDocument] = await CocktailDocument.find(
-        {"cocktailname": re.compile("testcocktail", re.IGNORECASE)}
-    ).to_list()
-    if len(to_delete) > 0:
-        _logger.warning("Deleting %s number of items named testcocktail", len(to_delete))
-    for cocktail in to_delete:
-        _logger.warning("Deleting item: %s", cocktail)
-        await cocktail.delete()
+    result = await CocktailDocument.find({"cocktailname": re.compile("testcocktail", re.IGNORECASE)}).delete()
+    if result is not None and result.deleted_count > 0:
+        _logger.warning("Cleanup removed %s testcocktail entries", result.deleted_count)

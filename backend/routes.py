@@ -14,7 +14,7 @@ router = APIRouter(prefix="/api/v1", tags=[Tags.PROTECTED])
 public_router = APIRouter(prefix="/api/v1/public", tags=[Tags.PUBLIC])
 
 
-@router.get("/", tags=["protected"])
+@router.get("/")
 async def check_api(
     api_key: Annotated[ApiKeyDocument, Security(get_api_key)],
 ) -> dict:

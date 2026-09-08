@@ -1,13 +1,16 @@
 from datetime import datetime
+from typing import ClassVar
 
 from beanie import Document
+from pymongo import ASCENDING, IndexModel
+from schemas import LandEnum
 
 
 class CocktailDocument(Document):
     cocktailname: str
     volume: int
     machinename: str
-    countrycode: str
+    countrycode: LandEnum
     keyname: str
     # wall clock time on the machine, no timezone by design (hour of day analytics)
     makedate: datetime
@@ -33,3 +36,5 @@ class ApiKeyDocument(Document):
 
     class Settings:  # noqa: D106
         name = "api_keys"
+        # looked up on every protected request, unique also guards against ambiguous keys
+        indexes: ClassVar[list[IndexModel]] = [IndexModel([("api_key", ASCENDING)], unique=True)]
