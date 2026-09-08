@@ -23,9 +23,8 @@ async def db_lifespan(app: FastAPI) -> AsyncGenerator[None]:
     await init_beanie(database, document_models=[CocktailDocument, InstallationDocument, ApiKeyDocument])
     ping_response = await database.command("ping")
     if int(ping_response["ok"]) != 1:
-        raise Exception("Problem connecting to database cluster.")
-    else:
-        _logger.info("Connected to database cluster.")
+        raise RuntimeError("Problem connecting to database cluster.")
+    _logger.info("Connected to database cluster.")
     cleanup_task = asyncio.create_task(run_cleanup_loop())
 
     yield

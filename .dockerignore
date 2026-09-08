@@ -1,0 +1,11 @@
+.git
+.venv
+**/__pycache__
+.ruff_cache
+.devcontainer
+.github
+.streamlit
+.vscode
+docs
+frontend
+streamlit_app.py
