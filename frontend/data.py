@@ -1,4 +1,4 @@
-import datetime
+import datetime as dt
 import time
 
 import pandas as pd
@@ -90,7 +90,7 @@ def filter_dataframe(
     machines: list,
     recipes: list,
     only_one_day: bool,
-    dates: tuple[datetime.date, datetime.date],
+    dates: tuple[dt.date, dt.date],
 ) -> pd.DataFrame:
     """Apply the sidebar filter option to the data."""
     filtered_df = df.loc[
@@ -101,7 +101,7 @@ def filter_dataframe(
         & (df[CocktailSchema.receivedate] <= pd.Timestamp(dates[1]) + pd.Timedelta(days=1))
     ]
     if only_one_day:
-        filtering = filtered_df[CocktailSchema.receivedate] >= (datetime.datetime.now() - datetime.timedelta(hours=24))
+        filtering = filtered_df[CocktailSchema.receivedate] >= (dt.datetime.now() - dt.timedelta(hours=24))
         filtered_df = filtered_df[filtering]
     return filtered_df
 
@@ -147,8 +147,7 @@ def cocktail_count(df: pd.DataFrame, limit_recipe: int, country_split: bool) -> 
     )
     # if no split, the logic is quite simple, just sort and limit them
     if not country_split:
-        cocktails.sort_values([CocktailSchema.cocktail_count], ascending=False, inplace=True)
-        return cocktails.iloc[:limit_recipe]
+        return cocktails.sort_values([CocktailSchema.cocktail_count], ascending=False).iloc[:limit_recipe]
     # If split by country, for the listing, we need to generate a tmp rank
     # that we can order by that rank for the cocktail name (its dependant on total count)
     name_order = (

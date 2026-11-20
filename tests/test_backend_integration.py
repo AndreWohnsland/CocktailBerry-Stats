@@ -1,6 +1,6 @@
 """Integration tests against a real (test) mongodb, covering migrations, routes, cleanup and cli."""
 
-import datetime
+import datetime as dt
 from pathlib import Path
 
 import environment
@@ -63,15 +63,15 @@ async def test_migrations_forward_and_backward(mongo_db):
     await _migrate("FORWARD")
 
     normal = await mongo_db.cocktails.find_one({"cocktailname": "Normal"})
-    assert normal["makedate"] == datetime.datetime(2026, 9, 5, 21, 30)
-    assert normal["receivedate"] == datetime.datetime(2026, 9, 5, 21, 31)
+    assert normal["makedate"] == dt.datetime(2026, 9, 5, 21, 30)
+    assert normal["receivedate"] == dt.datetime(2026, 9, 5, 21, 31)
     garbage = await mongo_db.cocktails.find_one({"cocktailname": "GarbageDate"})
     # unparseable makedate falls back to the receivedate of the document
-    assert garbage["makedate"] == garbage["receivedate"] == datetime.datetime(2026, 9, 5, 10, 0)
+    assert garbage["makedate"] == garbage["receivedate"] == dt.datetime(2026, 9, 5, 10, 0)
     relic = await mongo_db.cocktails.find_one({"cocktailname": "DetaRelic"})
     assert relic["keyname"] == "deta-era"
     installation = await mongo_db.installations.find_one()
-    assert installation["receivedate"] == datetime.datetime(2026, 9, 5, 9, 0)
+    assert installation["receivedate"] == dt.datetime(2026, 9, 5, 9, 0)
 
     await _migrate("BACKWARD", distance=1)  # revert keyname fill
     await _migrate("BACKWARD", distance=1)  # revert datetime conversion
@@ -138,7 +138,7 @@ async def test_public_endpoints_return_data(api_client):
 
 
 async def test_cleanup_removes_only_test_cocktails(mongo_db):
-    now = datetime.datetime.now()
+    now = dt.datetime.now()
     base = {
         "volume": 100,
         "machinename": "M1",
