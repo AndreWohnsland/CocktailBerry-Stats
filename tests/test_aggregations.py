@@ -1,4 +1,4 @@
-import datetime
+import datetime as dt
 
 import pandas as pd
 import pytest
@@ -17,7 +17,7 @@ from frontend.models import CocktailSchema, InstallationSchema
 # aggregations must stay clean under future pandas versions from dependabot
 pytestmark = pytest.mark.filterwarnings("error::FutureWarning", "error::DeprecationWarning")
 
-_FULL_RANGE = (datetime.date(2026, 8, 1), datetime.date(2026, 9, 1))
+_FULL_RANGE = (dt.date(2026, 8, 1), dt.date(2026, 9, 1))
 _ALL_LANGUAGES = ["en", "de"]
 _ALL_MACHINES = ["M1", "M2", "M3"]
 _ALL_RECIPES = ["Mojito", "Mai Tai", "Cuba Libre"]
@@ -40,7 +40,7 @@ def test_filter_dataframe_restricts_by_criteria(cocktails_df):
         _ALL_MACHINES,
         _ALL_RECIPES,
         False,
-        (datetime.date(2020, 1, 1), datetime.date(2020, 1, 2)),
+        (dt.date(2020, 1, 1), dt.date(2020, 1, 2)),
     )
     assert out_of_range.empty
 

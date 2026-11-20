@@ -1,6 +1,6 @@
 """Every plot builder must still construct after dependency bumps (plotly, streamlit)."""
 
-import datetime
+import datetime as dt
 
 import pytest
 
@@ -36,7 +36,7 @@ def test_all_plot_builders_construct(cocktails_df, installations_df, split):
         ["M1", "M2", "M3"],
         ["Mojito", "Mai Tai", "Cuba Libre"],
         False,
-        (datetime.date(2026, 8, 1), datetime.date(2026, 9, 1)),
+        (dt.date(2026, 8, 1), dt.date(2026, 9, 1)),
     )
     generate_volume_treemap(sum_volume(filtered, split), split)
     generate_recipes_treemap(cocktail_count(filtered, 2, split), split)

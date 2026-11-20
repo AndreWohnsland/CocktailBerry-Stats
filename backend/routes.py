@@ -1,4 +1,4 @@
-import datetime
+import datetime as dt
 from typing import Annotated
 
 from core.metadata import Tags
@@ -38,7 +38,7 @@ async def insert_cocktaildata(
         countrycode=cocktail.countrycode,
         keyname=api_key.name,
         makedate=cocktail.makedate,
-        receivedate=datetime.datetime.now(datetime.UTC),
+        receivedate=dt.datetime.now(dt.UTC),
     ).create()
 
 
@@ -58,9 +58,7 @@ async def post_installation(request: Request, information: InstallationData) -> 
 
     Route is open accessible.
     """
-    return await InstallationDocument(
-        os=information.os_version, receivedate=datetime.datetime.now(datetime.UTC)
-    ).create()
+    return await InstallationDocument(os=information.os_version, receivedate=dt.datetime.now(dt.UTC)).create()
 
 
 @public_router.get("/installations", tags=[Tags.INSTALLATION])

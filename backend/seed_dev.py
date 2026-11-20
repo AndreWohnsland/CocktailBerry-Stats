@@ -5,7 +5,7 @@ Run from the backend folder: uv run python seed_dev.py
 """
 
 import asyncio
-import datetime
+import datetime as dt
 import random
 import secrets
 
@@ -37,10 +37,10 @@ async def main() -> None:
         return
 
     rng = random.Random(42)
-    now = datetime.datetime.now()
+    now = dt.datetime.now()
     cocktails = []
     for _ in range(150):
-        made = now - datetime.timedelta(days=rng.randint(0, 60), minutes=rng.randint(0, 1440))
+        made = now - dt.timedelta(days=rng.randint(0, 60), minutes=rng.randint(0, 1440))
         cocktails.append(
             CocktailDocument(
                 cocktailname=rng.choice(COCKTAILS),
@@ -57,7 +57,7 @@ async def main() -> None:
     installations = [
         InstallationDocument(
             os=rng.choice(OS_NAMES),
-            receivedate=now - datetime.timedelta(days=rng.randint(0, 60)),
+            receivedate=now - dt.timedelta(days=rng.randint(0, 60)),
         )
         for _ in range(20)
     ]
